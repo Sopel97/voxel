@@ -1,0 +1,11 @@
+{
+    "textures": [
+        { 
+            "path": "spritesheet.png", 
+            "name": "Spritesheet", 
+            "gridSize": [16, 16], 
+            "padding": [0, 0], 
+            "repeated": false 
+        }
+    ]
+}

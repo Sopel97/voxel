@@ -274,7 +274,7 @@ namespace ls
                 return operator[](str.c_str());
             }
 
-            int size()
+            int size() const
             {
                 if (isArray()) return getArray().size();
                 else throw std::runtime_error("Value is not an array");
