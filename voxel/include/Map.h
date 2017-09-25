@@ -6,6 +6,7 @@
 #include "MapRenderer.h"
 
 #include "../LibS/Shapes/Vec3.h"
+#include "../LibS/OpenGL/Camera.h"
 
 class Map
 {
@@ -15,7 +16,7 @@ public:
     std::map<ls::Vec3I, MapChunk> chunks();
     const std::map<ls::Vec3I, MapChunk> chunks() const;
 
-    void draw();
+    void draw(const ls::gl::Camera& camera);
 
 private:
     MapRenderer m_renderer;

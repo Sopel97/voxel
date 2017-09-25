@@ -5,6 +5,8 @@
 
 #include "Logger.h"
 
+#include "Game.h"
+
 GameRenderer::GameRenderer() :
     m_window(sf::VideoMode(m_defaultWindowWidth, m_defaultWindowHeight), "Voxel", 7u, sf::ContextSettings(24, 8)),
     m_camera(m_defaultFov, static_cast<float>(m_defaultWindowWidth)/static_cast<float>(m_defaultWindowHeight)),
@@ -21,7 +23,7 @@ void GameRenderer::draw(Game& game, float dt)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // draw
+    game.map().draw(m_camera);
 
     m_window.display();
 }

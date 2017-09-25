@@ -6,6 +6,8 @@
 #include "block/BlockContainer.h"
 #include "block/BlockFactory.h"
 
+#include "MapChunkRenderer.h"
+
 class MapChunk;
 class Map;
 
@@ -48,6 +50,9 @@ public:
     BlockContainer& atLocal(const ls::Vec3I& localPos);
     const BlockContainer& atLocal(const ls::Vec3I& localPos) const;
 
+    void draw();
+    void noLongerRendered();
+
     static constexpr int width()
     {
         return m_width;
@@ -64,6 +69,7 @@ public:
 private:
     Map* m_map;
     ls::Vec3I m_pos;
+    MapChunkRenderer m_renderer;
     ls::Array3<BlockContainer> m_blocks;
 
     static constexpr int m_width = 16;

@@ -4,3 +4,7 @@ void MapChunkRenderer::draw(MapChunk& chunk)
 {
 
 }
+void MapChunkRenderer::noLongerRendered(MapChunk& chunk)
+{
+
+}

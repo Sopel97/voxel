@@ -73,6 +73,14 @@ const BlockContainer& MapChunk::atLocal(const ls::Vec3I& localPos) const
 {
     return m_blocks(localPos.x, localPos.y, localPos.z);
 }
+void MapChunk::draw()
+{
+    m_renderer.draw(*this);
+}
+void MapChunk::noLongerRendered()
+{
+    m_renderer.noLongerRendered(*this);
+}
 
 ls::Vec3I MapChunk::mapToLocalPos(const ls::Vec3I& mapPos) const
 {
