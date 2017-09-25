@@ -49,3 +49,12 @@ void Game::run()
         }
     }
 }
+
+Map& Game::map()
+{
+    return m_map;
+}
+const Map& Game::map() const
+{
+    return m_map;
+}

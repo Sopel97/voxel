@@ -16,6 +16,7 @@ public:
     BlockContainer& operator=(BlockContainer&& other);
 
     const Block& block() const;
+    Block& block();
 
     ~BlockContainer();
 

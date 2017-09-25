@@ -7,6 +7,7 @@
 
 GameRenderer::GameRenderer() :
     m_window(sf::VideoMode(m_defaultWindowWidth, m_defaultWindowHeight), "Voxel", 7u, sf::ContextSettings(24, 8)),
+    m_camera(m_defaultFov, static_cast<float>(m_defaultWindowWidth)/static_cast<float>(m_defaultWindowHeight)),
     m_timeSinceLastFpsMeasure(0.0f),
     m_lastMeasuredFps(0),
     m_currentFpsCounter(0)
@@ -40,6 +41,7 @@ bool GameRenderer::pollWindowEvent(sf::Event& event)
 void GameRenderer::onWindowResized(const sf::Event& e)
 {
     glViewport(0, 0, e.size.width, e.size.height);
+    m_camera.setAspect(static_cast<float>(e.size.width) / static_cast<float>(e.size.height));
 }
 
 void GameRenderer::updateFpsMeasures(float dt)

@@ -57,6 +57,10 @@ const Block& BlockContainer::block() const
 {
     return *m_block;
 }
+Block& BlockContainer::block()
+{
+    return *m_block;
+}
 
 BlockContainer::~BlockContainer()
 {

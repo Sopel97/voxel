@@ -1,6 +1,7 @@
 #pragma once
 
 #include <type_traits>
+#include <cmath>
 
 namespace ls
 {
@@ -681,18 +682,19 @@ namespace ls
 
         return abs(lhs.x - rhs.x) <= tolerance && abs(lhs.y - rhs.y) <= tolerance && abs(lhs.z - rhs.z) <= tolerance;
     }
+    
     // expects lhs and rhs to be normalized
     template <class T>
     constexpr Vec3<T> slerp(const Vec3<T>& lhs, const Vec3<T>& rhs, const T& t)
     {
-        using std::clamp;
         using std::acos;
         using std::sin;
         using std::cos;
 
         static constexpr T eps = T(0.01);
 
-        const T cosTheta = clamp(lhs.dot(rhs), T(-1.0), T(1.0));
+        // without std:: (with using) can sometimes crash msvc's optimizer (?!)
+        const T cosTheta = std::clamp(lhs.dot(rhs), T(-1.0), T(1.0));
 
         if (cosTheta > T(1) - eps)
         {
@@ -707,6 +709,8 @@ namespace ls
             return lhs*cos(theta) + rel*sin(theta);
         }
     }
+    
+    
     template <class FloatType, class IntType = int>
     Vec3<IntType> floorToInt(const Vec3<FloatType>& value)
     {
