@@ -25,6 +25,8 @@ bool MapRenderer::shouldDrawChunk(const ls::gl::Camera& camera, const MapChunk& 
 }
 float MapRenderer::estimateDistanceToChunk(const ls::Vec3F& cameraPos, const ls::Vec3I& chunkPos)
 {
-    const ls::Vec3F chunkCenter = (ls::Vec3F(chunkPos) + ls::Vec3F(0.5f, 0.5f, 0.5f)) * ls::Vec3F(MapChunk::width(), MapChunk::height(), MapChunk::depth());
+    static constexpr ls::Vec3F chunkSizeF(static_cast<float>(MapChunk::width()), static_cast<float>(MapChunk::height()), static_cast<float>(MapChunk::depth()));
+
+    const ls::Vec3F chunkCenter = (ls::Vec3F(chunkPos) + ls::Vec3F(0.5f, 0.5f, 0.5f)) * chunkSizeF;
     return cameraPos.distance(chunkCenter);
 }

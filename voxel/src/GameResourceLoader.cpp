@@ -3,9 +3,10 @@
 #include "ResourceManager.h"
 #include "sprite/SpritesheetResourceLoader.h"
 #include "block/BlockResourceLoader.h"
-#include "sprite/Spritesheet.h"
+#include "ShaderResourceLoader.h"
 
 #include "../LibS/Shapes/Vec2.h"
+#include "../LibS/OpenGL/Shader.h"
 
 #include "../LibS/Json.h"
 
@@ -19,6 +20,7 @@ void GameResourceLoader::loadAssets()
     if (m_areAssetsLoaded) return;
 
     loadTextures();
+    loadShaders();
     loadBlocks();
 
     m_areAssetsLoaded = true;
@@ -42,7 +44,7 @@ void GameResourceLoader::loadTextures()
             static_cast<int>(textureList[i]["padding"][1].getIntOr(0))
         );
         const bool isRepeated = textureList[i]["repeated"].getBoolOr(false);
-        ResourceHandle<Spritesheet> texture = ResourceManager<Spritesheet>::instance().loadWithName(name, std::string("assets/textures/") + path, gridSize, padding, isRepeated);
+        ResourceManager<Spritesheet>::instance().loadWithName(name, std::string("assets/textures/") + path, gridSize, padding, isRepeated);
     }
 }
 void GameResourceLoader::loadBlocks()
@@ -50,6 +52,20 @@ void GameResourceLoader::loadBlocks()
     for (const auto& tilePath : scanForFiles("assets/blocks/", "*.json"))
     {
         ResourceManager<BlockFactory>::instance().load(tilePath);
+    }
+}
+void GameResourceLoader::loadShaders()
+{
+    ls::json::Document config = ls::json::Document::fromFile("assets/shaders/shaders.json");
+    const auto& shaderList = config["shaders"];
+
+    const int numEntries = shaderList.size();
+    for (int i = 0; i < numEntries; ++i)
+    {
+        const std::string name = shaderList[i]["name"].getString();
+        const std::string vertexPath = shaderList[i]["vertex"].getString();
+        const std::string fragmentPath = shaderList[i]["fragment"].getString();
+        ResourceManager<ls::gl::ShaderProgram>::instance().loadWithName(name, std::string("assets/shaders/") + vertexPath, std::string("assets/shaders/") + fragmentPath);
     }
 }
 std::wstring GameResourceLoader::stringToWString(const std::string &s)

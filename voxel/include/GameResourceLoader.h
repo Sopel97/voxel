@@ -9,6 +9,7 @@ public:
     static void loadAssets();
     static void loadTextures();
     static void loadBlocks();
+    static void loadShaders();
 
 private:
     static bool m_areAssetsLoaded;

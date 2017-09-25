@@ -1,0 +1,9 @@
+{
+    "shaders": [
+        {
+            "name": "Terrain",
+            "vertex": "terrain.vert",
+            "fragment": "terrain.frag"
+        }
+    ]
+}

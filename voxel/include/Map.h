@@ -13,8 +13,8 @@ class Map
 public:
     Map() = default;
 
-    std::map<ls::Vec3I, MapChunk> chunks();
-    const std::map<ls::Vec3I, MapChunk> chunks() const;
+    std::map<ls::Vec3I, MapChunk>& chunks();
+    const std::map<ls::Vec3I, MapChunk>& chunks() const;
 
     void draw(const ls::gl::Camera& camera);
 
