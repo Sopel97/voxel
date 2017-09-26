@@ -9,7 +9,7 @@ MapChunk::MapChunk(Map& map, const ls::Vec3I& pos, const MapChunkNeighbours& nei
     m_pos(pos),
     m_blocks(m_width, m_height, m_depth)
 {
-
+    m_boundingSphere = computeBoundingSphere();
 }
 
 const ls::Vec3I& MapChunk::pos() const
@@ -73,6 +73,11 @@ const BlockContainer& MapChunk::atLocal(const ls::Vec3I& localPos) const
 {
     return m_blocks(localPos.x, localPos.y, localPos.z);
 }
+
+const ls::Sphere3F& MapChunk::boundingSphere() const
+{
+    return m_boundingSphere;
+}
 void MapChunk::draw()
 {
     m_renderer.draw(*this);
@@ -85,4 +90,16 @@ void MapChunk::noLongerRendered()
 ls::Vec3I MapChunk::mapToLocalPos(const ls::Vec3I& mapPos) const
 {
     return mapPos - firstBlockPosition();
+}
+
+ls::Sphere3F MapChunk::computeBoundingSphere()
+{
+    static constexpr ls::Vec3F chunkSizeF(static_cast<float>(MapChunk::width()), static_cast<float>(MapChunk::height()), static_cast<float>(MapChunk::depth()));
+
+    ls::Sphere3F sphere;
+
+    sphere.origin = (static_cast<ls::Vec3F>(m_pos) + ls::Vec3F(0.5f, 0.5f, 0.5f)) * chunkSizeF;
+    sphere.radius = chunkSizeF.length() / 2.0f;
+
+    return sphere;
 }

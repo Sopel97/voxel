@@ -8,3 +8,5 @@
 #include "Shapes/Ray3.h"
 #include "Shapes/Triangle3.h"
 #include "Shapes/Edge3.h"
+#include "Shapes/Plane3.h"
+#include "Shapes/Frustum3.h"

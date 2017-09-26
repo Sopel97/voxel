@@ -22,8 +22,8 @@ void MapChunkRenderer::draw(MapChunk& chunk)
 void MapChunkRenderer::noLongerRendered(MapChunk& chunk)
 {
     // TODO: better emptying of the buffers
-    m_vbo->reset<void>(nullptr, 1, GL_STATIC_DRAW);
-    m_ibo->reset<void>(nullptr, 1, GL_STATIC_DRAW);
+    m_vbo->reset<char>(nullptr, 1, GL_STATIC_DRAW);
+    m_ibo->reset<char>(nullptr, 1, GL_STATIC_DRAW);
 }
 void MapChunkRenderer::update()
 {

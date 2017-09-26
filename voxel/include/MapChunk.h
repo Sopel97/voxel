@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../LibS/Shapes/Vec3.h"
+#include "../LibS/Shapes/Sphere3.h"
 #include "../LibS/Array3.h"
 
 #include "block/BlockContainer.h"
@@ -50,6 +51,8 @@ public:
     BlockContainer& atLocal(const ls::Vec3I& localPos);
     const BlockContainer& atLocal(const ls::Vec3I& localPos) const;
 
+    const ls::Sphere3F& boundingSphere() const;
+
     void draw();
     void noLongerRendered();
 
@@ -69,6 +72,7 @@ public:
 private:
     Map* m_map;
     ls::Vec3I m_pos;
+    ls::Sphere3F m_boundingSphere;
     MapChunkRenderer m_renderer;
     ls::Array3<BlockContainer> m_blocks;
 
@@ -77,4 +81,5 @@ private:
     static constexpr int m_depth = 16;
 
     ls::Vec3I mapToLocalPos(const ls::Vec3I& mapPos) const;
+    ls::Sphere3F computeBoundingSphere();
 };

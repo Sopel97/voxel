@@ -83,6 +83,39 @@ namespace ls
     class WireworldRule;
 }
 
+// OpenGL
+namespace ls
+{
+    // TODO: fwd for templated types that require opengl int types
+    namespace gl
+    {
+        class Camera;
+
+        class AsciiBitmapMonospaceFont;
+
+        class Font;
+
+        class FramebufferObject;
+
+        class RenderbufferObject;
+
+        struct ShaderLoadResult;
+        struct ShaderLinkResult;
+        class ProgramUniformView;
+        class ShaderProgram;
+        class ShaderProgramBuilder;
+
+        class Text;
+
+        class Texture2;
+
+        class VertexArrayObject;
+
+        template <class T>
+        class VertexAttribute;
+    }
+}
+
 // Shapes
 namespace ls
 {
@@ -162,6 +195,16 @@ namespace ls
     class Sphere3;
     using Sphere3F = Sphere3<float>;
     using Sphere3D = Sphere3<double>;
+
+    template <class T>
+    class Plane3;
+    using Plane3F = Plane3<float>;
+    using Plane3D = Plane3<double>;
+
+    template <class T>
+    class Frustum3;
+    using Frustum3F = Frustum3<float>;
+    using Frustum3D = Frustum3<double>;
 
     template <class T>
     class Triangle2;

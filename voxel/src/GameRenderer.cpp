@@ -57,6 +57,6 @@ void GameRenderer::updateFpsMeasures(float dt)
         m_currentFpsCounter = 0;
         m_timeSinceLastFpsMeasure = 0.0f;
 
-        Logger::instance().log(Logger::Priority::Info, std::string("Avg frame time (ms): ") + std::to_string(1000.0 / m_lastMeasuredFps));
+        Logger::instance().log(Logger::Priority::Info, std::string("Avg frame time (ms): ") + std::to_string(1000.0 / m_lastMeasuredFps) + " (" + std::to_string(m_lastMeasuredFps) + " fps)");
     }
 }
