@@ -5,7 +5,9 @@
 std::pair<std::string, std::unique_ptr<Spritesheet>> ResourceLoader<Spritesheet>::load(const std::string& path, const ls::Vec2I& gridSize, const ls::Vec2I& padding, bool repeated)
 {
     std::unique_ptr<Spritesheet> spritesheet = std::make_unique<Spritesheet>(path, gridSize, padding);
-    spritesheet->setRepeated(repeated);
+    spritesheet->setRepeated(repeated);    
+    spritesheet->texture().setMagFilter(GL_NEAREST);
+    spritesheet->texture().setMinFilter(GL_NEAREST);
 
     Logger::instance().logLazy(Logger::Priority::Info, [&]()->std::string {return
         "Loaded texture: " + path +

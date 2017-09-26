@@ -7,7 +7,8 @@
 #include "MapChunk.h"
 
 MapChunkRenderer::MapChunkRenderer() :
-    m_needsUpdate(true)
+    m_needsUpdate(true),
+    m_iboSize(0)
 {
     m_vbo = &m_vao.createVertexBufferObject();
     m_vao.setVertexAttribute(*m_vbo, 0, &BlockVertex::pos, 3, GL_FLOAT, GL_FALSE);
@@ -25,7 +26,7 @@ void MapChunkRenderer::draw(MapChunk& chunk)
 
     if (m_iboSize > 0)
     {
-        m_vao.drawElements(GL_TRIANGLES, 0, GL_UNSIGNED_INT);
+        m_vao.drawElements(GL_TRIANGLES, m_iboSize, GL_UNSIGNED_INT);
     }
 }
 
@@ -54,7 +55,7 @@ void MapChunkRenderer::update(MapChunk& chunk)
             for (int z = 0; z < MapChunk::depth(); ++z)
             {
                 const auto& blockCont = blocks(x, y, z);
-                if (blockCont.isEmpty()) return;
+                if (blockCont.isEmpty()) continue;
 
                 const ls::Vec3I pos = firstBlockPos + ls::Vec3I(x, y, z);
                 blockCont.block().draw(vertices, indices, pos, opacity(x, y, z));

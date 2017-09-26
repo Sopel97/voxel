@@ -9,14 +9,33 @@
 #include "../LibS/Shapes/Frustum3.h"
 #include "../LibS/Shapes/Sphere3.h"
 
+#include "ResourceManager.h"
+#include "sprite/Spritesheet.h"
+
+MapRenderer::MapRenderer()
+{
+    m_texture = &(ResourceManager<Spritesheet>::instance().get("Spritesheet").get().texture());
+    m_shader = &(ResourceManager<ls::gl::ShaderProgram>::instance().get("Terrain").get());
+    m_uModelViewProjection = m_shader->uniformView("uModelViewProjection");    
+    m_shader->uniformView("tex0").set(0);
+}
 void MapRenderer::draw(Map& map, const ls::gl::Camera& camera)
 {
+    glEnable(GL_DEPTH_TEST);    
+    glDepthFunc(GL_LEQUAL);
+    glEnable(GL_CULL_FACE);
+    
+    m_texture->bind(GL_TEXTURE0);
+    m_shader->bind();
+    m_uModelViewProjection.set(camera.projectionMatrix() * camera.viewMatrix());
+    
     ls::Frustum3F frustum = ls::Frustum3F::fromMatrix(camera.projectionMatrix() * camera.viewMatrix());
     for (auto& p : frustum.planes)
     {
         p.normalize();
     }
 
+    int numRenderedChunks = 0;
     for (auto& p : map.chunks())
     {
         auto& chunk = p.second;
@@ -27,8 +46,11 @@ void MapRenderer::draw(Map& map, const ls::gl::Camera& camera)
         else if(shouldDrawChunk(camera, frustum, chunk))
         {
             chunk.draw();
+            ++numRenderedChunks;
         }
     }
+
+    //std::cout << "Rendered chunks: " << numRenderedChunks << '/' << map.chunks().size() << '\n';
 }
 
 bool MapRenderer::shouldDrawChunk(const ls::gl::Camera& camera, const ls::Frustum3F& frustum, const MapChunk& chunk)

@@ -32,6 +32,12 @@ namespace ls
         {
             using ShaderProgramBinder = ShaderProgramBindable;
         public:
+            ProgramUniformView() :
+                m_program(0),
+                m_location(0)
+            {
+
+            }
             ProgramUniformView(GLuint programId, const char* name) :
                 m_program(programId),
                 m_location(glGetUniformLocation(programId, name))

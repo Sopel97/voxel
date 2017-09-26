@@ -17,9 +17,13 @@ public:
     Map& map();
     const Map& map() const;
 
+    const ls::gl::Camera& camera() const;
+
 private:
     GameRenderer m_renderer;
-    Map m_map;
+    std::unique_ptr<Map> m_map;
 
     static constexpr float m_tickTime = 1.0f / 20.0f;
+
+    void handleInput(float dt);
 };

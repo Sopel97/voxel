@@ -15,6 +15,13 @@ GameRenderer::GameRenderer() :
     m_currentFpsCounter(0)
 {
     glewInit();
+
+    m_camera.setNear(0.1f);
+    m_camera.setFar(200.0f);
+
+    glViewport(0, 0, m_defaultWindowWidth, m_defaultWindowHeight);
+
+    sf::Mouse::setPosition(sf::Vector2i(m_window.getSize().x / 2, m_window.getSize().y / 2), m_window);
 }
 
 void GameRenderer::draw(Game& game, float dt)
@@ -59,4 +66,54 @@ void GameRenderer::updateFpsMeasures(float dt)
 
         Logger::instance().log(Logger::Priority::Info, std::string("Avg frame time (ms): ") + std::to_string(1000.0 / m_lastMeasuredFps) + " (" + std::to_string(m_lastMeasuredFps) + " fps)");
     }
+}
+
+const ls::gl::Camera& GameRenderer::camera() const
+{
+    return m_camera;
+}
+
+void GameRenderer::handleInput(float dt)
+{
+    static constexpr float mouseSens = 0.0015f;
+    static constexpr float moveSpeed = 16.0f;
+
+    ls::Vec2F moveInput(0, 0);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+    {
+        moveInput.y += dt * moveSpeed;
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+    {
+        moveInput.y -= dt * moveSpeed;
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+    {
+        moveInput.x -= dt * moveSpeed;
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+    {
+        moveInput.x += dt * moveSpeed;
+    }
+
+    if (moveInput.lengthSquared() > 0.0f)
+    {
+        const ls::Vec3F forward = m_camera.forward();
+        const ls::Vec3F right = m_camera.right();
+
+        m_camera.move(forward * moveInput.y + right * moveInput.x);
+    }
+
+    const int windowWidth = m_window.getSize().x;
+    const int windowHeight = m_window.getSize().y;
+    const ls::Vec2F mousePos(sf::Mouse::getPosition(m_window).x, sf::Mouse::getPosition(m_window).y);
+    const ls::Vec2F windowCenter(windowWidth / 2, windowHeight / 2);
+    const ls::Vec2F deltaRot = (mousePos - windowCenter) * mouseSens;
+    m_camera.addAngles(ls::Angle2F::radians(deltaRot.x), ls::Angle2F::radians(deltaRot.y));
+
+    sf::Mouse::setPosition(sf::Vector2i(windowCenter.x, windowCenter.y), m_window);
 }

@@ -4,6 +4,10 @@
 
 #include "../LibS/Shapes/Vec2.h"
 
+#include "CubeSide.h"
+
+#include <array>
+
 class PlainBlock : public StatelessBlock
 {
 public:
@@ -12,12 +16,8 @@ public:
     public:
         SharedData(SpecificBlockFactory<PlainBlock>& blockFactory, const ls::json::Value& config);
 
-        ls::Vec2I eastTexCoords;
-        ls::Vec2I westTexCoords;
-        ls::Vec2I bottomTexCoords;
-        ls::Vec2I topTexCoords;
-        ls::Vec2I southTexCoords;
-        ls::Vec2I northTexCoords;
+        std::array<ls::Vec2F, 6> texCoords;
+        ls::Vec2F texSize;
 
         BlockSideOpacity opacity;
     };
@@ -33,4 +33,6 @@ public:
 
 private:
     const SharedData* m_sharedData;
+
+    void drawFace(std::vector<BlockVertex>& vertices, std::vector<unsigned>& indices, const ls::Vec3I& position, CubeSide side) const;
 };

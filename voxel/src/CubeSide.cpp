@@ -63,6 +63,56 @@ const ls::Vec3I& CubeSide::direction()
     return dict[static_cast<int>(m_value)];
 }
 
+const std::array<BlockVertex, 4>& CubeSide::faceVertices()
+{
+    static const std::array<std::array<BlockVertex, 4>, 6> vertices{
+        std::array<BlockVertex, 4>{
+            BlockVertex{ { 1.0f, 0.0f, 1.0f },{ 0.0f, 0.0f } },
+            BlockVertex{ { 1.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
+            BlockVertex{ { 1.0f, 1.0f, 0.0f },{ 1.0f, 1.0f } },
+            BlockVertex{ { 1.0f, 1.0f, 1.0f },{ 0.0f, 1.0f } }
+        },
+        std::array<BlockVertex, 4>{
+            BlockVertex{ { 0.0f, 0.0f, 0.0f },{ 0.0f, 0.0f } },
+            BlockVertex{ { 0.0f, 0.0f, 1.0f },{ 1.0f, 0.0f } },
+            BlockVertex{ { 0.0f, 1.0f, 1.0f },{ 1.0f, 1.0f } },
+            BlockVertex{ { 0.0f, 1.0f, 0.0f },{ 0.0f, 1.0f } }
+        },
+        std::array<BlockVertex, 4>{
+            BlockVertex{ { 0.0f, 1.0f, 1.0f },{ 0.0f, 0.0f } },
+            BlockVertex{ { 1.0f, 1.0f, 1.0f },{ 1.0f, 0.0f } },
+            BlockVertex{ { 1.0f, 1.0f, 0.0f },{ 1.0f, 1.0f } },
+            BlockVertex{ { 0.0f, 1.0f, 0.0f },{ 0.0f, 1.0f } }
+        },
+        std::array<BlockVertex, 4>{
+            BlockVertex{ { 0.0f, 0.0f, 0.0f },{ 0.0f, 0.0f } },
+            BlockVertex{ { 1.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
+            BlockVertex{ { 1.0f, 0.0f, 1.0f },{ 1.0f, 1.0f } },
+            BlockVertex{ { 0.0f, 0.0f, 1.0f },{ 0.0f, 1.0f } }
+        },
+        std::array<BlockVertex, 4>{
+            BlockVertex{ { 0.0f, 0.0f, 1.0f },{ 0.0f, 0.0f } },
+            BlockVertex{ { 1.0f, 0.0f, 1.0f },{ 1.0f, 0.0f } },
+            BlockVertex{ { 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f } },
+            BlockVertex{ { 0.0f, 1.0f, 1.0f },{ 0.0f, 1.0f } }
+        },
+        std::array<BlockVertex, 4>{
+            BlockVertex{ { 1.0f, 0.0f, 0.0f },{ 0.0f, 0.0f } },
+            BlockVertex{ { 0.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
+            BlockVertex{ { 0.0f, 1.0f, 0.0f },{ 1.0f, 1.0f } },
+            BlockVertex{ { 1.0f, 1.0f, 0.0f },{ 0.0f, 1.0f } }
+        },
+    };
+
+    return vertices[static_cast<int>(m_value)];
+}
+const std::array<unsigned, 6>& CubeSide::faceIndices()
+{
+    static const std::array<unsigned, 6> indices{ 0, 1, 2, 0, 2, 3 };
+
+    return indices;
+}
+
 CubeSide::CubeSide(Value val) :
     m_value(val)
 {

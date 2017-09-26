@@ -45,24 +45,24 @@ void MapChunk::onAdjacentChunkPlaced(MapChunk& placedChunk, const ls::Vec3I& pla
     m_renderer.scheduleUpdate();
 }
 
-void MapChunk::emplaceBlock(const BlockFactory& blockFactory, const ls::Vec3I& mapPos)
+void MapChunk::emplaceBlock(const BlockFactory& blockFactory, const ls::Vec3I& localPos)
 {
-    placeBlock(blockFactory.instantiate(), mapPos);
+    placeBlock(blockFactory.instantiate(), localPos);
 }
 
-void MapChunk::placeBlock(BlockContainer&& block, const ls::Vec3I& mapPos)
+void MapChunk::placeBlock(BlockContainer&& block, const ls::Vec3I& localPos)
 {
-    BlockContainer& dest = at(mapPos);
+    BlockContainer& dest = at(localPos);
     dest = std::move(block);
-    dest.block().onBlockPlaced(*m_map, mapPos);
+    dest.block().onBlockPlaced(*m_map, localPos);
 
     m_renderer.scheduleUpdate();
 }
 
-BlockContainer MapChunk::removeBlock(const ls::Vec3I& mapPos)
+BlockContainer MapChunk::removeBlock(const ls::Vec3I& localPos)
 {
-    BlockContainer block = std::move(at(mapPos));
-    block.block().onBlockRemoved(*m_map, mapPos);
+    BlockContainer block = std::move(at(localPos));
+    block.block().onBlockRemoved(*m_map, localPos);
 
     m_renderer.scheduleUpdate();
 
@@ -73,28 +73,23 @@ void MapChunk::updateBlockOnAdjacentBlockPlaced(const ls::Vec3I& blockToUpdateMa
 {
     at(blockToUpdateMapPos).block().onAdjacentBlockPlaced(*m_map, blockToUpdateMapPos, placedBlock, placedBlockMapPos);
     updateOutsideOpacityOnAdjacentBlockPlaced(blockToUpdateMapPos, placedBlock, placedBlockMapPos);
+
+    m_renderer.scheduleUpdate();
 }
 
 void MapChunk::updateBlockOnAdjacentBlockRemoved(const ls::Vec3I& blockToUpdateMapPos, const ls::Vec3I& removedBlockMapPos)
 {
     at(blockToUpdateMapPos).block().onAdjacentBlockRemoved(*m_map, blockToUpdateMapPos, removedBlockMapPos);
     updateOutsideOpacityOnAdjacentBlockRemoved(blockToUpdateMapPos, removedBlockMapPos);
+
+    m_renderer.scheduleUpdate();
 }
 
-BlockContainer& MapChunk::at(const ls::Vec3I& mapPos)
-{
-    return atLocal(mapToLocalPos(mapPos));
-}
-const BlockContainer& MapChunk::at(const ls::Vec3I& mapPos) const
-{
-    return atLocal(mapToLocalPos(mapPos));
-}
-
-BlockContainer& MapChunk::atLocal(const ls::Vec3I& localPos)
+BlockContainer& MapChunk::at(const ls::Vec3I& localPos)
 {
     return m_blocks(localPos.x, localPos.y, localPos.z);
 }
-const BlockContainer& MapChunk::atLocal(const ls::Vec3I& localPos) const
+const BlockContainer& MapChunk::at(const ls::Vec3I& localPos) const
 {
     return m_blocks(localPos.x, localPos.y, localPos.z);
 }

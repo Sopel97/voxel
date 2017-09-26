@@ -3,6 +3,9 @@
 #include "MapChunk.h"
 
 #include "ResourceManager.h"
+#include "block/BlockFactory.h"
+#include "block/Block.h"
+#include "block/BlockContainer.h"
 
 #include <cstdlib>
 
@@ -24,4 +27,8 @@ void MapGenerator::generateChunk(MapChunk& chunk) const
             }
         }
     }
+
+    const auto& grassFactory = ResourceManager<BlockFactory>::instance().get("Grass");
+
+    chunk.emplaceBlock(grassFactory.get(), { 0, 0, 0 });
 }

@@ -3,6 +3,8 @@
 #include <type_traits>
 #include <cmath>
 
+#include "../Common.h"
+
 namespace ls
 {
     /**

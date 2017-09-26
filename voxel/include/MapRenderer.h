@@ -1,6 +1,10 @@
 #pragma once
 
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 #include "../LibS/Fwd.h"
+#include "../LibS/OpenGL/Shader.h"
 
 class Map;
 class MapChunk;
@@ -8,10 +12,15 @@ class MapChunk;
 class MapRenderer
 {
 public:
+    MapRenderer();
+
     void draw(Map& map, const ls::gl::Camera& camera);
 private:
+    const ls::gl::Texture2* m_texture;
+    const ls::gl::ShaderProgram* m_shader;
+    ls::gl::ProgramUniformView m_uModelViewProjection;
 
-    static constexpr float m_maxDistanceToRenderedChunk = 80.0f;
+    static constexpr float m_maxDistanceToRenderedChunk = 160.0f;
 
     // expects normalized planes in frustum
     static bool shouldDrawChunk(const ls::gl::Camera& camera, const ls::Frustum3F& frustum, const MapChunk& chunk);

@@ -40,7 +40,7 @@ std::pair<std::string, std::unique_ptr<ls::gl::ShaderProgram>> ResourceLoader<ls
     std::unique_ptr<ls::gl::ShaderProgram> program;
     {
         ls::gl::ShaderLinkResult linkLog;
-        program = std::make_unique<ls::gl::ShaderProgram>(shaderBuilder.link(&linkLog));
+        program = std::make_unique<ls::gl::ShaderProgram>(shaderBuilder.linkAndClear(&linkLog));
         if (!linkLog.success)
         {
             onFailLink(linkLog);

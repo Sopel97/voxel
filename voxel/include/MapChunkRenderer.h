@@ -2,6 +2,8 @@
 
 #include "../LibS/OpenGL/VertexArrayObject.h"
 
+#include "block/BlockVertex.h"
+
 class MapChunk;
 
 class MapChunkRenderer

@@ -3,12 +3,12 @@
         "name": "Grass",
         "type": "PlainBlock",
 
-        "eastTexCoords": [15, 2],
-        "westTexCoords": [15, 2],
-        "bottomTexCoords": [15, 2],
-        "topTexCoords": [15, 3],
-        "southTexCoords": [15, 2],
-        "northTexCoords": [15, 2],
+        "eastTexCoords": [3, 15],
+        "westTexCoords": [3, 15],
+        "bottomTexCoords": [2, 15],
+        "topTexCoords": [8, 13],
+        "southTexCoords": [3, 15],
+        "northTexCoords": [3, 15],
 
         "opacity": ["East", "West", "Bottom", "Top", "South", "North"]
     }

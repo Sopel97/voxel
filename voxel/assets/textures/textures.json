@@ -1,6 +1,6 @@
 {
     "textures": [
-        { 
+        {
             "path": "spritesheet.png", 
             "name": "Spritesheet", 
             "gridSize": [16, 16], 

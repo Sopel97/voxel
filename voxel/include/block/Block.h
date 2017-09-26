@@ -9,7 +9,7 @@
 #include "BlockSideOpacity.h"
 
 class Map;
-class BlockVertex;
+struct BlockVertex;
 
 template <class BlockType>
 class SpecificBlockFactory;

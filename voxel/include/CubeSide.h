@@ -5,6 +5,8 @@
 
 #include "../LibS/Shapes/Vec3.h"
 
+#include "block/BlockVertex.h"
+
 class CubeSide
 {
 private:
@@ -33,6 +35,8 @@ public:
     const std::string& toString();
 
     const ls::Vec3I& direction();
+    const std::array<BlockVertex, 4>& faceVertices();
+    static const std::array<unsigned, 6>& faceIndices();
 
     CubeSide() = default;
     CubeSide(const CubeSide&) = default;

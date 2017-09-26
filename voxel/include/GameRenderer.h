@@ -15,6 +15,10 @@ public:
 
     bool pollWindowEvent(sf::Event& event);
 
+    const ls::gl::Camera& camera() const;
+
+    void handleInput(float dt);
+
 private:
     sf::Window m_window;
     ls::gl::Camera m_camera;

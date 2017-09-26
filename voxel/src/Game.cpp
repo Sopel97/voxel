@@ -10,6 +10,8 @@ Game::Game() :
     m_renderer{}
 {
     GameResourceLoader::loadAssets();
+
+    m_map = std::make_unique<Map>();
 }
 
 
@@ -37,9 +39,18 @@ void Game::run()
             }
         }
 
+        if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        {
+            handleInput(dtDraw);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+        {
+            running = false;
+        }
+
         if (dtTick >= m_tickTime)
         {
-            // do tick
+            m_map->update(*this, m_tickTime);
             lastTick = currentTime;
         }
 
@@ -52,9 +63,18 @@ void Game::run()
 
 Map& Game::map()
 {
-    return m_map;
+    return *m_map;
 }
 const Map& Game::map() const
 {
-    return m_map;
+    return *m_map;
+}
+
+const ls::gl::Camera& Game::camera() const
+{
+    return m_renderer.camera();
+}
+void Game::handleInput(float dt)
+{
+    m_renderer.handleInput(dt);
 }

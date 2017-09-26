@@ -36,6 +36,11 @@ namespace ls
                 other.m_id = m_nullId;
             }
 
+            ~BufferObject()
+            {
+                cleanup();
+            }
+
             template <class T>
             void reserve(GLsizeiptr size, GLenum usage)
             {
@@ -80,8 +85,8 @@ namespace ls
                 if (m_id != m_nullId)
                 {
                     Binder::deleteBuffer(m_id);
+                    m_id = m_nullId;
                 }
-                m_id = m_nullId;
             }
         };
 
