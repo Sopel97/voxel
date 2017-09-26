@@ -1,6 +1,6 @@
-#include "MapGenerator.h"
+#include "map/MapGenerator.h"
 
-#include "MapChunk.h"
+#include "map/MapChunk.h"
 
 #include "ResourceManager.h"
 #include "block/BlockFactory.h"

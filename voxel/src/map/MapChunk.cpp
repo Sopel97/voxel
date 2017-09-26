@@ -1,7 +1,7 @@
-#include "MapChunk.h"
+#include "map/MapChunk.h"
 
-#include "Map.h"
-#include "MapGenerator.h"
+#include "map/Map.h"
+#include "map/MapGenerator.h"
 
 #include "block/Block.h"
 

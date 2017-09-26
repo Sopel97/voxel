@@ -5,7 +5,7 @@
 
 #include "GameRenderer.h"
 
-#include "Map.h"
+#include "map/Map.h"
 
 class Game
 {

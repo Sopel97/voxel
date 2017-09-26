@@ -1,10 +1,10 @@
-#include "MapChunkRenderer.h"
+#include "map/MapChunkRenderer.h"
 
 #include "block/BlockVertex.h"
 #include "block/Block.h"
 #include "block/BlockContainer.h"
 
-#include "MapChunk.h"
+#include "map/MapChunk.h"
 
 MapChunkRenderer::MapChunkRenderer() :
     m_needsUpdate(true),

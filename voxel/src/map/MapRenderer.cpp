@@ -1,7 +1,7 @@
-#include "MapRenderer.h"
+#include "map/MapRenderer.h"
 
-#include "MapChunk.h"
-#include "Map.h"
+#include "map/MapChunk.h"
+#include "map/Map.h"
 
 #include "../LibS/OpenGL/Camera.h"
 #include "../LibS/Shapes/Vec3.h"
