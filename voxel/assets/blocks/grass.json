@@ -1,0 +1,15 @@
+{
+    "block": {
+        "name": "Grass",
+        "type": "PlainBlock",
+
+        "eastTexCoords": [15, 2],
+        "westTexCoords": [15, 2],
+        "bottomTexCoords": [15, 2],
+        "topTexCoords": [15, 3],
+        "southTexCoords": [15, 2],
+        "northTexCoords": [15, 2],
+
+        "opacity": ["East", "West", "Bottom", "Top", "South", "North"]
+    }
+}

@@ -62,6 +62,11 @@ Block& BlockContainer::block()
     return *m_block;
 }
 
+bool BlockContainer::isEmpty() const
+{
+    return m_block == nullptr;
+}
+
 BlockContainer::~BlockContainer()
 {
     if (m_block && m_block->isStateful())

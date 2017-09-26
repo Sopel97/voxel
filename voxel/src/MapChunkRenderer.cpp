@@ -1,6 +1,10 @@
 #include "MapChunkRenderer.h"
 
 #include "block/BlockVertex.h"
+#include "block/Block.h"
+#include "block/BlockContainer.h"
+
+#include "MapChunk.h"
 
 MapChunkRenderer::MapChunkRenderer() :
     m_needsUpdate(true)
@@ -15,9 +19,19 @@ void MapChunkRenderer::draw(MapChunk& chunk)
 {
     if (m_needsUpdate)
     {
-        update();
+        update(chunk);
         m_needsUpdate = false;
     }
+
+    if (m_iboSize > 0)
+    {
+        m_vao.drawElements(GL_TRIANGLES, 0, GL_UNSIGNED_INT);
+    }
+}
+
+void MapChunkRenderer::scheduleUpdate()
+{
+    m_needsUpdate = true;
 }
 void MapChunkRenderer::noLongerRendered(MapChunk& chunk)
 {
@@ -25,7 +39,33 @@ void MapChunkRenderer::noLongerRendered(MapChunk& chunk)
     m_vbo->reset<char>(nullptr, 1, GL_STATIC_DRAW);
     m_ibo->reset<char>(nullptr, 1, GL_STATIC_DRAW);
 }
-void MapChunkRenderer::update()
+void MapChunkRenderer::update(MapChunk& chunk)
 {
+    std::vector<BlockVertex> vertices;
+    std::vector<unsigned> indices;
+    
+    const ls::Vec3I firstBlockPos = chunk.firstBlockPosition();
+    const auto& blocks = chunk.blocks();
+    const auto& opacity = chunk.outsideOpacityCache();
+    for (int x = 0; x < MapChunk::width(); ++x)
+    {
+        for (int y = 0; y < MapChunk::height(); ++y)
+        {
+            for (int z = 0; z < MapChunk::depth(); ++z)
+            {
+                const auto& blockCont = blocks(x, y, z);
+                if (blockCont.isEmpty()) return;
 
+                const ls::Vec3I pos = firstBlockPos + ls::Vec3I(x, y, z);
+                blockCont.block().draw(vertices, indices, pos, opacity(x, y, z));
+            }
+        }
+    }
+
+    m_iboSize = indices.size();
+    if (m_iboSize > 0)
+    {
+        m_vbo->reset(vertices.data(), vertices.size(), GL_DYNAMIC_DRAW);
+        m_ibo->reset(indices.data(), indices.size(), GL_DYNAMIC_DRAW);
+    }
 }

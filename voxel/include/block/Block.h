@@ -6,7 +6,10 @@
 #include "../LibS/Json.h"
 #include "../LibS/Shapes/Vec3.h"
 
+#include "BlockSideOpacity.h"
+
 class Map;
+class BlockVertex;
 
 template <class BlockType>
 class SpecificBlockFactory;
@@ -14,8 +17,8 @@ class SpecificBlockFactory;
 template <class BlockType>
 struct BlockSharedData
 {
-    BlockSharedData(SpecificBlockFactory<BlockType>* blockFactory, const ls::json::Value& config) :
-        blockFactory(blockFactory)
+    BlockSharedData(SpecificBlockFactory<BlockType>& blockFactory, const ls::json::Value& config) :
+        blockFactory(&blockFactory)
     {
     }
 
@@ -38,6 +41,13 @@ public:
     }
     virtual void onAdjacentBlockRemoved(Map& map, const ls::Vec3I& thisPos, const ls::Vec3I& removedBlockPos)
     {
+    }
+    virtual void draw(std::vector<BlockVertex>& vertices, std::vector<unsigned>& indices, const ls::Vec3I& position, BlockSideOpacity outsideOpacity) const
+    {
+    }
+    virtual BlockSideOpacity sideOpacity() const
+    {
+        return BlockSideOpacity::none();
     }
 
     virtual ~Block()

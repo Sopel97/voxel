@@ -11,7 +11,7 @@ public:
 
     virtual int typeId() const = 0;
 
-    virtual ~BlockFactory() = 0;
+    virtual ~BlockFactory() {};
 
 protected:
     int getNextTypeId() const
@@ -30,7 +30,7 @@ public:
 
     SpecificBlockFactory(const ls::json::Value& config) : // or some other way of passing the config
         m_typeId(getNextTypeId()),
-        m_sharedData(std::make_unique<const BlockSharedDataType>(this, config)),
+        m_sharedData(std::make_unique<const BlockSharedDataType>(*this, config)),
         m_singleton(nullptr)
     {
         if (!BlockType::isStatefulStatic())
@@ -55,6 +55,8 @@ public:
     {
         return m_typeId;
     }
+
+    ~SpecificBlockFactory() override = default;
 
 private:
     int m_typeId;

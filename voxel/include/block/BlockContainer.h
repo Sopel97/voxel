@@ -18,6 +18,8 @@ public:
     const Block& block() const;
     Block& block();
 
+    bool isEmpty() const;
+
     ~BlockContainer();
 
 private:
