@@ -18,34 +18,34 @@ PlainBlock::SharedData::SharedData(SpecificBlockFactory<PlainBlock>& blockFactor
 {
     const Spritesheet& texture = ResourceManager<Spritesheet>::instance().get("Spritesheet").get();
 
-    texCoords[static_cast<int>(CubeSide::East)] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        config["eastTexCoords"][0].getInt(),
-        config["eastTexCoords"][1].getInt()
+    texCoords[CubeSide::East] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
+        static_cast<int>(config["eastTexCoords"][0].getInt()),
+        static_cast<int>(config["eastTexCoords"][1].getInt())
     ));
 
-    texCoords[static_cast<int>(CubeSide::West)] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        config["westTexCoords"][0].getInt(),
-        config["westTexCoords"][1].getInt()
+    texCoords[CubeSide::West] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
+        static_cast<int>(config["westTexCoords"][0].getInt()),
+        static_cast<int>(config["westTexCoords"][1].getInt())
     ));
 
-    texCoords[static_cast<int>(CubeSide::Bottom)] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        config["bottomTexCoords"][0].getInt(),
-        config["bottomTexCoords"][1].getInt()
+    texCoords[CubeSide::Bottom] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
+        static_cast<int>(config["bottomTexCoords"][0].getInt()),
+        static_cast<int>(config["bottomTexCoords"][1].getInt())
     ));
 
-    texCoords[static_cast<int>(CubeSide::Top)] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        config["topTexCoords"][0].getInt(),
-        config["topTexCoords"][1].getInt()
+    texCoords[CubeSide::Top] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
+        static_cast<int>(config["topTexCoords"][0].getInt()),
+        static_cast<int>(config["topTexCoords"][1].getInt())
     ));
 
-    texCoords[static_cast<int>(CubeSide::South)] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        config["southTexCoords"][0].getInt(),
-        config["southTexCoords"][1].getInt()
+    texCoords[CubeSide::South] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
+        static_cast<int>(config["southTexCoords"][0].getInt()),
+        static_cast<int>(config["southTexCoords"][1].getInt())
     ));
 
-    texCoords[static_cast<int>(CubeSide::North)] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        config["northTexCoords"][0].getInt(),
-        config["northTexCoords"][1].getInt()
+    texCoords[CubeSide::North] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
+        static_cast<int>(config["northTexCoords"][0].getInt()),
+        static_cast<int>(config["northTexCoords"][1].getInt())
     ));
 
     texSize = texture.gridSizeToTexSizeF({ 1, 1 });

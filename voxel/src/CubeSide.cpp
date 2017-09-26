@@ -21,20 +21,6 @@ CubeSide CubeSide::fromString(const std::string& s)
     }
 }
 
-CubeSide CubeSide::fromDirection(const ls::Vec3I& dir)
-{
-    if (dir.x > 0) return CubeSide(Value::East);
-    if (dir.x < 0) return CubeSide(Value::West);
-
-    if (dir.y > 0) return CubeSide(Value::Top);
-    if (dir.y < 0) return CubeSide(Value::Bottom);
-
-    if (dir.z > 0) return CubeSide(Value::South);
-    if (dir.z < 0) return CubeSide(Value::North);
-
-    return CubeSide{};
-}
-
 const std::string& CubeSide::toString()
 {
     static const std::array<std::string, 6> dict = {
@@ -47,88 +33,4 @@ const std::string& CubeSide::toString()
     };
 
     return dict[static_cast<int>(m_value)];
-}
-
-const ls::Vec3I& CubeSide::direction()
-{
-    static const std::array<ls::Vec3I, 6> dict = {
-        ls::Vec3I{ 1, 0, 0 },
-        ls::Vec3I{ -1, 0, 0 },
-        ls::Vec3I{ 0, 1, 0 },
-        ls::Vec3I{ 0, -1, 0 },
-        ls::Vec3I{ 0, 0, 1 },
-        ls::Vec3I{ 0, 0, -1 }
-    };
-
-    return dict[static_cast<int>(m_value)];
-}
-
-const std::array<BlockVertex, 4>& CubeSide::faceVertices()
-{
-    static const std::array<std::array<BlockVertex, 4>, 6> vertices{
-        std::array<BlockVertex, 4>{
-            BlockVertex{ { 1.0f, 0.0f, 1.0f },{ 0.0f, 0.0f } },
-            BlockVertex{ { 1.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
-            BlockVertex{ { 1.0f, 1.0f, 0.0f },{ 1.0f, 1.0f } },
-            BlockVertex{ { 1.0f, 1.0f, 1.0f },{ 0.0f, 1.0f } }
-        },
-        std::array<BlockVertex, 4>{
-            BlockVertex{ { 0.0f, 0.0f, 0.0f },{ 0.0f, 0.0f } },
-            BlockVertex{ { 0.0f, 0.0f, 1.0f },{ 1.0f, 0.0f } },
-            BlockVertex{ { 0.0f, 1.0f, 1.0f },{ 1.0f, 1.0f } },
-            BlockVertex{ { 0.0f, 1.0f, 0.0f },{ 0.0f, 1.0f } }
-        },
-        std::array<BlockVertex, 4>{
-            BlockVertex{ { 0.0f, 1.0f, 1.0f },{ 0.0f, 0.0f } },
-            BlockVertex{ { 1.0f, 1.0f, 1.0f },{ 1.0f, 0.0f } },
-            BlockVertex{ { 1.0f, 1.0f, 0.0f },{ 1.0f, 1.0f } },
-            BlockVertex{ { 0.0f, 1.0f, 0.0f },{ 0.0f, 1.0f } }
-        },
-        std::array<BlockVertex, 4>{
-            BlockVertex{ { 0.0f, 0.0f, 0.0f },{ 0.0f, 0.0f } },
-            BlockVertex{ { 1.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
-            BlockVertex{ { 1.0f, 0.0f, 1.0f },{ 1.0f, 1.0f } },
-            BlockVertex{ { 0.0f, 0.0f, 1.0f },{ 0.0f, 1.0f } }
-        },
-        std::array<BlockVertex, 4>{
-            BlockVertex{ { 0.0f, 0.0f, 1.0f },{ 0.0f, 0.0f } },
-            BlockVertex{ { 1.0f, 0.0f, 1.0f },{ 1.0f, 0.0f } },
-            BlockVertex{ { 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f } },
-            BlockVertex{ { 0.0f, 1.0f, 1.0f },{ 0.0f, 1.0f } }
-        },
-        std::array<BlockVertex, 4>{
-            BlockVertex{ { 1.0f, 0.0f, 0.0f },{ 0.0f, 0.0f } },
-            BlockVertex{ { 0.0f, 0.0f, 0.0f },{ 1.0f, 0.0f } },
-            BlockVertex{ { 0.0f, 1.0f, 0.0f },{ 1.0f, 1.0f } },
-            BlockVertex{ { 1.0f, 1.0f, 0.0f },{ 0.0f, 1.0f } }
-        },
-    };
-
-    return vertices[static_cast<int>(m_value)];
-}
-const std::array<unsigned, 6>& CubeSide::faceIndices()
-{
-    static const std::array<unsigned, 6> indices{ 0, 1, 2, 0, 2, 3 };
-
-    return indices;
-}
-
-CubeSide::CubeSide(Value val) :
-    m_value(val)
-{
-}
-
-CubeSide& CubeSide::operator=(Value val)
-{
-    m_value = val;
-    return *this;
-}
-
-CubeSide::operator Value()
-{
-    return m_value;
-}
-CubeSide::operator int()
-{
-    return static_cast<int>(m_value);
 }

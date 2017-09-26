@@ -92,12 +92,12 @@ MapChunk* Map::chunkAt(const ls::Vec3I& pos)
 }
 MapChunkNeighbours Map::chunkNeighbours(const ls::Vec3I& pos)
 {
-    MapChunk* east = chunkAt(pos + CubeSide(CubeSide::East).direction());
-    MapChunk* west = chunkAt(pos + CubeSide(CubeSide::West).direction());
-    MapChunk* bottom = chunkAt(pos + CubeSide(CubeSide::Bottom).direction());
-    MapChunk* top = chunkAt(pos + CubeSide(CubeSide::Top).direction());
-    MapChunk* south = chunkAt(pos + CubeSide(CubeSide::South).direction());
-    MapChunk* north = chunkAt(pos + CubeSide(CubeSide::North).direction());
+    MapChunk* east = chunkAt(pos + CubeSide::makeEast().direction());
+    MapChunk* west = chunkAt(pos + CubeSide::makeWest().direction());
+    MapChunk* bottom = chunkAt(pos + CubeSide::makeBottom().direction());
+    MapChunk* top = chunkAt(pos + CubeSide::makeTop().direction());
+    MapChunk* south = chunkAt(pos + CubeSide::makeSouth().direction());
+    MapChunk* north = chunkAt(pos + CubeSide::makeNorth().direction());
 
     return MapChunkNeighbours{ east, west, bottom, top, south, north };
 }

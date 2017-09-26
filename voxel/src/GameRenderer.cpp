@@ -110,10 +110,10 @@ void GameRenderer::handleInput(float dt)
 
     const int windowWidth = m_window.getSize().x;
     const int windowHeight = m_window.getSize().y;
-    const ls::Vec2F mousePos(sf::Mouse::getPosition(m_window).x, sf::Mouse::getPosition(m_window).y);
-    const ls::Vec2F windowCenter(windowWidth / 2, windowHeight / 2);
+    const ls::Vec2F mousePos(static_cast<float>(sf::Mouse::getPosition(m_window).x), static_cast<float>(sf::Mouse::getPosition(m_window).y));
+    const ls::Vec2F windowCenter(windowWidth / 2.0f, windowHeight / 2.0f);
     const ls::Vec2F deltaRot = (mousePos - windowCenter) * mouseSens;
     m_camera.addAngles(ls::Angle2F::radians(deltaRot.x), ls::Angle2F::radians(deltaRot.y));
 
-    sf::Mouse::setPosition(sf::Vector2i(windowCenter.x, windowCenter.y), m_window);
+    sf::Mouse::setPosition(sf::Vector2i(static_cast<int>(windowCenter.x), static_cast<int>(windowCenter.y)), m_window);
 }
