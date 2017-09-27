@@ -19,7 +19,7 @@ public:
     std::map<ls::Vec3I, MapChunk>& chunks();
     const std::map<ls::Vec3I, MapChunk>& chunks() const;
 
-    void draw(const ls::gl::Camera& camera);
+    void draw(const ls::gl::Camera& camera, float dt);
 
     void update(Game& game, float dt);
 

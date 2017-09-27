@@ -16,7 +16,7 @@ MapChunkRenderer::MapChunkRenderer() :
 
     m_ibo = &m_vao.createIndexBufferObject();
 }
-void MapChunkRenderer::draw(MapChunk& chunk)
+void MapChunkRenderer::draw(MapChunk& chunk, float dt)
 {
     if (m_needsUpdate)
     {
@@ -28,17 +28,26 @@ void MapChunkRenderer::draw(MapChunk& chunk)
     {
         m_vao.drawElements(GL_TRIANGLES, m_iboSize, GL_UNSIGNED_INT);
     }
+
+    m_timeSinceLastRender = 0.0f;
 }
 
 void MapChunkRenderer::scheduleUpdate()
 {
     m_needsUpdate = true;
 }
-void MapChunkRenderer::noLongerRendered(MapChunk& chunk)
+void MapChunkRenderer::noLongerRendered(MapChunk& chunk, float dt)
 {
-    // TODO: better emptying of the buffers
-    m_vbo->reset<char>(nullptr, 1, GL_STATIC_DRAW);
-    m_ibo->reset<char>(nullptr, 1, GL_STATIC_DRAW);
+    m_timeSinceLastRender += dt;
+    if (m_iboSize > 0 && m_timeSinceLastRender > m_freeChunkBufferTimeout)
+    {
+        // TODO: better emptying of the buffers
+        m_vbo->reset<char>(nullptr, 1, GL_STATIC_DRAW);
+        m_ibo->reset<char>(nullptr, 1, GL_STATIC_DRAW);
+
+        m_iboSize = 0;
+        m_needsUpdate = true;
+    }
 }
 void MapChunkRenderer::update(MapChunk& chunk)
 {

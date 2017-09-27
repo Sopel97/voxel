@@ -31,7 +31,7 @@ void GameRenderer::draw(Game& game, float dt)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    game.map().draw(m_camera);
+    game.map().draw(m_camera, dt);
 
     m_window.display();
 }

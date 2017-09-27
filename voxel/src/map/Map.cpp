@@ -21,9 +21,9 @@ const std::map<ls::Vec3I, MapChunk>& Map::chunks() const
     return m_chunks;
 }
 
-void Map::draw(const ls::gl::Camera& camera)
+void Map::draw(const ls::gl::Camera& camera, float dt)
 {
-    m_renderer.draw(*this, camera);
+    m_renderer.draw(*this, camera, dt);
 }
 
 void Map::update(Game& game, float dt)
@@ -52,7 +52,7 @@ bool Map::isValidChunkPos(const ls::Vec3I& pos) const
 
 void Map::trySpawnNewChunk(const ls::Vec3I& currentChunk)
 {
-    constexpr int numTries = 10;
+    constexpr int numTries = 100;
     constexpr int maxRange = 5;
     constexpr int maxChunksSpawned = 2;
 

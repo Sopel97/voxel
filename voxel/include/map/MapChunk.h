@@ -38,15 +38,17 @@ public:
 
     void onAdjacentChunkPlaced(MapChunk& placedChunk, const ls::Vec3I& placedChunkPos);
 
-    void emplaceBlock(const BlockFactory& blockFactory, const ls::Vec3I& localPos);
+    void emplaceBlock(const BlockFactory& blockFactory, const ls::Vec3I& localPos, bool doUpdate = true);
 
-    void placeBlock(BlockContainer&& block, const ls::Vec3I& localPos);
+    void placeBlock(BlockContainer&& block, const ls::Vec3I& localPos, bool doUpdate = true);
 
-    BlockContainer removeBlock(const ls::Vec3I& localPos);
+    BlockContainer removeBlock(const ls::Vec3I& localPos, bool doUpdate = true);
 
     void updateBlockOnAdjacentBlockPlaced(const ls::Vec3I& blockToUpdateMapPos, Block& placedBlock, const ls::Vec3I& placedBlockMapPos);
 
     void updateBlockOnAdjacentBlockRemoved(const ls::Vec3I& blockToUpdateMapPos, const ls::Vec3I& removedBlockMapPos);
+
+    void updateAllAsIfPlaced();
 
     BlockContainer& at(const ls::Vec3I& localPos);
     const BlockContainer& at(const ls::Vec3I& localPos) const;
@@ -56,8 +58,8 @@ public:
     const ls::Array3<BlockContainer>& blocks() const;
     const ls::Array3<BlockSideOpacity>& outsideOpacityCache() const;
 
-    void draw();
-    void noLongerRendered();
+    void draw(float dt);
+    void noLongerRendered(float dt);
 
     static constexpr int width()
     {
@@ -91,4 +93,8 @@ private:
     void updateOutsideOpacityOnChunkBorder(const MapChunk& other, const ls::Vec3I& otherPos);
     void updateOutsideOpacityOnAdjacentBlockPlaced(const ls::Vec3I& blockToUpdateMapPos, Block& placedBlock, const ls::Vec3I& placedBlockMapPos);
     void updateOutsideOpacityOnAdjacentBlockRemoved(const ls::Vec3I& blockToUpdateMapPos, const ls::Vec3I& removedBlockMapPos);
+
+    BlockSideOpacity computeOutsideOpacity(ls::Vec3I blockPos, const ls::Array3<BlockSideOpacity>& cache);
+    // created cache has padding on each side, so the coords are shifted by 1
+    ls::Array3<BlockSideOpacity> createBlockOpacityCache();
 };

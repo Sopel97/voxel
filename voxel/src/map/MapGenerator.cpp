@@ -17,6 +17,8 @@ MapGenerator::MapGenerator(Map& map) :
 
 void MapGenerator::generateChunk(MapChunk& chunk) const
 {
+    const auto& grassFactory = ResourceManager<BlockFactory>::instance().get("Grass");
+
     for (int x = 0; x < MapChunk::width(); ++x)
     {
         for (int y = 0; y < MapChunk::height(); ++y)
@@ -24,11 +26,16 @@ void MapGenerator::generateChunk(MapChunk& chunk) const
             for (int z = 0; z < MapChunk::depth(); ++z)
             {
                 float r = rand() / static_cast<float>(RAND_MAX);
+
+                if (r < 0.1)
+                {
+                    chunk.emplaceBlock(grassFactory.get(), { x, y, z }, false);
+                }
             }
         }
     }
 
-    const auto& grassFactory = ResourceManager<BlockFactory>::instance().get("Grass");
+    chunk.emplaceBlock(grassFactory.get(), { 0, 0, 0 }, false);
 
-    chunk.emplaceBlock(grassFactory.get(), { 0, 0, 0 });
+    chunk.updateAllAsIfPlaced();
 }

@@ -19,7 +19,7 @@ MapRenderer::MapRenderer()
     m_uModelViewProjection = m_shader->uniformView("uModelViewProjection");    
     m_shader->uniformView("tex0").set(0);
 }
-void MapRenderer::draw(Map& map, const ls::gl::Camera& camera)
+void MapRenderer::draw(Map& map, const ls::gl::Camera& camera, float dt)
 {
     glEnable(GL_DEPTH_TEST);    
     glDepthFunc(GL_LEQUAL);
@@ -41,11 +41,11 @@ void MapRenderer::draw(Map& map, const ls::gl::Camera& camera)
         auto& chunk = p.second;
         if (shouldForgetChunk(camera, chunk))
         {
-            chunk.noLongerRendered();
+            chunk.noLongerRendered(dt);
         }
         else if(shouldDrawChunk(camera, frustum, chunk))
         {
-            chunk.draw();
+            chunk.draw(dt);
             ++numRenderedChunks;
         }
     }

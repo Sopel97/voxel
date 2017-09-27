@@ -14,7 +14,7 @@ class MapRenderer
 public:
     MapRenderer();
 
-    void draw(Map& map, const ls::gl::Camera& camera);
+    void draw(Map& map, const ls::gl::Camera& camera, float dt);
 private:
     const ls::gl::Texture2* m_texture;
     const ls::gl::ShaderProgram* m_shader;
