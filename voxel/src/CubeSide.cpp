@@ -21,7 +21,7 @@ CubeSide CubeSide::fromString(const std::string& s)
     }
 }
 
-const std::string& CubeSide::toString()
+const std::string& CubeSide::toString() const
 {
     static const std::array<std::string, 6> dict = {
         "East",

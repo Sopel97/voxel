@@ -62,9 +62,9 @@ public:
         return CubeSide{};
     }
 
-    const std::string& toString();
+    const std::string& toString() const;
 
-    constexpr const ls::Vec3I& direction()
+    constexpr const ls::Vec3I& direction() const
     {
         static constexpr std::array<ls::Vec3I, 6> dict{
             ls::Vec3I{ 1, 0, 0 },
@@ -77,7 +77,7 @@ public:
 
         return dict[static_cast<int>(m_value)];
     }
-    constexpr const std::array<BlockVertex, 4>& faceVertices()
+    constexpr const std::array<BlockVertex, 4>& faceVertices() const
     {
         static const std::array<std::array<BlockVertex, 4>, 6> vertices{
             std::array<BlockVertex, 4>{
