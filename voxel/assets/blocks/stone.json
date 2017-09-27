@@ -1,0 +1,15 @@
+{
+    "block": {
+        "name": "Stone",
+        "type": "PlainBlock",
+
+        "eastTexCoords": [1, 15],
+        "westTexCoords": [1, 15],
+        "bottomTexCoords": [1, 15],
+        "topTexCoords": [1, 15],
+        "southTexCoords": [1, 15],
+        "northTexCoords": [1, 15],
+
+        "opacity": ["East", "West", "Bottom", "Top", "South", "North"]
+    }
+}

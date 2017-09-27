@@ -9,6 +9,7 @@
 
 MapChunk::MapChunk(Map& map, const ls::Vec3I& pos, const MapChunkNeighbours& neighbours) :
     m_map(&map),
+    m_seed(map.seed()),
     m_pos(pos),
     m_blocks(m_width, m_height, m_depth, nullptr),
     m_outsideOpacityCache(m_width, m_height, m_depth, BlockSideOpacity::none())
@@ -19,6 +20,7 @@ MapChunk::MapChunk(Map& map, const ls::Vec3I& pos, const MapChunkNeighbours& nei
 
 MapChunk::MapChunk(Map& map, MapGenerator& mapGenerator, const ls::Vec3I& pos, const MapChunkNeighbours& neighbours) :
     m_map(&map),
+    m_seed(map.seed()),
     m_pos(pos),
     m_blocks(m_width, m_height, m_depth, nullptr),
     m_outsideOpacityCache(m_width, m_height, m_depth, BlockSideOpacity::none())
@@ -75,6 +77,11 @@ BlockContainer MapChunk::removeBlock(const ls::Vec3I& localPos, bool doUpdate)
     m_renderer.scheduleUpdate();
 
     return block;
+}
+
+uint32_t MapChunk::seed() const
+{
+    return m_seed;
 }
 
 void MapChunk::updateBlockOnAdjacentBlockPlaced(const ls::Vec3I& blockToUpdateMapPos, Block& placedBlock, const ls::Vec3I& placedBlockMapPos)

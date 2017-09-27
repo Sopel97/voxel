@@ -2,6 +2,7 @@
 
 #include "../Common.h"
 #include "../VectorUtil.h"
+#include "NoiseUtil.h"
 
 namespace ls
 {
@@ -42,7 +43,7 @@ namespace ls
 
             if (m_octaves == 1)
             {
-                return std::forward<NoiseGen>(gen).raw(pos * frequency, period);
+                return detail::scaleResult(std::forward<NoiseGen>(gen).raw(pos * frequency, period), m_lowerBound, m_upperBound);
             }
 
             // do more octaves if needed
@@ -63,7 +64,7 @@ namespace ls
                 amplitude *= m_persistence;
             }
 
-            return total / amplitudeSum;
+            return detail::scaleResult(total / amplitudeSum, m_lowerBound, m_upperBound);
         }
 
         template <class NoiseGen, class RetType = decltype(m_noiseGen.rawDerivative(declval<VectorType>(), declval<VectorTypeI>()))>
@@ -74,7 +75,7 @@ namespace ls
 
             if (m_octaves == 1)
             {
-                return std::forward<NoiseGen>(gen).rawDerivative(pos * frequency, period);
+                return detail::scaleResult(std::forward<NoiseGen>(gen).rawDerivative(pos * frequency, period), m_lowerBound, m_upperBound);
             }
 
             // do more octaves if needed
@@ -95,7 +96,7 @@ namespace ls
                 amplitude *= m_persistence;
             }
 
-            return total / amplitudeSum;
+            return detail::scaleResult(total / amplitudeSum, m_lowerBound, m_upperBound);
         }
 
         void setScale(const VectorType& newScale)

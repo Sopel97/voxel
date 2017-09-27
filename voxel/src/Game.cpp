@@ -11,7 +11,7 @@ Game::Game() :
 {
     GameResourceLoader::loadAssets();
 
-    m_map = std::make_unique<Map>();
+    m_map = std::make_unique<Map>(321412u);
 }
 
 

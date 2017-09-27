@@ -14,7 +14,7 @@ class Game;
 class Map
 {
 public:
-    Map();
+    Map(uint32_t seed);
 
     std::map<ls::Vec3I, MapChunk>& chunks();
     const std::map<ls::Vec3I, MapChunk>& chunks() const;
@@ -31,13 +31,18 @@ public:
 
     MapChunkNeighbours chunkNeighbours(const ls::Vec3I& pos);
 
+    uint32_t seed() const;
+
 private:
     MapRenderer m_renderer;
     MapGenerator m_generator;
+    uint32_t m_seed;
     std::map<ls::Vec3I, MapChunk> m_chunks;
 
     static constexpr int m_maxWorldHeight = 256;
     static_assert(m_maxWorldHeight % MapChunk::height() == 0);
+
+    static constexpr int m_minChunkDistanceToUnload = 20;
 
     void trySpawnNewChunk(const ls::Vec3I& currentChunk);
     void spawnChunk(const ls::Vec3I& pos);

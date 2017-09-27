@@ -20,7 +20,7 @@ private:
     const ls::gl::ShaderProgram* m_shader;
     ls::gl::ProgramUniformView m_uModelViewProjection;
 
-    static constexpr float m_maxDistanceToRenderedChunk = 160.0f;
+    static constexpr float m_maxDistanceToRenderedChunk = 16.0f * 16.0f;
 
     // expects normalized planes in frustum
     static bool shouldDrawChunk(const ls::gl::Camera& camera, const ls::Frustum3F& frustum, const MapChunk& chunk);

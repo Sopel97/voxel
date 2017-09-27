@@ -1,0 +1,15 @@
+{
+    "block": {
+        "name": "Dirt",
+        "type": "PlainBlock",
+
+        "eastTexCoords": [2, 15],
+        "westTexCoords": [2, 15],
+        "bottomTexCoords": [2, 15],
+        "topTexCoords": [2, 15],
+        "southTexCoords": [2, 15],
+        "northTexCoords": [2, 15],
+
+        "opacity": ["East", "West", "Bottom", "Top", "South", "North"]
+    }
+}

@@ -61,6 +61,8 @@ public:
     void draw(float dt);
     void noLongerRendered(float dt);
 
+    uint32_t seed() const;
+
     static constexpr int width()
     {
         return m_width;
@@ -76,6 +78,7 @@ public:
 
 private:
     Map* m_map;
+    uint32_t m_seed;
     ls::Vec3I m_pos;
     ls::Sphere3F m_boundingSphere;
     MapChunkRenderer m_renderer;

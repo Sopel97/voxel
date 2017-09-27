@@ -6,9 +6,10 @@
 
 #include <cstdlib>
 
-Map::Map() :
+Map::Map(uint32_t seed) :
     m_renderer{},
-    m_generator(*this)
+    m_generator(*this),
+    m_seed(seed)
 {
 
 }
@@ -53,17 +54,22 @@ bool Map::isValidChunkPos(const ls::Vec3I& pos) const
 void Map::trySpawnNewChunk(const ls::Vec3I& currentChunk)
 {
     constexpr int numTries = 100;
-    constexpr int maxRange = 5;
-    constexpr int maxChunksSpawned = 2;
+    constexpr int maxRange = 10;
+    constexpr int maxChunksSpawned = 10;
 
     int numChunksSpawned = 0;
     for (int i = 0; i < numTries && numChunksSpawned < maxChunksSpawned; ++i)
     {
-        const ls::Vec3I offset(
+        ls::Vec3I offset(
             rand() % (maxRange * 2 + 1) - maxRange,
             rand() % (maxRange * 2 + 1) - maxRange,
             rand() % (maxRange * 2 + 1) - maxRange
         );
+
+        ls::Vec3I sgn(offset.x > 0 ? 1 : -1, offset.y > 0 ? 1 : -1, offset.z > 0 ? 1 : -1);
+        offset *= offset;
+        offset /= 10;
+        offset *= sgn;
 
         const ls::Vec3I pos = currentChunk + offset;
         if (isValidChunkPos(pos))
@@ -77,6 +83,10 @@ void Map::trySpawnNewChunk(const ls::Vec3I& currentChunk)
     }
 }
 
+uint32_t Map::seed() const
+{
+    return m_seed;
+}
 
 MapChunk* Map::chunkAt(const ls::Vec3I& pos)
 {
@@ -116,12 +126,10 @@ void Map::spawnChunk(const ls::Vec3I& pos)
 }
 void Map::unloadFarChunks(const ls::Vec3I& currentChunk)
 {
-    static constexpr int maxDistance = 8;
-
     for (auto iter = m_chunks.begin(); iter != m_chunks.end();)
     {
         auto& pos = iter->first;
-        if (distanceBetweenChunks(currentChunk, pos) > maxDistance)
+        if (distanceBetweenChunks(currentChunk, pos) >= m_minChunkDistanceToUnload)
         {
             iter = unloadChunk(iter);
         }
