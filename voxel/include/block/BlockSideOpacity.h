@@ -4,8 +4,8 @@ struct BlockSideOpacity
 {
     bool east : 1;
     bool west : 1;
-    bool bottom : 1;
     bool top : 1;
+    bool bottom : 1;
     bool south : 1;
     bool north : 1;
 

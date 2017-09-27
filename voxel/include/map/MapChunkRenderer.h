@@ -12,7 +12,8 @@ public:
     MapChunkRenderer();
 
     void draw(MapChunk& chunk, float dt);
-    void noLongerRendered(MapChunk& chunk, float dt);
+    void tooFarToDraw(MapChunk& chunk, float dt);
+    void culled(MapChunk& chunk, float dt);
 
     void scheduleUpdate();
 
@@ -20,11 +21,11 @@ private:
     ls::gl::VertexArrayObject m_vao;
     ls::gl::VertexBufferObject* m_vbo;
     ls::gl::IndexBufferObject* m_ibo;
-    float m_timeSinceLastRender;
+    float m_timeOutsideDrawingRange;
     int m_iboSize;
     bool m_needsUpdate; 
     
-    static constexpr float m_freeChunkBufferTimeout = 30.0f;
+    static constexpr float m_maxTimeOutsideDrawingRange = 30.0f;
 
     void update(MapChunk& chunk);
 };

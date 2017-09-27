@@ -9,7 +9,8 @@
 Map::Map(uint32_t seed) :
     m_renderer{},
     m_generator(*this),
-    m_seed(seed)
+    m_seed(seed), 
+    m_timeSinceLastChunkUnloadPass(0.0f)
 {
 
 }
@@ -32,8 +33,15 @@ void Map::update(Game& game, float dt)
     const auto& cameraPos = game.camera().position();
 
     const auto currentChunk = worldToChunk(cameraPos);
-    unloadFarChunks(currentChunk);
+
     trySpawnNewChunk(currentChunk);
+
+    ++m_timeSinceLastChunkUnloadPass;
+    if (m_timeSinceLastChunkUnloadPass >= m_timeBetweenChunkUnloadingPasses)
+    {
+        unloadFarChunks(currentChunk);
+        m_timeSinceLastChunkUnloadPass = 0.0f;
+    }
 }
 
 ls::Vec3I Map::worldToChunk(const ls::Vec3F& worldPos) const
@@ -57,6 +65,26 @@ void Map::trySpawnNewChunk(const ls::Vec3I& currentChunk)
     constexpr int maxRange = 10;
     constexpr int maxChunksSpawned = 10;
 
+    // always spawn chunks in near proximity
+    for (int dx = -1; dx <= 1; ++dx)
+    {
+        for (int dy = -1; dy <= 1; ++dy)
+        {
+            for (int dz = -1; dz <= 1; ++dz)
+            {
+                const ls::Vec3I pos = currentChunk + ls::Vec3I(dx, dy, dz);
+
+                if (isValidChunkPos(pos))
+                {
+                    if (m_chunks.count(pos) == 0)
+                    {
+                        spawnChunk(pos);
+                    }
+                }
+            }
+        }
+    }
+
     int numChunksSpawned = 0;
     for (int i = 0; i < numTries && numChunksSpawned < maxChunksSpawned; ++i)
     {
@@ -74,7 +102,7 @@ void Map::trySpawnNewChunk(const ls::Vec3I& currentChunk)
         const ls::Vec3I pos = currentChunk + offset;
         if (isValidChunkPos(pos))
         {
-            if (m_chunks.count(offset) == 0)
+            if (m_chunks.count(pos) == 0)
             {
                 spawnChunk(pos);
                 ++numChunksSpawned;
@@ -104,12 +132,12 @@ MapChunkNeighbours Map::chunkNeighbours(const ls::Vec3I& pos)
 {
     MapChunk* east = chunkAt(pos + CubeSide::makeEast().direction());
     MapChunk* west = chunkAt(pos + CubeSide::makeWest().direction());
-    MapChunk* bottom = chunkAt(pos + CubeSide::makeBottom().direction());
     MapChunk* top = chunkAt(pos + CubeSide::makeTop().direction());
+    MapChunk* bottom = chunkAt(pos + CubeSide::makeBottom().direction());
     MapChunk* south = chunkAt(pos + CubeSide::makeSouth().direction());
     MapChunk* north = chunkAt(pos + CubeSide::makeNorth().direction());
 
-    return MapChunkNeighbours{ east, west, bottom, top, south, north };
+    return MapChunkNeighbours{ east, west, top, bottom, south, north };
 }
 void Map::spawnChunk(const ls::Vec3I& pos)
 {
@@ -119,8 +147,8 @@ void Map::spawnChunk(const ls::Vec3I& pos)
 
     if (neighbours.east) neighbours.east->onAdjacentChunkPlaced(placedChunk, pos);
     if (neighbours.west) neighbours.west->onAdjacentChunkPlaced(placedChunk, pos);
-    if (neighbours.bottom) neighbours.bottom->onAdjacentChunkPlaced(placedChunk, pos);
     if (neighbours.top) neighbours.top->onAdjacentChunkPlaced(placedChunk, pos);
+    if (neighbours.bottom) neighbours.bottom->onAdjacentChunkPlaced(placedChunk, pos);
     if (neighbours.south) neighbours.south->onAdjacentChunkPlaced(placedChunk, pos);
     if (neighbours.north) neighbours.north->onAdjacentChunkPlaced(placedChunk, pos);
 }

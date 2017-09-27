@@ -41,16 +41,20 @@ void MapRenderer::draw(Map& map, const ls::gl::Camera& camera, float dt)
         auto& chunk = p.second;
         if (shouldForgetChunk(camera, chunk))
         {
-            chunk.noLongerRendered(dt);
+            chunk.tooFarToDraw(dt);
         }
         else if(shouldDrawChunk(camera, frustum, chunk))
         {
             chunk.draw(dt);
             ++numRenderedChunks;
         }
+        else
+        {
+            chunk.culled(dt);
+        }
     }
 
-    //std::cout << "Rendered chunks: " << numRenderedChunks << '/' << map.chunks().size() << '\n';
+    std::cout << "Rendered chunks: " << numRenderedChunks << '/' << map.chunks().size() << '\n';
 }
 
 bool MapRenderer::shouldDrawChunk(const ls::gl::Camera& camera, const ls::Frustum3F& frustum, const MapChunk& chunk)

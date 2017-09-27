@@ -37,12 +37,15 @@ private:
     MapRenderer m_renderer;
     MapGenerator m_generator;
     uint32_t m_seed;
+    float m_timeSinceLastChunkUnloadPass;
     std::map<ls::Vec3I, MapChunk> m_chunks;
 
     static constexpr int m_maxWorldHeight = 256;
     static_assert(m_maxWorldHeight % MapChunk::height() == 0);
 
     static constexpr int m_minChunkDistanceToUnload = 20;
+
+    static constexpr float m_timeBetweenChunkUnloadingPasses = 1.0f;
 
     void trySpawnNewChunk(const ls::Vec3I& currentChunk);
     void spawnChunk(const ls::Vec3I& pos);

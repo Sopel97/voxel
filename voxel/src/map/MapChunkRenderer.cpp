@@ -29,17 +29,17 @@ void MapChunkRenderer::draw(MapChunk& chunk, float dt)
         m_vao.drawElements(GL_TRIANGLES, m_iboSize, GL_UNSIGNED_INT);
     }
 
-    m_timeSinceLastRender = 0.0f;
+    m_timeOutsideDrawingRange = 0.0f;
 }
 
 void MapChunkRenderer::scheduleUpdate()
 {
     m_needsUpdate = true;
 }
-void MapChunkRenderer::noLongerRendered(MapChunk& chunk, float dt)
+void MapChunkRenderer::tooFarToDraw(MapChunk& chunk, float dt)
 {
-    m_timeSinceLastRender += dt;
-    if (m_iboSize > 0 && m_timeSinceLastRender > m_freeChunkBufferTimeout)
+    m_timeOutsideDrawingRange += dt;
+    if (m_iboSize > 0 && m_timeOutsideDrawingRange > m_maxTimeOutsideDrawingRange)
     {
         // TODO: better emptying of the buffers
         m_vbo->reset<char>(nullptr, 1, GL_STATIC_DRAW);
@@ -48,6 +48,16 @@ void MapChunkRenderer::noLongerRendered(MapChunk& chunk, float dt)
         m_iboSize = 0;
         m_needsUpdate = true;
     }
+}
+void MapChunkRenderer::culled(MapChunk& chunk, float dt)
+{
+    if (m_needsUpdate)
+    {
+        update(chunk);
+        m_needsUpdate = false;
+    }
+
+    m_timeOutsideDrawingRange = 0.0f;
 }
 void MapChunkRenderer::update(MapChunk& chunk)
 {

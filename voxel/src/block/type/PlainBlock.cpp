@@ -28,14 +28,14 @@ PlainBlock::SharedData::SharedData(SpecificBlockFactory<PlainBlock>& blockFactor
         static_cast<int>(config["westTexCoords"][1].getInt())
     ));
 
-    texCoords[CubeSide::Bottom] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        static_cast<int>(config["bottomTexCoords"][0].getInt()),
-        static_cast<int>(config["bottomTexCoords"][1].getInt())
-    ));
-
     texCoords[CubeSide::Top] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
         static_cast<int>(config["topTexCoords"][0].getInt()),
         static_cast<int>(config["topTexCoords"][1].getInt())
+    ));
+
+    texCoords[CubeSide::Bottom] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
+        static_cast<int>(config["bottomTexCoords"][0].getInt()),
+        static_cast<int>(config["bottomTexCoords"][1].getInt())
     ));
 
     texCoords[CubeSide::South] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
@@ -64,10 +64,10 @@ PlainBlock::SharedData::SharedData(SpecificBlockFactory<PlainBlock>& blockFactor
         case CubeSide::West:
             opacity.west = true;
             break;
-        case CubeSide::Bottom:
+        case CubeSide::Top:
             opacity.bottom = true;
             break;
-        case CubeSide::Top:
+        case CubeSide::Bottom:
             opacity.top = true;
             break;
         case CubeSide::South:
@@ -99,11 +99,11 @@ void PlainBlock::draw(std::vector<BlockVertex>& vertices, std::vector<unsigned>&
     }
     if (!outsideOpacity.top)
     {
-        drawFace(vertices, indices, position, CubeSide::Top);
+        drawFace(vertices, indices, position, CubeSide::Bottom);
     }
     if (!outsideOpacity.bottom)
     {
-        drawFace(vertices, indices, position, CubeSide::Bottom);
+        drawFace(vertices, indices, position, CubeSide::Top);
     }
     if (!outsideOpacity.south)
     {

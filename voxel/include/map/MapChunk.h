@@ -59,7 +59,8 @@ public:
     const ls::Array3<BlockSideOpacity>& outsideOpacityCache() const;
 
     void draw(float dt);
-    void noLongerRendered(float dt);
+    void tooFarToDraw(float dt);
+    void culled(float dt);
 
     uint32_t seed() const;
 

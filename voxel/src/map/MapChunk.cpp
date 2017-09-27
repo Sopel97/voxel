@@ -138,9 +138,13 @@ void MapChunk::draw(float dt)
 {
     m_renderer.draw(*this, dt);
 }
-void MapChunk::noLongerRendered(float dt)
+void MapChunk::tooFarToDraw(float dt)
 {
-    m_renderer.noLongerRendered(*this, dt);
+    m_renderer.tooFarToDraw(*this, dt);
+}
+void MapChunk::culled(float dt)
+{
+    m_renderer.culled(*this, dt);
 }
 
 ls::Vec3I MapChunk::mapToLocalPos(const ls::Vec3I& mapPos) const
@@ -219,17 +223,16 @@ void MapChunk::updateOutsideOpacityOnChunkBorder(const MapChunk& other, const ls
 {
     const ls::Vec3I diff = otherPos - m_pos;
     const auto dir = CubeSide::fromDirection(diff);
-    const ls::Vec3I dirVector = dir.direction();
 
     // calculate bounding coords of a 16x16 plane of blocks
     // on the side next to the other chunk
-    int minX = dirVector.x == 1 ? m_width - 1 : 0;
-    int minY = dirVector.y == 1 ? m_height - 1 : 0;
-    int minZ = dirVector.z == 1 ? m_depth - 1 : 0;
+    int minX = diff.x == 1 ? m_width - 1 : 0;
+    int minY = diff.y == 1 ? m_height - 1 : 0;
+    int minZ = diff.z == 1 ? m_depth - 1 : 0;
 
-    int maxX = std::abs(dirVector.x) == 1 ? minX : m_width - 1;
-    int maxY = std::abs(dirVector.y) == 1 ? minY : m_height - 1;
-    int maxZ = std::abs(dirVector.z) == 1 ? minZ : m_depth - 1;
+    int maxX = std::abs(diff.x) == 1 ? minX : m_width - 1;
+    int maxY = std::abs(diff.y) == 1 ? minY : m_height - 1;
+    int maxZ = std::abs(diff.z) == 1 ? minZ : m_depth - 1;
 
     for (int x = minX; x <= maxX; ++x)
     {
@@ -254,10 +257,10 @@ void MapChunk::updateOutsideOpacityOnChunkBorder(const MapChunk& other, const ls
                     selfOpacity.west = otherOpacity.east;
                     break;
                 case CubeSide::Bottom:
-                    selfOpacity.bottom = otherOpacity.top;
+                    selfOpacity.top = selfOpacity.bottom;
                     break;
                 case CubeSide::Top:
-                    selfOpacity.top = otherOpacity.bottom;
+                    selfOpacity.bottom = selfOpacity.top;
                     break;
                 case CubeSide::South:
                     selfOpacity.south = otherOpacity.north;
@@ -288,10 +291,10 @@ void MapChunk::updateOutsideOpacityOnAdjacentBlockPlaced(const ls::Vec3I& blockT
         selfOpacity.west = otherOpacity.east;
         break;
     case CubeSide::Bottom:
-        selfOpacity.bottom = otherOpacity.top;
+        selfOpacity.top = otherOpacity.bottom;
         break;
     case CubeSide::Top:
-        selfOpacity.top = otherOpacity.bottom;
+        selfOpacity.bottom = otherOpacity.top;
         break;
     case CubeSide::South:
         selfOpacity.south = otherOpacity.north;
@@ -329,8 +332,8 @@ BlockSideOpacity MapChunk::computeOutsideOpacity(ls::Vec3I blockPos, const ls::A
     return BlockSideOpacity{
         eastBlockOpacity.west,
         westBlockOpacity.east,
-        bottomBlockOpacity.top,
-        topBlockOpacity.bottom,
+        bottomBlockOpacity.bottom,
+        topBlockOpacity.top,
         southBlockOpacity.north,
         northBlockOpacity.south
     };
@@ -345,7 +348,7 @@ ls::Array3<BlockSideOpacity> MapChunk::createBlockOpacityCache()
         {
             for (int z = 1; z < m_depth + 1; ++z)
             {
-                auto& block = m_blocks.at(x-1, y-1, z-1);
+                auto& block = m_blocks.at(x - 1, y - 1, z - 1);
                 if (block.isEmpty())
                 {
                     continue;
