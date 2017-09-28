@@ -12,7 +12,8 @@ Map::Map(uint32_t seed) :
     m_seed(seed), 
     m_timeSinceLastChunkUnloadPass(0.0f),
     m_timeSinceLastMissingChunkPosCacheUpdate(0.0f),
-    m_missingChunkPosCacheCurrentPosition(0)
+    m_missingChunkPosCacheCurrentPosition(0),
+    m_missingChunkPosCacheLastOrigin(1, 1, 1) // must not be the starting chunk
 {
 }
 std::map<ls::Vec3I, MapChunk>& Map::chunks()
@@ -45,10 +46,11 @@ void Map::update(Game& game, float dt)
     }
 
     m_timeSinceLastMissingChunkPosCacheUpdate += dt;
-    if (m_timeSinceLastMissingChunkPosCacheUpdate >= m_timeBetweenMissingChunkPosCacheUpdates)
+    if (m_timeSinceLastMissingChunkPosCacheUpdate >= m_timeBetweenMissingChunkPosCacheUpdates && m_missingChunkPosCacheLastOrigin != currentChunk)
     {
         updateMissingChunkPosCache(currentChunk);
         m_timeSinceLastMissingChunkPosCacheUpdate = 0.0f;
+        m_missingChunkPosCacheLastOrigin = currentChunk;
     }
 }
 
@@ -161,7 +163,7 @@ void Map::updateMissingChunkPosCache(const ls::Vec3I& currentChunkPos)
         }
 
         std::sort(result.begin(), result.end(), [](const ls::Vec3I& lhs, const ls::Vec3I& rhs) {
-            return std::abs(lhs.x) + std::abs(lhs.y) + std::abs(lhs.z) < std::abs(rhs.x) + std::abs(rhs.y) + std::abs(rhs.z);
+            return std::abs(lhs.x) + std::abs(lhs.y * 2) + std::abs(lhs.z) < std::abs(rhs.x) + std::abs(rhs.y * 2) + std::abs(rhs.z); // value horizontal directions more
         });
 
         return result;

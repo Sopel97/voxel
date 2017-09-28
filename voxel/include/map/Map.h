@@ -43,6 +43,7 @@ private:
     float m_timeSinceLastMissingChunkPosCacheUpdate;
     std::vector<ls::Vec3I> m_missingChunkPosCache;
     int m_missingChunkPosCacheCurrentPosition;
+    ls::Vec3I m_missingChunkPosCacheLastOrigin;
 
     static constexpr int m_maxWorldHeight = 256;
     static_assert(m_maxWorldHeight % MapChunk::height() == 0);
