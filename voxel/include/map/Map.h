@@ -9,6 +9,8 @@
 #include "../LibS/Shapes/Vec3.h"
 #include "../LibS/OpenGL/Camera.h"
 
+#include "ResourceManager.h"
+
 class Game;
 
 class Map
@@ -33,10 +35,13 @@ public:
 
     uint32_t seed() const;
 
+    BlockContainer instantiateAirBlock() const;
+
 private:
     MapRenderer m_renderer;
     MapGenerator m_generator;
     uint32_t m_seed;
+    ResourceHandle<BlockFactory> m_airFactory;
     float m_timeSinceLastChunkUnloadPass;
     std::map<ls::Vec3I, MapChunk> m_chunks;
 

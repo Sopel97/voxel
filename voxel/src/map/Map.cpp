@@ -10,6 +10,7 @@ Map::Map(uint32_t seed) :
     m_renderer{},
     m_generator(*this),
     m_seed(seed), 
+    m_airFactory(ResourceManager<BlockFactory>::instance().get("Air")),
     m_timeSinceLastChunkUnloadPass(0.0f),
     m_timeSinceLastMissingChunkPosCacheUpdate(0.0f),
     m_missingChunkPosCacheCurrentPosition(0),
@@ -28,6 +29,11 @@ const std::map<ls::Vec3I, MapChunk>& Map::chunks() const
 void Map::draw(const ls::gl::Camera& camera, float dt)
 {
     m_renderer.draw(*this, camera, dt);
+}
+
+BlockContainer Map::instantiateAirBlock() const
+{
+    return m_airFactory.get().instantiate();
 }
 
 void Map::update(Game& game, float dt)

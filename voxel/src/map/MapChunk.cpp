@@ -68,11 +68,13 @@ void MapChunk::placeBlock(BlockContainer&& block, const ls::Vec3I& localPos, boo
 
 BlockContainer MapChunk::removeBlock(const ls::Vec3I& localPos, bool doUpdate)
 {
-    BlockContainer block = std::move(at(localPos));
+    BlockContainer& block = at(localPos);
     if (doUpdate)
     {
         block.block().onBlockRemoved(*m_map, localPos);
     }
+
+    block = m_map->instantiateAirBlock();
 
     m_renderer.scheduleUpdate();
 

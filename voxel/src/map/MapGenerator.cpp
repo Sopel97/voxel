@@ -10,6 +10,8 @@
 #include "../LibS/Noise/NoiseSampler.h"
 #include "../LibS/Noise/SimplexNoise.h"
 
+#include "map\Map.h"
+
 #include <cstdlib>
 #include <utility>
 
@@ -38,7 +40,6 @@ void MapGenerator::generateChunk(MapChunk& chunk) const
         uint32_t m_seed;
     };
 
-    const auto& airFactory = ResourceManager<BlockFactory>::instance().get("Air");
     const auto& grassFactory = ResourceManager<BlockFactory>::instance().get("Grass");
     const auto& dirtFactory = ResourceManager<BlockFactory>::instance().get("Dirt");
     const auto& stoneFactory = ResourceManager<BlockFactory>::instance().get("Stone");
@@ -81,7 +82,7 @@ void MapGenerator::generateChunk(MapChunk& chunk) const
             }
             while (y < MapChunk::height())
             {
-                chunk.emplaceBlock(airFactory.get(), { x, y, z }, false);
+                chunk.placeBlock(m_map->instantiateAirBlock(), { x, y, z }, false);
                 ++y;
             }
                 
