@@ -38,6 +38,7 @@ void MapGenerator::generateChunk(MapChunk& chunk) const
         uint32_t m_seed;
     };
 
+    const auto& airFactory = ResourceManager<BlockFactory>::instance().get("Air");
     const auto& grassFactory = ResourceManager<BlockFactory>::instance().get("Grass");
     const auto& dirtFactory = ResourceManager<BlockFactory>::instance().get("Dirt");
     const auto& stoneFactory = ResourceManager<BlockFactory>::instance().get("Stone");
@@ -61,25 +62,26 @@ void MapGenerator::generateChunk(MapChunk& chunk) const
             const int stoneLayerTop = 110 + static_cast<int>(r * 5.0) - firstBlockPos.y;
             const int dirtLayerTop = stoneLayerTop + static_cast<int>(r * 2.0) + 2;
             const int grassLayerTop = dirtLayerTop + 1;
-            if (grassLayerTop < 0) continue;
 
             int y = 0;
             while (y < MapChunk::height() && y <= stoneLayerTop)
             {
-                if (rand() % 100 > 1) 
                 chunk.emplaceBlock(stoneFactory.get(), { x, y, z }, false);
                 ++y;
             }
             while (y < MapChunk::height() && y <= dirtLayerTop)
             {
-                if (rand() % 100 > 1)
                 chunk.emplaceBlock(dirtFactory.get(), { x, y, z }, false);
                 ++y;
             }
             while (y < MapChunk::height() && y <= grassLayerTop)
             {
-                if (rand() % 100 > 1)
                 chunk.emplaceBlock(grassFactory.get(), { x, y, z }, false);
+                ++y;
+            }
+            while (y < MapChunk::height())
+            {
+                chunk.emplaceBlock(airFactory.get(), { x, y, z }, false);
                 ++y;
             }
                 

@@ -78,7 +78,6 @@ void MapChunkRenderer::update(MapChunk& chunk)
             for (int z = 0; z < MapChunk::depth(); ++z)
             {
                 const auto& blockCont = blocks(x, y, z);
-                if (blockCont.isEmpty()) continue;
 
                 const ls::Vec3I pos = firstBlockPos + ls::Vec3I(x, y, z);
                 blockCont.block().draw(vertices, indices, pos, opacity(x, y, z));

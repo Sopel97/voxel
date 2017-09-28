@@ -44,9 +44,7 @@ public:
 
     BlockContainer removeBlock(const ls::Vec3I& localPos, bool doUpdate = true);
 
-    void updateBlockOnAdjacentBlockPlaced(const ls::Vec3I& blockToUpdateMapPos, Block& placedBlock, const ls::Vec3I& placedBlockMapPos);
-
-    void updateBlockOnAdjacentBlockRemoved(const ls::Vec3I& blockToUpdateMapPos, const ls::Vec3I& removedBlockMapPos);
+    void updateBlockOnAdjacentBlockChanged(const ls::Vec3I& blockToUpdateMapPos, Block& changedBlock, const ls::Vec3I& changedBlockMapPos);
 
     void updateAllAsIfPlaced();
 
@@ -95,8 +93,7 @@ private:
     void updateOutsideOpacity(const MapChunkNeighbours& neighbours);
     void updateOutsideOpacityOnChunkBorders(const MapChunkNeighbours& neighbours);
     void updateOutsideOpacityOnChunkBorder(const MapChunk& other, const ls::Vec3I& otherPos);
-    void updateOutsideOpacityOnAdjacentBlockPlaced(const ls::Vec3I& blockToUpdateMapPos, Block& placedBlock, const ls::Vec3I& placedBlockMapPos);
-    void updateOutsideOpacityOnAdjacentBlockRemoved(const ls::Vec3I& blockToUpdateMapPos, const ls::Vec3I& removedBlockMapPos);
+    void updateOutsideOpacityOnAdjacentBlockChanged(const ls::Vec3I& blockToUpdateMapPos, Block& changedBlock, const ls::Vec3I& changedBlockMapPos);
 
     BlockSideOpacity computeOutsideOpacity(ls::Vec3I blockPos, const ls::Array3<BlockSideOpacity>& cache);
     // created cache has padding on each side, so the coords are shifted by 1

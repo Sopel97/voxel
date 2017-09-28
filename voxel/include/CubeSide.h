@@ -64,6 +64,20 @@ public:
 
     const std::string& toString() const;
 
+    constexpr CubeSide opposite() const
+    {
+        static constexpr std::array<Value, 6> dict{
+            West,
+            East,
+            Bottom,
+            Top,
+            North,
+            South
+        };
+
+        return CubeSide(dict[static_cast<int>(m_value)]);
+    }
+
     constexpr const ls::Vec3I& direction() const
     {
         static constexpr std::array<ls::Vec3I, 6> dict{

@@ -36,10 +36,7 @@ public:
     virtual void onBlockRemoved(Map& map, const ls::Vec3I& pos)
     {
     }
-    virtual void onAdjacentBlockPlaced(Map& map, const ls::Vec3I& thisPos, Block& placedBlock, const ls::Vec3I& placedBlockPos)
-    {
-    }
-    virtual void onAdjacentBlockRemoved(Map& map, const ls::Vec3I& thisPos, const ls::Vec3I& removedBlockPos)
+    virtual void onAdjacentBlockChanged(Map& map, const ls::Vec3I& thisPos, Block& changedBlock, const ls::Vec3I& changedBlockPos)
     {
     }
     virtual void draw(std::vector<BlockVertex>& vertices, std::vector<unsigned>& indices, const ls::Vec3I& position, BlockSideOpacity outsideOpacity) const

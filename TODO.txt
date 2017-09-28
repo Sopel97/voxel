@@ -1,0 +1,7 @@
+- Proper block updating when adjacent chunk is placed
+- Map should handle placing/removing events to adjacent blocks (when placing single blocks. When a chunk is placed, other chunks get notified and resolve updates by themselves)
+
+- Light (after updating is resolved completely)
+-- 4 bits for 'sun', 4 bits for local
+-- stored and updated in chunk like opacity cache is stored now (so 6 bytes per block)
+--- consider storing them in one struct so the updating is less code
