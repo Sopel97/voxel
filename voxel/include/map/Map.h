@@ -37,6 +37,8 @@ public:
 
     BlockContainer instantiateAirBlock() const;
 
+    static int distanceBetweenChunks(const ls::Vec3I& lhs, const ls::Vec3I& rhs);
+
 private:
     MapRenderer m_renderer;
     MapGenerator m_generator;
@@ -65,7 +67,6 @@ private:
     void trySpawnNewChunk(const ls::Vec3I& currentChunk);
     void spawnChunk(const ls::Vec3I& pos);
     void unloadFarChunks(const ls::Vec3I& currentChunk);
-    int distanceBetweenChunks(const ls::Vec3I& lhs, const ls::Vec3I& rhs);
     std::map<ls::Vec3I, MapChunk>::iterator unloadChunk(const std::map<ls::Vec3I, MapChunk>::iterator& iter);
 
     void updateMissingChunkPosCache(const ls::Vec3I& pos);

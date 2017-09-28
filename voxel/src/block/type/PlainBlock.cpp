@@ -65,10 +65,10 @@ PlainBlock::SharedData::SharedData(SpecificBlockFactory<PlainBlock>& blockFactor
             opacity.west = true;
             break;
         case CubeSide::Top:
-            opacity.bottom = true;
+            opacity.top = true;
             break;
         case CubeSide::Bottom:
-            opacity.top = true;
+            opacity.bottom = true;
             break;
         case CubeSide::South:
             opacity.south = true;
@@ -99,11 +99,11 @@ void PlainBlock::draw(std::vector<BlockVertex>& vertices, std::vector<unsigned>&
     }
     if (!outsideOpacity.top)
     {
-        drawFace(vertices, indices, position, CubeSide::Bottom);
+        drawFace(vertices, indices, position, CubeSide::Top);
     }
     if (!outsideOpacity.bottom)
     {
-        drawFace(vertices, indices, position, CubeSide::Top);
+        drawFace(vertices, indices, position, CubeSide::Bottom);
     }
     if (!outsideOpacity.south)
     {

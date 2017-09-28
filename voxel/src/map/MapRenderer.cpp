@@ -35,12 +35,14 @@ void MapRenderer::draw(Map& map, const ls::gl::Camera& camera, float dt)
         p.normalize();
     }
 
+    const ls::Vec3I cameraChunk = map.worldToChunk(camera.position());
+
     int numUpdatedChunksOnDraw = 0;
     int numUpdatedChunksOnCull = 0;
     for (auto& p : map.chunks())
     {
         auto& chunk = p.second;
-        if (shouldForgetChunk(camera, chunk))
+        if (shouldForgetChunk(cameraChunk, chunk))
         {
             chunk.tooFarToDraw(dt);
         }
@@ -61,13 +63,9 @@ bool MapRenderer::shouldDrawChunk(const ls::gl::Camera& camera, const ls::Frustu
 {
     return intersect(frustum, chunk.boundingSphere());
 }
-bool MapRenderer::shouldForgetChunk(const ls::gl::Camera& camera, const MapChunk& chunk)
+bool MapRenderer::shouldForgetChunk(const ls::Vec3I& cameraChunk, const MapChunk& chunk)
 {
-    return estimateDistanceToChunk(camera.position(), chunk) > m_maxDistanceToRenderedChunk;
-}
-float MapRenderer::estimateDistanceToChunk(const ls::Vec3F& cameraPos, const MapChunk& chunkPos)
-{
-    return cameraPos.distance(chunkPos.boundingSphere().origin);
+    return Map::distanceBetweenChunks(cameraChunk, chunk.pos()) > m_maxDistanceToRenderedChunk;
 }
 float MapRenderer::distance(const ls::Plane3F& plane, const ls::Vec3F& point)
 {

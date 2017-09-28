@@ -22,13 +22,11 @@ private:
     const ls::gl::ShaderProgram* m_shader;
     ls::gl::ProgramUniformView m_uModelViewProjection;
 
-    static constexpr float m_maxDistanceToRenderedChunk = 16.0f * 16.0f;
+    static constexpr int m_maxDistanceToRenderedChunk = 16;
 
     // expects normalized planes in frustum
     static bool shouldDrawChunk(const ls::gl::Camera& camera, const ls::Frustum3F& frustum, const MapChunk& chunk);
-    static bool shouldForgetChunk(const ls::gl::Camera& camera, const MapChunk& chunk);
-    static float estimateDistanceToChunk(const ls::Vec3F& cameraPos, const MapChunk& chunkPos);
-
+    static bool shouldForgetChunk(const ls::Vec3I& cameraChunk, const MapChunk& chunk);
     // expects normalized plane
     static float distance(const ls::Plane3F& plane, const ls::Vec3F& point);
 

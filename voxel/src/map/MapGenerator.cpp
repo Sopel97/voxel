@@ -85,26 +85,6 @@ void MapGenerator::generateChunk(MapChunk& chunk) const
                 chunk.placeBlock(m_map->instantiateAirBlock(), { x, y, z }, false);
                 ++y;
             }
-                
-            /*
-            for (int y = 0; y < MapChunk::height(); ++y)
-            {
-                float r = rand() / static_cast<float>(RAND_MAX);
-
-                if (r < 0.03)
-                {
-                    chunk.emplaceBlock(grassFactory.get(), { x, y, z }, false);
-                }
-                else if (r < 0.07)
-                {
-                    chunk.emplaceBlock(stoneFactory.get(), { x, y, z }, false);
-                }
-                else if (r < 0.1)
-                {
-                    chunk.emplaceBlock(dirtFactory.get(), { x, y, z }, false);
-                }
-            }
-            */
         }
     }
 

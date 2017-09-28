@@ -246,11 +246,11 @@ void MapChunk::updateOutsideOpacityOnChunkBorder(const MapChunk& other, const ls
                 case CubeSide::West:
                     selfOpacity.west = otherOpacity.east;
                     break;
-                case CubeSide::Bottom:
-                    selfOpacity.top = selfOpacity.bottom;
-                    break;
                 case CubeSide::Top:
-                    selfOpacity.bottom = selfOpacity.top;
+                    selfOpacity.top = otherOpacity.bottom;
+                    break;
+                case CubeSide::Bottom:
+                    selfOpacity.bottom = otherOpacity.top;
                     break;
                 case CubeSide::South:
                     selfOpacity.south = otherOpacity.north;
@@ -280,10 +280,10 @@ void MapChunk::updateOutsideOpacityOnAdjacentBlockChanged(const ls::Vec3I& block
     case CubeSide::West:
         selfOpacity.west = otherOpacity.east;
         break;
-    case CubeSide::Bottom:
+    case CubeSide::Top:
         selfOpacity.top = otherOpacity.bottom;
         break;
-    case CubeSide::Top:
+    case CubeSide::Bottom:
         selfOpacity.bottom = otherOpacity.top;
         break;
     case CubeSide::South:
@@ -298,18 +298,18 @@ void MapChunk::updateOutsideOpacityOnAdjacentBlockChanged(const ls::Vec3I& block
 }
 BlockSideOpacity MapChunk::computeOutsideOpacity(ls::Vec3I blockPos, const ls::Array3<BlockSideOpacity>& cache)
 {
-    blockPos += ls::Vec3I(1, 1, 1);
+    blockPos += ls::Vec3I(1, 1, 1); // because cache is offseted
     const ls::Vec3I eastPos = blockPos + CubeSide::makeEast().direction();
     const ls::Vec3I westPos = blockPos + CubeSide::makeWest().direction();
-    const ls::Vec3I bottomPos = blockPos + CubeSide::makeBottom().direction();
     const ls::Vec3I topPos = blockPos + CubeSide::makeTop().direction();
+    const ls::Vec3I bottomPos = blockPos + CubeSide::makeBottom().direction();
     const ls::Vec3I southPos = blockPos + CubeSide::makeSouth().direction();
     const ls::Vec3I northPos = blockPos + CubeSide::makeNorth().direction();
 
     auto eastBlockOpacity = cache(eastPos.x, eastPos.y, eastPos.z);
     auto westBlockOpacity = cache(westPos.x, westPos.y, westPos.z);
-    auto bottomBlockOpacity = cache(bottomPos.x, bottomPos.y, bottomPos.z);
     auto topBlockOpacity = cache(topPos.x, topPos.y, topPos.z);
+    auto bottomBlockOpacity = cache(bottomPos.x, bottomPos.y, bottomPos.z);
     auto southBlockOpacity = cache(southPos.x, southPos.y, southPos.z);
     auto northBlockOpacity = cache(northPos.x, northPos.y, northPos.z);
 
@@ -318,8 +318,8 @@ BlockSideOpacity MapChunk::computeOutsideOpacity(ls::Vec3I blockPos, const ls::A
     return BlockSideOpacity{
         eastBlockOpacity.west,
         westBlockOpacity.east,
-        bottomBlockOpacity.bottom,
-        topBlockOpacity.top,
+        topBlockOpacity.bottom,
+        bottomBlockOpacity.top,
         southBlockOpacity.north,
         northBlockOpacity.south
     };
