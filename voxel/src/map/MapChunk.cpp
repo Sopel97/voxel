@@ -134,17 +134,17 @@ const ls::Sphere3F& MapChunk::boundingSphere() const
 {
     return m_boundingSphere;
 }
-void MapChunk::draw(float dt)
+void MapChunk::draw(float dt, int& numUpdatedChunksOnDraw)
 {
-    m_renderer.draw(*this, dt);
+    m_renderer.draw(*this, dt, numUpdatedChunksOnDraw);
 }
 void MapChunk::tooFarToDraw(float dt)
 {
     m_renderer.tooFarToDraw(*this, dt);
 }
-void MapChunk::culled(float dt)
+void MapChunk::culled(float dt, int& numUpdatedChunksOnCull)
 {
-    m_renderer.culled(*this, dt);
+    m_renderer.culled(*this, dt, numUpdatedChunksOnCull);
 }
 
 ls::Vec3I MapChunk::mapToLocalPos(const ls::Vec3I& mapPos) const

@@ -58,9 +58,9 @@ public:
     const ls::Array3<BlockContainer>& blocks() const;
     const ls::Array3<BlockSideOpacity>& outsideOpacityCache() const;
 
-    void draw(float dt);
+    void draw(float dt, int& numUpdatedChunksOnDraw);
     void tooFarToDraw(float dt);
-    void culled(float dt);
+    void culled(float dt, int& numUpdatedChunksOnCull);
 
     uint32_t seed() const;
 

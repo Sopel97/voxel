@@ -35,7 +35,8 @@ void MapRenderer::draw(Map& map, const ls::gl::Camera& camera, float dt)
         p.normalize();
     }
 
-    int numRenderedChunks = 0;
+    int numUpdatedChunksOnDraw = 0;
+    int numUpdatedChunksOnCull = 0;
     for (auto& p : map.chunks())
     {
         auto& chunk = p.second;
@@ -45,16 +46,15 @@ void MapRenderer::draw(Map& map, const ls::gl::Camera& camera, float dt)
         }
         else if(shouldDrawChunk(camera, frustum, chunk))
         {
-            chunk.draw(dt);
-            ++numRenderedChunks;
+            chunk.draw(dt, numUpdatedChunksOnDraw);
         }
         else
         {
-            chunk.culled(dt);
+            chunk.culled(dt, numUpdatedChunksOnCull);
         }
     }
 
-    std::cout << "Rendered chunks: " << numRenderedChunks << '/' << map.chunks().size() << '\n';
+    //std::cout << "Rendered chunks: " << numRenderedChunks << '/' << map.chunks().size() << '\n';
 }
 
 bool MapRenderer::shouldDrawChunk(const ls::gl::Camera& camera, const ls::Frustum3F& frustum, const MapChunk& chunk)

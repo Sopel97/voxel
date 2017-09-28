@@ -16,12 +16,14 @@ MapChunkRenderer::MapChunkRenderer() :
 
     m_ibo = &m_vao.createIndexBufferObject();
 }
-void MapChunkRenderer::draw(MapChunk& chunk, float dt)
+void MapChunkRenderer::draw(MapChunk& chunk, float dt, int& numUpdatedChunksOnDraw)
 {
-    if (m_needsUpdate)
+    if (m_needsUpdate && numUpdatedChunksOnDraw < m_maxChunksUpdatedOnDrawPerFrame)
     {
         update(chunk);
         m_needsUpdate = false;
+
+        ++numUpdatedChunksOnDraw;
     }
 
     if (m_iboSize > 0)
@@ -49,12 +51,14 @@ void MapChunkRenderer::tooFarToDraw(MapChunk& chunk, float dt)
         m_needsUpdate = true;
     }
 }
-void MapChunkRenderer::culled(MapChunk& chunk, float dt)
+void MapChunkRenderer::culled(MapChunk& chunk, float dt, int& numUpdatedChunksOnCull)
 {
-    if (m_needsUpdate)
+    if (m_needsUpdate && numUpdatedChunksOnCull < m_maxChunksUpdatedOnCullPerFrame)
     {
         update(chunk);
         m_needsUpdate = false;
+
+        ++numUpdatedChunksOnCull;
     }
 
     m_timeOutsideDrawingRange = 0.0f;

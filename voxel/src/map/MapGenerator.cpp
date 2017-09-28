@@ -66,16 +66,19 @@ void MapGenerator::generateChunk(MapChunk& chunk) const
             int y = 0;
             while (y < MapChunk::height() && y <= stoneLayerTop)
             {
+                if (rand() % 100 > 1) 
                 chunk.emplaceBlock(stoneFactory.get(), { x, y, z }, false);
                 ++y;
             }
             while (y < MapChunk::height() && y <= dirtLayerTop)
             {
+                if (rand() % 100 > 1)
                 chunk.emplaceBlock(dirtFactory.get(), { x, y, z }, false);
                 ++y;
             }
             while (y < MapChunk::height() && y <= grassLayerTop)
             {
+                if (rand() % 100 > 1)
                 chunk.emplaceBlock(grassFactory.get(), { x, y, z }, false);
                 ++y;
             }

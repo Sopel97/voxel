@@ -6,6 +6,8 @@
 #include "../LibS/Fwd.h"
 #include "../LibS/OpenGL/Shader.h"
 
+#include <vector>
+
 class Map;
 class MapChunk;
 
