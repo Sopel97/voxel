@@ -7,6 +7,18 @@
 
 #include "CubeSide.h"
 
+MapChunkBlockData::MapChunkBlockData(Map& map, MapGenerator& mapGenerator, const ls::Vec3I& pos) :
+    map(&map),
+    pos(pos),
+    seed(map.seed()),
+    blocks(MapChunk::m_width, MapChunk::m_height, MapChunk::m_depth, nullptr)
+{
+    mapGenerator.generateChunk(*this);
+}
+ls::Vec3I MapChunkBlockData::firstBlockPosition() const
+{
+    return pos * ls::Vec3I(MapChunk::m_width, MapChunk::m_height, MapChunk::m_depth);
+}
 MapChunk::MapChunk(Map& map, const ls::Vec3I& pos, const MapChunkNeighbours& neighbours) :
     m_map(&map),
     m_seed(map.seed()),
@@ -17,19 +29,39 @@ MapChunk::MapChunk(Map& map, const ls::Vec3I& pos, const MapChunkNeighbours& nei
     m_boundingSphere = computeBoundingSphere();
     updateOutsideOpacityOnChunkBorders(neighbours);
 }
-
-MapChunk::MapChunk(Map& map, MapGenerator& mapGenerator, const ls::Vec3I& pos, const MapChunkNeighbours& neighbours) :
-    m_map(&map),
-    m_seed(map.seed()),
-    m_pos(pos),
-    m_blocks(m_width, m_height, m_depth, nullptr),
+MapChunk::MapChunk(MapChunkBlockData&& chunkBlockData, const MapChunkNeighbours& neighbours) :
+    m_map(chunkBlockData.map),
+    m_seed(chunkBlockData.seed),
+    m_pos(chunkBlockData.pos),
+    m_blocks(std::move(chunkBlockData.blocks)),
     m_outsideOpacityCache(m_width, m_height, m_depth, BlockSideOpacity::none())
 {
     m_boundingSphere = computeBoundingSphere();
-
-    mapGenerator.generateChunk(*this);
-
     updateOutsideOpacity(neighbours);
+    updateAllAsIfPlaced();
+}
+MapChunk::MapChunk(MapChunk&& other) noexcept :
+    m_map(std::move(other.m_map)),
+    m_seed(std::move(other.m_seed)),
+    m_pos(std::move(other.m_pos)),
+    m_boundingSphere(std::move(other.m_boundingSphere)),
+    m_renderer(std::move(other.m_renderer)),
+    m_blocks(std::move(other.m_blocks)),
+    m_outsideOpacityCache(std::move(other.m_outsideOpacityCache))
+{
+
+}
+MapChunk& MapChunk::operator=(MapChunk&& other) noexcept
+{
+    m_map = std::move(other.m_map);
+    m_seed = std::move(other.m_seed);
+    m_pos = std::move(other.m_pos);
+    m_boundingSphere = std::move(other.m_boundingSphere);
+    m_renderer = std::move(other.m_renderer);
+    m_blocks = std::move(other.m_blocks);
+    m_outsideOpacityCache = std::move(other.m_outsideOpacityCache);
+
+    return *this;
 }
 
 const ls::Vec3I& MapChunk::pos() const

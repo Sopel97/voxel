@@ -1,6 +1,8 @@
 #pragma once
 
 #include <map>
+#include <future>
+#include <vector>
 
 #include "MapChunk.h"
 #include "MapRenderer.h"
@@ -46,6 +48,7 @@ private:
     ResourceHandle<BlockFactory> m_airFactory;
     float m_timeSinceLastChunkUnloadPass;
     std::map<ls::Vec3I, MapChunk> m_chunks;
+    std::future<std::vector<std::pair<ls::Vec3I, MapChunkBlockData>>> m_generatedChunks;
 
     float m_timeSinceLastMissingChunkPosCacheUpdate;
     std::vector<ls::Vec3I> m_missingChunkPosCache;
@@ -62,12 +65,16 @@ private:
 
     static constexpr int m_chunkLoadingRange = 10;
 
-    static constexpr int m_maxChunksSpawnedPerUpdate = 16;
+    static constexpr int m_maxChunksSpawnedPerUpdate = 8;
 
-    void trySpawnNewChunk(const ls::Vec3I& currentChunk);
+    void trySpawnNewChunks(const ls::Vec3I& currentChunk);
     void spawnChunk(const ls::Vec3I& pos);
+    void spawnChunk(const ls::Vec3I& pos, MapChunkBlockData&& chunk);
     void unloadFarChunks(const ls::Vec3I& currentChunk);
     std::map<ls::Vec3I, MapChunk>::iterator unloadChunk(const std::map<ls::Vec3I, MapChunk>::iterator& iter);
+
+    std::vector<std::pair<ls::Vec3I, MapChunkBlockData>> generateChunksIsolated(std::vector<ls::Vec3I> positions);
+    std::pair<ls::Vec3I, MapChunkBlockData> generateChunkIsolated(const ls::Vec3I& pos);
 
     void updateMissingChunkPosCache(const ls::Vec3I& pos);
 };

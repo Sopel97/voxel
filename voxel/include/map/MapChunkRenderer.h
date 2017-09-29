@@ -26,7 +26,7 @@ private:
     bool m_needsUpdate; 
     
     static constexpr float m_maxTimeOutsideDrawingRange = 30.0f;
-    static constexpr int m_maxChunksUpdatedOnDrawPerFrame = 4;
+    static constexpr int m_maxChunksUpdatedOnDrawPerFrame = 2;
     static constexpr int m_maxChunksUpdatedOnCullPerFrame = 1;
 
     void update(MapChunk& chunk);

@@ -16,8 +16,8 @@ GameRenderer::GameRenderer() :
 {
     glewInit();
 
-    m_camera.setNear(0.1f);
-    m_camera.setFar(512.0f);
+    m_camera.setNear(1.0f/8.0f);
+    m_camera.setFar(1024.0f);
     m_camera.setPosition({ 0, 128.0f, 0 });
 
     glViewport(0, 0, m_defaultWindowWidth, m_defaultWindowHeight);

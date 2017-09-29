@@ -7,8 +7,9 @@
 #include "map/MapChunk.h"
 
 MapChunkRenderer::MapChunkRenderer() :
-    m_needsUpdate(true),
-    m_iboSize(0)
+    m_timeOutsideDrawingRange(0.0f),
+    m_iboSize(0),
+    m_needsUpdate(true)
 {
     m_vbo = &m_vao.createVertexBufferObject();
     m_vao.setVertexAttribute(*m_vbo, 0, &BlockVertex::pos, 3, GL_FLOAT, GL_FALSE);

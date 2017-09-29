@@ -24,13 +24,36 @@ struct MapChunkNeighbours
     MapChunk* north;
 };
 
+class MapChunkBlockData
+{
+public:
 
+    Map* map;
+    ls::Vec3I pos;
+    uint32_t seed;
+    ls::Array3<BlockContainer> blocks;
+
+    MapChunkBlockData(Map& map, MapGenerator& mapGenerator, const ls::Vec3I& pos);
+
+    MapChunkBlockData(const MapChunkBlockData&) = delete;
+    MapChunkBlockData& operator=(const MapChunkBlockData&) = delete;
+    MapChunkBlockData(MapChunkBlockData&&) noexcept = default;
+    MapChunkBlockData& operator=(MapChunkBlockData&&) noexcept = default;
+
+    ls::Vec3I firstBlockPosition() const;
+};
 
 class MapChunk
 {
+    friend class MapChunkBlockData;
 public:
     MapChunk(Map& map, const ls::Vec3I& pos, const MapChunkNeighbours& neighbours);
-    MapChunk(Map& map, MapGenerator& mapGenerator, const ls::Vec3I& pos, const MapChunkNeighbours& neighbours);
+    MapChunk(MapChunkBlockData&& chunkBlockData, const MapChunkNeighbours& neighbours);
+
+    MapChunk(const MapChunk&) = delete;
+    MapChunk& operator=(const MapChunk&) = delete;
+    MapChunk(MapChunk&& other) noexcept;
+    MapChunk& operator=(MapChunk&& other) noexcept;
 
     const ls::Vec3I& pos() const;
 
@@ -84,9 +107,9 @@ private:
     ls::Array3<BlockContainer> m_blocks;
     ls::Array3<BlockSideOpacity> m_outsideOpacityCache;
 
-    static constexpr int m_width = 16;
-    static constexpr int m_height = 16;
-    static constexpr int m_depth = 16;
+    static constexpr int m_width = 32;
+    static constexpr int m_height = 32;
+    static constexpr int m_depth = 32;
 
     ls::Vec3I mapToLocalPos(const ls::Vec3I& mapPos) const;
     ls::Sphere3F computeBoundingSphere();

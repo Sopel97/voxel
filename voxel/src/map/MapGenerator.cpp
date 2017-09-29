@@ -21,7 +21,7 @@ MapGenerator::MapGenerator(Map& map) :
 
 }
 
-void MapGenerator::generateChunk(MapChunk& chunk) const
+void MapGenerator::generateChunk(MapChunkBlockData& chunk) const
 {
     struct Hasher
     {
@@ -48,9 +48,9 @@ void MapGenerator::generateChunk(MapChunk& chunk) const
     sampler.setLowerBound(0.0);
     sampler.setUpperBound(1.0);
     sampler.setOctaves(4);
-    sampler.setScale({0.01, 0.01});
+    sampler.setScale({ 0.01, 0.01 });
 
-    ls::SimplexNoise<double, Hasher> simplexNoise(Hasher(chunk.seed()));
+    ls::SimplexNoise<double, Hasher> simplexNoise(Hasher(chunk.seed));
 
     const ls::Vec3I firstBlockPos = chunk.firstBlockPosition();
 
@@ -67,26 +67,24 @@ void MapGenerator::generateChunk(MapChunk& chunk) const
             int y = 0;
             while (y < MapChunk::height() && y <= stoneLayerTop)
             {
-                chunk.emplaceBlock(stoneFactory.get(), { x, y, z }, false);
+                chunk.blocks(x, y, z) = stoneFactory.get().instantiate();
                 ++y;
             }
             while (y < MapChunk::height() && y <= dirtLayerTop)
             {
-                chunk.emplaceBlock(dirtFactory.get(), { x, y, z }, false);
+                chunk.blocks(x, y, z) = dirtFactory.get().instantiate();;
                 ++y;
             }
             while (y < MapChunk::height() && y <= grassLayerTop)
             {
-                chunk.emplaceBlock(grassFactory.get(), { x, y, z }, false);
+                chunk.blocks(x, y, z) = grassFactory.get().instantiate();
                 ++y;
             }
             while (y < MapChunk::height())
             {
-                chunk.placeBlock(m_map->instantiateAirBlock(), { x, y, z }, false);
+                chunk.blocks(x, y, z) = m_map->instantiateAirBlock();
                 ++y;
             }
         }
     }
-
-    chunk.updateAllAsIfPlaced();
 }

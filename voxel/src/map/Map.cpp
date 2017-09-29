@@ -9,7 +9,7 @@
 Map::Map(uint32_t seed) :
     m_renderer{},
     m_generator(*this),
-    m_seed(seed), 
+    m_seed(seed),
     m_airFactory(ResourceManager<BlockFactory>::instance().get("Air")),
     m_timeSinceLastChunkUnloadPass(0.0f),
     m_timeSinceLastMissingChunkPosCacheUpdate(0.0f),
@@ -42,7 +42,7 @@ void Map::update(Game& game, float dt)
 
     const auto currentChunk = worldToChunk(cameraPos);
 
-    trySpawnNewChunk(currentChunk);
+    trySpawnNewChunks(currentChunk);
 
     m_timeSinceLastChunkUnloadPass += dt;
     if (m_timeSinceLastChunkUnloadPass >= m_timeBetweenChunkUnloadingPasses)
@@ -75,13 +75,47 @@ bool Map::isValidChunkPos(const ls::Vec3I& pos) const
     return true;
 }
 
-void Map::trySpawnNewChunk(const ls::Vec3I& currentChunk)
+
+std::vector<std::pair<ls::Vec3I, MapChunkBlockData>> Map::generateChunksIsolated(std::vector<ls::Vec3I> positions)
 {
-    const int numMissingChunks = m_missingChunkPosCache.size();
-    for (int i = 0; i < m_maxChunksSpawnedPerUpdate && m_missingChunkPosCacheCurrentPosition < numMissingChunks; ++i)
+    std::vector<std::pair<ls::Vec3I, MapChunkBlockData>> chunks;
+
+    for (const auto& pos : positions)
     {
-        spawnChunk(m_missingChunkPosCache[m_missingChunkPosCacheCurrentPosition]);
-        ++m_missingChunkPosCacheCurrentPosition;
+        chunks.emplace_back(generateChunkIsolated(pos));
+    }
+
+    return chunks;
+}
+std::pair<ls::Vec3I, MapChunkBlockData> Map::generateChunkIsolated(const ls::Vec3I& pos)
+{
+    return std::make_pair(pos, MapChunkBlockData(*this, m_generator, pos));
+}
+void Map::trySpawnNewChunks(const ls::Vec3I& currentChunk)
+{
+    bool ready = false;
+    if (m_generatedChunks.valid() && m_generatedChunks.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+    {
+        ready = true;
+
+        auto chunks = m_generatedChunks.get();
+        for (auto& chunk : chunks)
+        {
+            spawnChunk(chunk.first, std::move(chunk.second));
+        }
+    }
+
+    if(!m_generatedChunks.valid() || ready)
+    {
+        const int numMissingChunks = m_missingChunkPosCache.size();
+        std::vector<ls::Vec3I> positions;
+        for (int i = 0; i < m_maxChunksSpawnedPerUpdate && m_missingChunkPosCacheCurrentPosition < numMissingChunks; ++i)
+        {
+            positions.emplace_back(m_missingChunkPosCache[m_missingChunkPosCacheCurrentPosition]);
+            ++m_missingChunkPosCacheCurrentPosition;
+        }
+
+        m_generatedChunks = std::async(std::launch::async, [this](const std::vector<ls::Vec3I>& p) {return generateChunksIsolated(p); }, positions);
     }
 }
 
@@ -99,7 +133,7 @@ MapChunk* Map::chunkAt(const ls::Vec3I& pos)
     {
         return &(iter->second);
     }
-    
+
     return nullptr;
 }
 MapChunkNeighbours Map::chunkNeighbours(const ls::Vec3I& pos)
@@ -115,8 +149,13 @@ MapChunkNeighbours Map::chunkNeighbours(const ls::Vec3I& pos)
 }
 void Map::spawnChunk(const ls::Vec3I& pos)
 {
+    MapChunkBlockData blockData(*this, m_generator, pos);
+    spawnChunk(pos, std::move(blockData));
+}
+void Map::spawnChunk(const ls::Vec3I& pos, MapChunkBlockData&& chunk)
+{
     const auto neighbours = chunkNeighbours(pos);
-    auto p = m_chunks.emplace(std::make_pair(pos, MapChunk(*this, m_generator, pos, neighbours)));
+    auto p = m_chunks.emplace(std::make_pair(pos, MapChunk(std::move(chunk), neighbours)));
     auto& placedChunk = p.first->second;
 
     if (neighbours.east) neighbours.east->onAdjacentChunkPlaced(placedChunk, pos);
@@ -152,7 +191,7 @@ int Map::distanceBetweenChunks(const ls::Vec3I& lhs, const ls::Vec3I& rhs)
 
 void Map::updateMissingChunkPosCache(const ls::Vec3I& currentChunkPos)
 {
-    const static std::vector<ls::Vec3I> order = []() ->std::vector<ls::Vec3I> 
+    const static std::vector<ls::Vec3I> order = []() ->std::vector<ls::Vec3I>
     {
         std::vector<ls::Vec3I> result;
         const int dim = m_chunkLoadingRange * 2 + 1;

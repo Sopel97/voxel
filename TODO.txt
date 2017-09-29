@@ -5,6 +5,3 @@
 -- 4 bits for 'sun', 4 bits for local
 -- stored and updated in chunk like opacity cache is stored now (so 6 bytes per block)
 -- if memory is a problem store 18x18 of actual light values and then gather when needed
-
-- make chunk generation (and possibly updating) asyncroneous
--- 32x32x32 chunks (currently only low performance on chunk generation)
