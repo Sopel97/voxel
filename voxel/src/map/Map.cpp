@@ -76,7 +76,7 @@ bool Map::isValidChunkPos(const ls::Vec3I& pos) const
 }
 
 
-std::vector<std::pair<ls::Vec3I, MapChunkBlockData>> Map::generateChunksIsolated(std::vector<ls::Vec3I> positions)
+std::vector<std::pair<ls::Vec3I, MapChunkBlockData>> Map::generateChunksIsolated(const std::vector<ls::Vec3I>& positions)
 {
     std::vector<std::pair<ls::Vec3I, MapChunkBlockData>> chunks;
 
@@ -103,19 +103,19 @@ void Map::trySpawnNewChunks(const ls::Vec3I& currentChunk)
         {
             spawnChunk(chunk.first, std::move(chunk.second));
         }
+        m_missingChunksInGeneration.clear();
     }
 
     if(!m_generatedChunks.valid() || ready)
     {
         const int numMissingChunks = m_missingChunkPosCache.size();
-        std::vector<ls::Vec3I> positions;
         for (int i = 0; i < m_maxChunksSpawnedPerUpdate && m_missingChunkPosCacheCurrentPosition < numMissingChunks; ++i)
         {
-            positions.emplace_back(m_missingChunkPosCache[m_missingChunkPosCacheCurrentPosition]);
+            m_missingChunksInGeneration.emplace_back(m_missingChunkPosCache[m_missingChunkPosCacheCurrentPosition]);
             ++m_missingChunkPosCacheCurrentPosition;
         }
 
-        m_generatedChunks = std::async(std::launch::async, [this](const std::vector<ls::Vec3I>& p) {return generateChunksIsolated(p); }, positions);
+        m_generatedChunks = std::async(std::launch::async, [this](const std::vector<ls::Vec3I>& p) {return generateChunksIsolated(p); }, m_missingChunksInGeneration);
     }
 }
 
@@ -221,7 +221,7 @@ void Map::updateMissingChunkPosCache(const ls::Vec3I& currentChunkPos)
         const auto pos = currentChunkPos + offset;
         if (!isValidChunkPos(pos)) continue;
 
-        if (m_chunks.count(pos) == 0)
+        if (m_chunks.count(pos) == 0 && std::find(m_missingChunksInGeneration.begin(), m_missingChunksInGeneration.end(), pos) == m_missingChunksInGeneration.end())
         {
             m_missingChunkPosCache.emplace_back(pos);
         }

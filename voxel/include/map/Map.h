@@ -52,6 +52,7 @@ private:
 
     float m_timeSinceLastMissingChunkPosCacheUpdate;
     std::vector<ls::Vec3I> m_missingChunkPosCache;
+    std::vector<ls::Vec3I> m_missingChunksInGeneration;
     int m_missingChunkPosCacheCurrentPosition;
     ls::Vec3I m_missingChunkPosCacheLastOrigin;
 
@@ -73,7 +74,7 @@ private:
     void unloadFarChunks(const ls::Vec3I& currentChunk);
     std::map<ls::Vec3I, MapChunk>::iterator unloadChunk(const std::map<ls::Vec3I, MapChunk>::iterator& iter);
 
-    std::vector<std::pair<ls::Vec3I, MapChunkBlockData>> generateChunksIsolated(std::vector<ls::Vec3I> positions);
+    std::vector<std::pair<ls::Vec3I, MapChunkBlockData>> generateChunksIsolated(const std::vector<ls::Vec3I>& positions);
     std::pair<ls::Vec3I, MapChunkBlockData> generateChunkIsolated(const ls::Vec3I& pos);
 
     void updateMissingChunkPosCache(const ls::Vec3I& pos);
