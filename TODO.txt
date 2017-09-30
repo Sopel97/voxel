@@ -5,3 +5,5 @@
 -- 4 bits for 'sun', 4 bits for local
 -- stored and updated in chunk like opacity cache is stored now (so 6 bytes per block)
 -- if memory is a problem store 18x18 of actual light values and then gather when needed
+
+- sometimes when generating geometry for drawing bad_alloc is thrown (happens after some exploring, probably due to horrible memory fragmentation), look for a way to minimize memory allocation and preallocate as much as possible.

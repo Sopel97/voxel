@@ -59,7 +59,7 @@ private:
     static constexpr int m_maxWorldHeight = 256;
     static_assert(m_maxWorldHeight % MapChunk::height() == 0);
 
-    static constexpr int m_minChunkDistanceToUnload = 20;
+    static constexpr int m_minChunkDistanceToUnload = 14;
 
     static constexpr float m_timeBetweenChunkUnloadingPasses = 1.0f;
     static constexpr float m_timeBetweenMissingChunkPosCacheUpdates = 1.0f;
