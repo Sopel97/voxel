@@ -14,6 +14,16 @@ class MapChunk;
 class Map;
 class MapGenerator;
 
+namespace detail
+{
+    constexpr int m_chunkWidth = 32;
+    constexpr int m_chunkHeight = 32;
+    constexpr int m_chunkDepth = 32;
+
+    using BlockArray = ls::Array3<BlockContainer, m_chunkWidth, m_chunkHeight, m_chunkDepth>;
+    using BlockSideOpacityArray = ls::Array3<BlockSideOpacity, m_chunkWidth, m_chunkHeight, m_chunkDepth>;
+}
+
 struct MapChunkNeighbours
 {
     MapChunk* east;
@@ -26,12 +36,12 @@ struct MapChunkNeighbours
 
 class MapChunkBlockData
 {
+    using BlockArray = detail::BlockArray;
 public:
-
     Map* map;
     ls::Vec3I pos;
     uint32_t seed;
-    ls::Array3<BlockContainer> blocks;
+    BlockArray blocks;
 
     MapChunkBlockData(Map& map, MapGenerator& mapGenerator, const ls::Vec3I& pos);
 
@@ -46,6 +56,14 @@ public:
 class MapChunk
 {
     friend class MapChunkBlockData;
+
+    static constexpr int m_width = detail::m_chunkWidth;
+    static constexpr int m_height = detail::m_chunkHeight;
+    static constexpr int m_depth = detail::m_chunkDepth;
+
+    using BlockArray = detail::BlockArray;
+    using BlockSideOpacityArray = detail::BlockSideOpacityArray;
+
 public:
     MapChunk(Map& map, const ls::Vec3I& pos, const MapChunkNeighbours& neighbours);
     MapChunk(MapChunkBlockData&& chunkBlockData, const MapChunkNeighbours& neighbours);
@@ -76,8 +94,8 @@ public:
 
     const ls::Sphere3F& boundingSphere() const;
 
-    const ls::Array3<BlockContainer>& blocks() const;
-    const ls::Array3<BlockSideOpacity>& outsideOpacityCache() const;
+    const BlockArray& blocks() const;
+    const BlockSideOpacityArray& outsideOpacityCache() const;
 
     void draw(float dt, int& numUpdatedChunksOnDraw);
     void tooFarToDraw(float dt);
@@ -104,12 +122,8 @@ private:
     ls::Vec3I m_pos;
     ls::Sphere3F m_boundingSphere;
     MapChunkRenderer m_renderer;
-    ls::Array3<BlockContainer> m_blocks;
-    ls::Array3<BlockSideOpacity> m_outsideOpacityCache;
-
-    static constexpr int m_width = 32;
-    static constexpr int m_height = 32;
-    static constexpr int m_depth = 32;
+    BlockArray m_blocks;
+    BlockSideOpacityArray m_outsideOpacityCache;
 
     ls::Vec3I mapToLocalPos(const ls::Vec3I& mapPos) const;
     ls::Sphere3F computeBoundingSphere();

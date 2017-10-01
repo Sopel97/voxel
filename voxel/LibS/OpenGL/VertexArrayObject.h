@@ -24,7 +24,7 @@ namespace ls
             }
 
             VertexArrayObject(const VertexArrayObject&) = delete;
-            VertexArrayObject(VertexArrayObject&& other) :
+            VertexArrayObject(VertexArrayObject&& other) noexcept :
                 m_id(other.m_id),
                 m_vbos(std::move(other.m_vbos)),
                 m_ibo(std::move(other.m_ibo))
@@ -32,7 +32,7 @@ namespace ls
                 other.m_id = m_nullId;
             }
             VertexArrayObject& operator=(const VertexArrayObject&) = delete;
-            VertexArrayObject& operator=(VertexArrayObject&& other)
+            VertexArrayObject& operator=(VertexArrayObject&& other) noexcept
             {
                 cleanup();
 

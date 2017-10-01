@@ -18,13 +18,13 @@ namespace ls
         Vec3<T> origin;
         T radius;
 
-        constexpr Sphere3() = default;
+        constexpr Sphere3() noexcept = default;
         constexpr Sphere3(const Vec3<T>& origin, const T& radius) noexcept(std::is_nothrow_copy_constructible<Vec3<T>>::value && std::is_nothrow_copy_constructible<T>::value);
 
         constexpr Sphere3(const Sphere3<T>&) = default;
-        constexpr Sphere3(Sphere3<T>&&) = default;
+        constexpr Sphere3(Sphere3<T>&&) noexcept = default;
 
-        Sphere3<T>& operator =(Sphere3<T> &&) = default;
+        Sphere3<T>& operator =(Sphere3<T> &&) noexcept = default;
         Sphere3<T>& operator =(const Sphere3<T>&) = default;
 
         constexpr Sphere3<T> translated(const Vec3<T>& displacement) const;

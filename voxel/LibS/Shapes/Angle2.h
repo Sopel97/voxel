@@ -33,13 +33,13 @@ namespace ls
         constexpr static Angle2<T> degrees(const T& deg) noexcept(std::is_nothrow_constructible<Angle2<T>, T>::value);
         constexpr static const Angle2<T>& fullTurn();
 
-        constexpr Angle2() = default;
+        constexpr Angle2() noexcept = default;
 
         constexpr Angle2(const Angle2<T>&) = default;
-        constexpr Angle2(Angle2<T>&&) = default;
+        constexpr Angle2(Angle2<T>&&) noexcept = default;
 
         constexpr Angle2<T>& operator=(const Angle2<T>&) = default;
-        constexpr Angle2<T>& operator=(Angle2<T> &&) = default;
+        constexpr Angle2<T>& operator=(Angle2<T> &&) noexcept = default;
 
         constexpr Angle2<T>& operator+=(const Angle2<T>& rhs);
         constexpr Angle2<T>& operator-=(const Angle2<T>& rhs);

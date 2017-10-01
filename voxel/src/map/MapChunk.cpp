@@ -11,7 +11,7 @@ MapChunkBlockData::MapChunkBlockData(Map& map, MapGenerator& mapGenerator, const
     map(&map),
     pos(pos),
     seed(map.seed()),
-    blocks(MapChunk::m_width, MapChunk::m_height, MapChunk::m_depth, nullptr)
+    blocks(nullptr)
 {
     mapGenerator.generateChunk(*this);
 }
@@ -23,8 +23,8 @@ MapChunk::MapChunk(Map& map, const ls::Vec3I& pos, const MapChunkNeighbours& nei
     m_map(&map),
     m_seed(map.seed()),
     m_pos(pos),
-    m_blocks(m_width, m_height, m_depth, nullptr),
-    m_outsideOpacityCache(m_width, m_height, m_depth, BlockSideOpacity::none())
+    m_blocks(nullptr),
+    m_outsideOpacityCache(BlockSideOpacity::none())
 {
     m_boundingSphere = computeBoundingSphere();
     updateOutsideOpacityOnChunkBorders(neighbours);
@@ -34,7 +34,7 @@ MapChunk::MapChunk(MapChunkBlockData&& chunkBlockData, const MapChunkNeighbours&
     m_seed(chunkBlockData.seed),
     m_pos(chunkBlockData.pos),
     m_blocks(std::move(chunkBlockData.blocks)),
-    m_outsideOpacityCache(m_width, m_height, m_depth, BlockSideOpacity::none())
+    m_outsideOpacityCache(BlockSideOpacity::none())
 {
     m_boundingSphere = computeBoundingSphere();
     updateOutsideOpacity(neighbours);
@@ -186,11 +186,11 @@ ls::Sphere3F MapChunk::computeBoundingSphere()
     return sphere;
 }
 
-const ls::Array3<BlockContainer>& MapChunk::blocks() const
+const MapChunk::BlockArray& MapChunk::blocks() const
 {
     return m_blocks;
 }
-const ls::Array3<BlockSideOpacity>& MapChunk::outsideOpacityCache() const
+const MapChunk::BlockSideOpacityArray& MapChunk::outsideOpacityCache() const
 {
     return m_outsideOpacityCache;
 }

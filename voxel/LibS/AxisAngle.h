@@ -9,7 +9,7 @@ namespace ls
     class AxisAngle
     {
     public:
-        AxisAngle() = default;
+        AxisAngle() noexcept = default;
         AxisAngle(const Vec3<T>& axis, const Angle2<T>& angle) :
             m_axis(axis.normalized()),
             m_angle(angle)
@@ -17,9 +17,9 @@ namespace ls
 
         }
         AxisAngle(const AxisAngle<T>&) = default;
-        AxisAngle(AxisAngle<T>&&) = default;
+        AxisAngle(AxisAngle<T>&&) noexcept = default;
         AxisAngle<T>& operator=(const AxisAngle<T>&) = default;
-        AxisAngle<T>& operator=(AxisAngle<T>&&) = default;
+        AxisAngle<T>& operator=(AxisAngle<T>&&) noexcept = default;
 
         const Vec3<T>& axis() const
         {

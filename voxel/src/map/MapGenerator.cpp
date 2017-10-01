@@ -23,7 +23,7 @@ MapGenerator::MapGenerator(Map& map) :
 
 }
 
-ls::Array3<bool> MapGenerator::generateCaveMap(const ls::Vec3I& chunkPos, uint32_t seed) const
+MapGenerator::CaveMapType MapGenerator::generateCaveMap(const ls::Vec3I& chunkPos, uint32_t seed) const
 {
     static constexpr int simulationRadiusInChunks = 1;
     static constexpr float stepSize = 2.0f;
@@ -65,7 +65,7 @@ ls::Array3<bool> MapGenerator::generateCaveMap(const ls::Vec3I& chunkPos, uint32
         return templates;
     }();
 
-    auto applyTemplate = [](ls::Array3<bool>& map, const ls::Array3<bool>& t, const ls::Vec3I& center)
+    auto applyTemplate = [](CaveMapType& map, const ls::Array3<bool>& t, const ls::Vec3I& center)
     {
         const int w = t.width();
         const int h = t.height();
@@ -97,7 +97,7 @@ ls::Array3<bool> MapGenerator::generateCaveMap(const ls::Vec3I& chunkPos, uint32
     sampler.setOctaves(3);
     sampler.setScale({ 0.01f, 0.01f });
 
-    auto simulateWorm = [&sampler, &noiseGen, &applyTemplate](ls::Array3<bool>& map, const ls::Array3<bool>& carvingTemplate, ls::Vec3F pos, uint32_t chunkHash)
+    auto simulateWorm = [&sampler, &noiseGen, &applyTemplate](CaveMapType& map, const ls::Array3<bool>& carvingTemplate, ls::Vec3F pos, uint32_t chunkHash)
     {
         constexpr float xSampleOffset = 0.0f;
         constexpr float ySampleOffset = wormSize * 16.0f;
@@ -120,7 +120,7 @@ ls::Array3<bool> MapGenerator::generateCaveMap(const ls::Vec3I& chunkPos, uint32
         }
     };
 
-    ls::Array3<bool> result(MapChunk::width(), MapChunk::height(), MapChunk::depth(), false);
+    CaveMapType result(false);
 
     for (int cdx = -simulationRadiusInChunks; cdx <= simulationRadiusInChunks; ++cdx)
     {
@@ -185,7 +185,7 @@ void MapGenerator::generateChunk(MapChunkBlockData& chunk) const
             while (y < MapChunk::height() && y <= stoneLayerTop)
             {
                 chunk.blocks(x, y, z) = caveMap(x, y, z) ? m_map->instantiateAirBlock() : stoneFactory.get().instantiate();
-                ++y;
+                 ++y;
             }
             while (y < MapChunk::height() && y <= dirtLayerTop)
             {

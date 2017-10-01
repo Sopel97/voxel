@@ -8,8 +8,9 @@
 
 #include "../LibS/Array3.h"
 
+#include "MapChunk.h"
+
 class Map;
-class MapChunk;
 class MapChunkBlockData;
 
 class MapGenerator
@@ -20,6 +21,8 @@ public:
     void generateChunk(MapChunkBlockData& chunk) const;
 
 private:
+    using CaveMapType = ls::Array3<bool, MapChunk::width(), MapChunk::height(), MapChunk::depth()>;
+
     struct Hasher
     {
         Hasher(uint32_t seed) :
@@ -76,5 +79,5 @@ private:
 
     Map* m_map;
 
-    ls::Array3<bool> generateCaveMap(const ls::Vec3I& chunkPos, uint32_t seed) const;
+    CaveMapType generateCaveMap(const ls::Vec3I& chunkPos, uint32_t seed) const;
 };

@@ -21,16 +21,16 @@ namespace ls
 
             static void deleteShaderProgram(GLuint id)
             {
+                glDeleteProgram(id);
                 if (id == currentBond())
                 {
                     currentBond() = 0;
                 }
-                glDeleteProgram(id);
             }
             static void bindShaderProgram(GLuint id)
             {
-                currentBond() = id;
                 glBindRenderbuffer(GL_RENDERBUFFER, id);
+                currentBond() = id;
             }
             static void ensureBond(GLuint id)
             {
@@ -58,16 +58,16 @@ namespace ls
 
             static void deleteRenderbuffer(GLuint id)
             {
+                glDeleteRenderbuffers(1, &id);
                 if (id == currentBond())
                 {
                     currentBond() = 0;
                 }
-                glDeleteRenderbuffers(1, &id);
             }
             static void bindRenderbuffer(GLuint id)
             {
-                currentBond() = id;
                 glBindRenderbuffer(GL_RENDERBUFFER, id);
+                currentBond() = id;
             }
             static void ensureBond(GLuint id)
             {
@@ -96,16 +96,16 @@ namespace ls
 
             static void deleteFramebuffer(GLuint id)
             {
+                glDeleteFramebuffers(1, &id);
                 if (id == currentBond())
                 {
                     currentBond() = 0;
                 }
-                glDeleteFramebuffers(1, &id);
             }
             static void bindFramebuffer(GLuint id)
             {
-                currentBond() = id;
                 glBindFramebuffer(GL_FRAMEBUFFER, id);
+                currentBond() = id;
             }
             static void ensureBond(GLuint id)
             {
@@ -134,16 +134,16 @@ namespace ls
 
             static void deleteVertexArray(GLuint id)
             {
+                glDeleteVertexArrays(1, &id);
                 if (id == currentBond())
                 {
                     currentBond() = 0;
                 }
-                glDeleteVertexArrays(1, &id);
             }
             static void bindVertexArray(GLuint id)
             {
-                currentBond() = id;
                 glBindVertexArray(id);
+                currentBond() = id;
             }
             static void ensureBond(GLuint id)
             {
@@ -173,20 +173,20 @@ namespace ls
 
             static void deleteBuffer(GLuint id)
             {
+                glDeleteBuffers(1, &id);
                 if (currentBond() == id)
                 {
                     currentBond() = 0;
                 }
-                glDeleteBuffers(1, &id);
             }
             static void bindBuffer(GLuint id)
             {
-                currentBond() = id;
                 glBindBuffer(Target, id);
+                currentBond() = id;
             }
             static void ensureBond(GLuint id)
-            {
-                // TODO: desyncs from opengl (at least for IBOs).
+            {                
+                // TODO: somehow desyncs from opengl (at least for IBOs).
                 //if (isBound(id)) return;
 
                 bindBuffer(id);
@@ -225,6 +225,7 @@ namespace ls
 
             static void deleteTexture(GLuint id)
             {
+                glDeleteTextures(1, &id);
                 for (auto& c : currentBonds())
                 {
                     if (c == id)
@@ -232,12 +233,11 @@ namespace ls
                         c = 0;
                     }
                 }
-                glDeleteTextures(1, &id);
             }
             static void bindTexture(GLuint id)
             {
-                currentUnitBond() = id;
                 glBindTexture(Target, id);
+                currentUnitBond() = id;
             }
             static void ensureBond(GLuint id)
             {

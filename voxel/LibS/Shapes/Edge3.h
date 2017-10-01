@@ -17,14 +17,14 @@ namespace ls
 
         std::array<Vec3<T>, 2u> vertices;
 
-        constexpr Edge3() = default;
+        constexpr Edge3() noexcept = default;
         constexpr Edge3(const Vec3<T>& v1, const Vec3<T>& v2) noexcept(std::is_nothrow_copy_constructible<Vec3<T>>::value);
 
         constexpr Edge3(const Edge3<T>&) = default;
-        constexpr Edge3(Edge3<T>&&) = default;
+        constexpr Edge3(Edge3<T>&&) noexcept = default;
 
         Edge3<T>& operator=(const Edge3<T>&) = default;
-        Edge3<T>& operator=(Edge3<T> &&) = default;
+        Edge3<T>& operator=(Edge3<T> &&) noexcept = default;
 
         constexpr Edge3<T> translated(const Vec3<T>& displacement) const;
         Edge3<T>& translate(const Vec3<T>& displacement) &;

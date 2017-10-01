@@ -43,7 +43,7 @@ namespace ls
                 load(path, internalFormat);
             }
             Texture2(const Texture2&) = delete;
-            Texture2(Texture2&& other) :
+            Texture2(Texture2&& other) noexcept :
                 m_id(other.m_id),
                 m_width(other.m_width),
                 m_height(other.m_height)
@@ -51,7 +51,7 @@ namespace ls
                 other.m_id = m_nullId;
             }
             Texture2& operator=(const Texture2&) = delete;
-            Texture2& operator=(Texture2&& other)
+            Texture2& operator=(Texture2&& other) noexcept
             {
                 cleanup();
                 m_id = other.m_id;

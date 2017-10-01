@@ -11,7 +11,6 @@ Map::Map(uint32_t seed) :
     m_generator(*this),
     m_seed(seed),
     m_airFactory(ResourceManager<BlockFactory>::instance().get("Air")),
-    m_timeSinceLastChunkUnloadPass(0.0f),
     m_timeSinceLastMissingChunkPosCacheUpdate(0.0f),
     m_missingChunkPosCacheCurrentPosition(0),
     m_missingChunkPosCacheLastOrigin(1, 1, 1) // must not be the starting chunk
@@ -43,13 +42,7 @@ void Map::update(Game& game, float dt)
     const auto currentChunk = worldToChunk(cameraPos);
 
     trySpawnNewChunks(currentChunk);
-
-    m_timeSinceLastChunkUnloadPass += dt;
-    if (m_timeSinceLastChunkUnloadPass >= m_timeBetweenChunkUnloadingPasses)
-    {
-        unloadFarChunks(currentChunk);
-        m_timeSinceLastChunkUnloadPass = 0.0f;
-    }
+    unloadFarChunks(currentChunk);
 
     m_timeSinceLastMissingChunkPosCacheUpdate += dt;
     if (m_timeSinceLastMissingChunkPosCacheUpdate >= m_timeBetweenMissingChunkPosCacheUpdates && m_missingChunkPosCacheLastOrigin != currentChunk)
@@ -167,12 +160,14 @@ void Map::spawnChunk(const ls::Vec3I& pos, MapChunkBlockData&& chunk)
 }
 void Map::unloadFarChunks(const ls::Vec3I& currentChunk)
 {
-    for (auto iter = m_chunks.begin(); iter != m_chunks.end();)
+    int numRemovedChunks = 0;
+    for (auto iter = m_chunks.begin(); iter != m_chunks.end() && numRemovedChunks < m_maxChunksRemovedPerUpdate;)
     {
         auto& pos = iter->first;
         if (distanceBetweenChunks(currentChunk, pos) >= m_minChunkDistanceToUnload)
         {
             iter = unloadChunk(iter);
+            ++numRemovedChunks;
         }
         else
         {

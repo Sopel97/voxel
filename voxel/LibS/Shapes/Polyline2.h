@@ -17,17 +17,17 @@ namespace ls
 
         std::vector<Vec2<T>> vertices;
 
-        Polyline2() = default;
+        Polyline2() noexcept = default;
         explicit Polyline2(const std::vector<Vec2<T>>& vertices);
         explicit Polyline2(std::vector<Vec2<T>>&& vertices) noexcept;
         template <class InputIt>
         Polyline2(InputIt begin, InputIt end);
 
         Polyline2(const Polyline2<T>&) = default;
-        Polyline2(Polyline2<T>&&) = default;
+        Polyline2(Polyline2<T>&&) noexcept = default;
 
         Polyline2<T>& operator=(const Polyline2<T>&) = default;
-        Polyline2<T>& operator=(Polyline2<T> &&) = default;
+        Polyline2<T>& operator=(Polyline2<T> &&) noexcept = default;
 
         Polyline2<T> translated(const Vec2<T>& displacement) const;
         Polyline2<T>& translate(const Vec2<T>& displacement) &;

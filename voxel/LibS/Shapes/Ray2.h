@@ -14,14 +14,14 @@ namespace ls
         using ValueType = T;
         using VectorType = Vec2<T>;
 
-        constexpr Ray2() = default;
+        constexpr Ray2() noexcept = default;
         constexpr Ray2(const Vec2<T>& origin, const Vec2<T>& direction) noexcept(std::is_nothrow_copy_constructible<Vec2<T>>::value);
 
         constexpr Ray2(const Ray2<T>&) = default;
-        constexpr Ray2(Ray2<T>&&) = default;
+        constexpr Ray2(Ray2<T>&&) noexcept = default;
 
         Ray2<T>& operator=(const Ray2<T>&) = default;
-        Ray2<T>& operator=(Ray2<T> &&) = default;
+        Ray2<T>& operator=(Ray2<T> &&) noexcept = default;
 
         constexpr Ray2<T> translated(const Vec2<T>& displacement) const;
         Ray2<T>& translate(const Vec2<T>& displacement) &;

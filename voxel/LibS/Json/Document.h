@@ -73,7 +73,7 @@ namespace ls
 
             }
 
-            Document(Value&& root) :
+            Document(Value&& root) noexcept :
                 Value(std::move(root))
             {
 

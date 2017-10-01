@@ -77,7 +77,7 @@ const ls::gl::Camera& GameRenderer::camera() const
 void GameRenderer::handleInput(float dt)
 {
     static constexpr float mouseSens = 0.0015f;
-    static constexpr float moveSpeed = 16.0f;
+    static constexpr float moveSpeed = 64.0f;
 
     ls::Vec2F moveInput(0, 0);
 

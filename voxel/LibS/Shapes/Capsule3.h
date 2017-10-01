@@ -18,14 +18,14 @@ namespace ls
         std::array<Vec3<T>, 2u> vertices;
         T radius;
 
-        constexpr Capsule3() = default;
+        constexpr Capsule3() noexcept = default;
         constexpr Capsule3(const Vec3<T>& v1, const Vec3<T>& v2, const T& radius) noexcept(std::is_nothrow_copy_constructible<Vec3<T>>::value);
 
         constexpr Capsule3(const Capsule3<T>&) = default;
-        constexpr Capsule3(Capsule3<T>&&) = default;
+        constexpr Capsule3(Capsule3<T>&&) noexcept = default;
 
         Capsule3<T>& operator=(const Capsule3<T>&) = default;
-        Capsule3<T>& operator=(Capsule3<T> &&) = default;
+        Capsule3<T>& operator=(Capsule3<T> &&) noexcept = default;
 
         constexpr Capsule3<T> translated(const Vec3<T>& displacement) const;
         Capsule3<T>& translate(const Vec3<T>& displacement) &;

@@ -62,14 +62,14 @@ namespace ls
         template <int Rows = R, int Cols = C, class SFINAE = typename std::enable_if<Rows == 4 && Cols == 4>::type>
         static Matrix<T, R, C> lookAt(const Vec3<T>& cameraPos, const Vec3<T>& cameraTarget, const Vec3<T>& upVector) noexcept;
 
-        constexpr Matrix() = default;
+        constexpr Matrix() noexcept = default;
         explicit Matrix(const T& value) noexcept(std::is_nothrow_copy_constructible<T>::value);
 
         constexpr Matrix(const Matrix<T, R, C>&) = default;
-        constexpr Matrix(Matrix<T, R, C>&&) = default;
+        constexpr Matrix(Matrix<T, R, C>&&) noexcept = default;
 
         Matrix<T, R, C>& operator=(const Matrix<T, R, C>&) = default;
-        Matrix<T, R, C>& operator=(Matrix<T, R, C> &&) = default;
+        Matrix<T, R, C>& operator=(Matrix<T, R, C> &&) noexcept = default;
 
         constexpr const RowStorageType& operator[](int row) const;
         RowStorageType& operator[](int row);

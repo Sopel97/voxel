@@ -21,24 +21,19 @@ namespace ls
                 glGenBuffers(1, &m_id);
             }
             BufferObject(const BufferObject&) = delete;
-            BufferObject(BufferObject&& other) :
+            BufferObject(BufferObject&& other) noexcept :
                 m_id(other.m_id)
             {
                 other.m_id = m_nullId;
             }
             BufferObject& operator=(const BufferObject&) = delete;
-            BufferObject& operator=(BufferObject&& other)
+            BufferObject& operator=(BufferObject&& other) noexcept
             {
                 cleanup();
 
                 m_id = other.m_id;
 
                 other.m_id = m_nullId;
-            }
-
-            ~BufferObject()
-            {
-                cleanup();
             }
 
             template <class T>
@@ -85,8 +80,8 @@ namespace ls
                 if (m_id != m_nullId)
                 {
                     Binder::deleteBuffer(m_id);
-                    m_id = m_nullId;
                 }
+                m_id = m_nullId;
             }
         };
 

@@ -20,17 +20,17 @@ namespace ls
 
         std::vector<Vec2<T>> vertices;
 
-        ConvexPolygon2() = default;
+        ConvexPolygon2() noexcept = default;
         explicit ConvexPolygon2(const std::vector<Vec2<T>>& _vertices);
         explicit ConvexPolygon2(std::vector<Vec2<T>>&& _vertices) noexcept;
         template <class InputIt>
         ConvexPolygon2(InputIt begin, InputIt end);
 
         ConvexPolygon2(const ConvexPolygon2<T>&) = default;
-        ConvexPolygon2(ConvexPolygon2<T>&&) = default;
+        ConvexPolygon2(ConvexPolygon2<T>&&) noexcept = default;
 
         ConvexPolygon2<T>& operator=(const ConvexPolygon2<T>&) = default;
-        ConvexPolygon2<T>& operator=(ConvexPolygon2<T> &&) = default;
+        ConvexPolygon2<T>& operator=(ConvexPolygon2<T> &&) noexcept = default;
 
         ConvexPolygon2<T> translated(const Vec2<T>& displacement) const;
         ConvexPolygon2<T>& translate(const Vec2<T>& displacement) &;

@@ -38,7 +38,7 @@ namespace ls
             return q;
         }
 
-        Quat() :
+        Quat() noexcept :
             w(1),
             x(0),
             y(0),
@@ -151,9 +151,9 @@ namespace ls
         */
 
         Quat(const Quat<T>&) = default;
-        Quat(Quat<T>&&) = default;
+        Quat(Quat<T>&&) noexcept = default;
         Quat<T>& operator=(const Quat<T>&) = default;
-        Quat<T>& operator=(Quat<T>&&) = default;
+        Quat<T>& operator=(Quat<T>&&) noexcept = default;
 
         Quat<T>& operator+=(const Quat<T>& rhs)
         {

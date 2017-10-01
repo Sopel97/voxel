@@ -10,8 +10,11 @@
 
 namespace ls
 {
+    template <class, int...>
+    class Array3;
+
     template <class T>
-    class Array3
+    class Array3<T>
     {
     private:
 
@@ -21,7 +24,7 @@ namespace ls
         using iterator = T*;
         using const_iterator = const T*;
 
-        Array3() :
+        Array3() noexcept :
             m_data(nullptr),
             m_width(0),
             m_height(0),
@@ -113,7 +116,7 @@ namespace ls
             std::fill(begin(), end(), value);
         }
 
-        void swap(Array3<T>& other)
+        void swap(Array3<T>& other) noexcept
         {
             Array3<T> temp(std::move(*this));
             *this = std::move(other);
@@ -184,13 +187,164 @@ namespace ls
 
         int index(int x, int y, int z) const
         {
-            // z * m_width * m_height + y * m_width + x
-            return (z * m_height + y) * m_width + x;
+            return (x * m_height + y) * m_depth + z;
         }
     };
 
     template <class T>
     void swap(Array3<T>& lhs, Array3<T>& rhs) noexcept
+    {
+        lhs.swap(rhs);
+    }
+
+
+
+    template <class T, int Width, int Height, int Depth>
+    class Array3<T, Width, Height, Depth>
+    {
+    public:
+        using ValueType = T;
+        using SelfType = Array3<T, Width, Height, Depth>;
+
+        using iterator = T*;
+        using const_iterator = const T*;
+
+        Array3() :
+            m_data(std::make_unique<T[]>(bufferSize()))
+        {
+
+        }
+
+        Array3(const T& initValue) :
+            Array3()
+        {
+            fill(initValue);
+        }
+
+        Array3(const SelfType& other) :
+            Array3()
+        {
+            for (int i = 0; i < bufferSize(); ++i)
+            {
+                m_data[i] = other.m_data[i];
+            }
+        }
+
+        Array3(SelfType&& other) noexcept :
+            m_data(std::move(other.m_data))
+        {
+        }
+
+        const T& operator() (int x, int y, int z) const
+        {
+            return m_data[index(x, y, z)];
+        }
+        T& operator() (int x, int y, int z)
+        {
+            return m_data[index(x, y, z)];
+        }
+        const T& at(int x, int y, int z) const
+        {
+            return m_data[index(x, y, z)];
+        }
+        T& at(int x, int y, int z)
+        {
+            return m_data[index(x, y, z)];
+        }
+
+        Array3& operator= (SelfType&& other) noexcept
+        {
+            m_data = std::move(other.m_data);
+
+            return *this;
+        }
+
+        Array3& operator= (const SelfType& other)
+        {
+            return operator=(Array3(other));
+        }
+
+        void fill(const T& value)
+        {
+            std::fill(begin(), end(), value);
+        }
+
+        void swap(SelfType& other) noexcept
+        {
+            SelfType temp(std::move(*this));
+            *this = std::move(other);
+            other = std::move(temp);
+        }
+
+        const T* data() const
+        {
+            return m_data.get();
+        }
+
+        static constexpr int width()
+        {
+            return Width;
+        }
+
+        static constexpr int height()
+        {
+            return Height;
+        }
+
+        static constexpr int depth()
+        {
+            return Depth;
+        }
+
+        bool isEmpty() const
+        {
+            return m_data == nullptr;
+        }
+
+        iterator begin()
+        {
+            return m_data.get();
+        }
+
+        iterator end()
+        {
+            return m_data.get() + bufferSize();
+        }
+        const_iterator begin() const
+        {
+            return cbegin();
+        }
+
+        const_iterator end() const
+        {
+            return cend();
+        }
+        const_iterator cbegin() const
+        {
+            return m_data.get();
+        }
+
+        const_iterator cend() const
+        {
+            return m_data.get() + bufferSize();
+        }
+
+    private:
+        std::unique_ptr<T[]> m_data;
+
+        int index(int x, int y, int z) const
+        {
+            return x * (Depth * Height) + y * Depth + z;
+        }
+
+        static constexpr int bufferSize()
+        {
+            return Width * Height * Depth;
+        }
+    };
+
+    template <class T, int W, int H, int D>
+    void swap(Array3<T, W, H, D>& lhs, Array3<T, W, H, D>& rhs) noexcept
     {
         lhs.swap(rhs);
     }

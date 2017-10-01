@@ -26,7 +26,7 @@ namespace ls
             }
 
             FramebufferObject(const FramebufferObject&) = delete;
-            FramebufferObject(FramebufferObject&& other) :
+            FramebufferObject(FramebufferObject&& other) noexcept :
                 m_id(other.m_id),
                 m_width(other.m_width),
                 m_height(other.m_height),
@@ -36,7 +36,7 @@ namespace ls
                 other.m_id = m_nullId;
             }
             FramebufferObject& operator=(const FramebufferObject&) = delete;
-            FramebufferObject& operator=(FramebufferObject&& other)
+            FramebufferObject& operator=(FramebufferObject&& other) noexcept
             {
                 cleanup();
 

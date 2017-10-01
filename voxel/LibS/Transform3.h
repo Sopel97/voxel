@@ -31,7 +31,7 @@ namespace ls
             return Transform3<T>(Quat<T>::identity(), Vec3<T>::one(), v);
         }
 
-        Transform3() :
+        Transform3() noexcept :
             m_rotation(Quat<T>::identity()),
             m_scale(Vec3<T>::one()),
             m_translation(Vec3<T>::zero())
@@ -45,9 +45,9 @@ namespace ls
         {
         }
         Transform3(const Transform3<T>&) = default;
-        Transform3(Transform3<T>&&) = default;
+        Transform3(Transform3<T>&&) noexcept = default;
         Transform3& operator=(const Transform3<T>&) = default;
-        Transform3& operator=(Transform3<T>&&) = default;
+        Transform3& operator=(Transform3<T>&&) noexcept = default;
 
         const Quat<T>& rotation() const
         {

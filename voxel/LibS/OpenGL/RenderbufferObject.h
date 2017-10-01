@@ -26,7 +26,7 @@ namespace ls
                 m_height = height;
             }
             RenderbufferObject(const RenderbufferObject&) = delete;
-            RenderbufferObject(RenderbufferObject&& other) :
+            RenderbufferObject(RenderbufferObject&& other) noexcept :
                 m_id(other.m_id),
                 m_width(other.m_width),
                 m_height(other.m_height)
@@ -34,7 +34,7 @@ namespace ls
                 other.m_id = m_nullId;
             }
             RenderbufferObject& operator=(const RenderbufferObject&) = delete;
-            RenderbufferObject& operator=(RenderbufferObject&& other)
+            RenderbufferObject& operator=(RenderbufferObject&& other) noexcept
             {
                 cleanup();
 

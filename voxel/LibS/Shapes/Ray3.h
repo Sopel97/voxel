@@ -14,14 +14,14 @@ namespace ls
         using ValueType = T;
         using VectorType = Vec3<T>;
 
-        constexpr Ray3() = default;
+        constexpr Ray3() noexcept = default;
         constexpr Ray3(const Vec3<T>& origin, const Vec3<T>& direction) noexcept(std::is_nothrow_copy_constructible<Vec3<T>>::value);
 
         constexpr Ray3(const Ray3<T>&) = default;
-        constexpr Ray3(Ray3<T>&&) = default;
+        constexpr Ray3(Ray3<T>&&) noexcept = default;
 
         Ray3<T>& operator=(const Ray3<T>&) = default;
-        Ray3<T>& operator=(Ray3<T> &&) = default;
+        Ray3<T>& operator=(Ray3<T> &&) noexcept = default;
 
         constexpr Ray3<T> translated(const Vec3<T>& displacement) const;
         Ray3<T>& translate(const Vec3<T>& displacement) &;

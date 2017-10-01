@@ -18,16 +18,16 @@ namespace ls
 
         std::vector<Vec2<T>> controlPoints;
 
-        BezierCurve2() = default;
+        BezierCurve2() noexcept = default;
         BezierCurve2(const std::vector<Vec2<T>>& controlPoints);
         BezierCurve2(std::vector<Vec2<T>>&& controlPoints) noexcept;
         template<class InputIt>
         BezierCurve2(InputIt begin, InputIt end);
         BezierCurve2(const BezierCurve2<T>&) = default;
-        BezierCurve2(BezierCurve2<T>&&) = default;
+        BezierCurve2(BezierCurve2<T>&&) noexcept = default;
 
         BezierCurve2<T>& operator=(const BezierCurve2<T>&) = default;
-        BezierCurve2<T>& operator=(BezierCurve2<T>&&) = default;
+        BezierCurve2<T>& operator=(BezierCurve2<T>&&) noexcept = default;
 
         Vec2<T> evaluate(const T& t) const;
         std::vector<Vec2<T>> evaluateAll(const int numberOfSamples) const;

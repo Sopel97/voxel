@@ -18,13 +18,13 @@ namespace ls
         Vec2<T> origin;
         T radius;
 
-        constexpr Circle2() = default;
+        constexpr Circle2() noexcept = default;
         constexpr Circle2(const Vec2<T>& origin, const T& radius) noexcept(std::is_nothrow_copy_constructible<Vec2<T>>::value && std::is_nothrow_copy_constructible<T>::value);
 
         constexpr Circle2(const Circle2<T>&) = default;
-        constexpr Circle2(Circle2<T>&&) = default;
+        constexpr Circle2(Circle2<T>&&) noexcept = default;
 
-        Circle2<T>& operator =(Circle2<T> &&) = default;
+        Circle2<T>& operator =(Circle2<T> &&) noexcept = default;
         Circle2<T>& operator =(const Circle2<T>&) = default;
 
         constexpr Circle2<T> translated(const Vec2<T>& displacement) const;

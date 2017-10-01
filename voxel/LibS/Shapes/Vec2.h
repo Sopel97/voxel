@@ -26,7 +26,7 @@ namespace ls
          *
          * Does not initialize the components
          */
-        constexpr Vec2() = default;
+        constexpr Vec2() noexcept = default;
 
         /**
          * Constructor
@@ -73,7 +73,7 @@ namespace ls
         /**
         * Default move constructor
         */
-        constexpr Vec2(Vec2<T>&&) = default;
+        constexpr Vec2(Vec2<T>&&) noexcept = default;
 
         /**
         * Default copy assign
@@ -83,7 +83,7 @@ namespace ls
         /**
         * Default move assign
         */
-        Vec2<T>& operator=(Vec2<T> &&) = default;
+        Vec2<T>& operator=(Vec2<T> &&) noexcept = default;
 
         /**
         * Adds a vector to this

@@ -17,14 +17,14 @@ namespace ls
 
         std::array<Vec3<T>, 3u> vertices;
 
-        constexpr Triangle3() = default;
+        constexpr Triangle3() noexcept = default;
         constexpr Triangle3(const Vec3<T>& v1, const Vec3<T>& v2, const Vec3<T>& v3) noexcept(std::is_nothrow_copy_constructible<Vec3<T>>::value);
 
         constexpr Triangle3(const Triangle3<T>&) = default;
-        constexpr Triangle3(Triangle3<T>&&) = default;
+        constexpr Triangle3(Triangle3<T>&&) noexcept = default;
 
         Triangle3<T>& operator =(const Triangle3<T>&) = default;
-        Triangle3<T>& operator =(Triangle3<T>&&) = default;
+        Triangle3<T>& operator =(Triangle3<T>&&) noexcept = default;
 
         constexpr Triangle3<T> translated(const Vec3<T>& displacement) const;
         Triangle3<T>& translate(const Vec3<T>& displacement) &;

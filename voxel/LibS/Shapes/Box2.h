@@ -16,17 +16,17 @@ namespace ls
 
         Vec2<T> min, max;
 
-        constexpr Box2() = default;
+        constexpr Box2() noexcept = default;
         constexpr Box2(const Vec2<T>& min, const Vec2<T>& max) noexcept(std::is_nothrow_copy_constructible<Vec2<T>>::value);
 
         static Box2<T> withSize(const Vec2<T>& min, const Vec2<T>& size) noexcept(std::is_nothrow_copy_constructible<Vec2<T>>::value);
         static const Box2<T>& unitRectangle() noexcept;
 
         constexpr Box2(const Box2<T>&) = default;
-        constexpr Box2(Box2<T>&&) = default;
+        constexpr Box2(Box2<T>&&) noexcept = default;
 
         Box2<T>& operator =(const Box2<T>&) = default;
-        Box2<T>& operator =(Box2<T> &&) = default;
+        Box2<T>& operator =(Box2<T> &&) noexcept = default;
 
         constexpr Box2<T> translated(const Vec2<T>& displacement) const;
         Box2<T>& translate(const Vec2<T>& displacement) &;

@@ -19,7 +19,7 @@ namespace ls
 
         std::array<Vec2<T>, 3u> vertices;
 
-        constexpr Triangle2() = default;
+        constexpr Triangle2() noexcept = default;
         constexpr Triangle2(const Vec2<T>& v1, const Vec2<T>& v2, const Vec2<T>& v3) noexcept(std::is_nothrow_copy_constructible<Vec2<T>>::value);
 
         constexpr static Triangle2<T> equilateral(const Vec2<T>& center, const T& baseLength) noexcept(std::is_nothrow_constructible<Triangle2<T>, const Vec2<T>&, const Vec2<T>&, const Vec2<T>&>::value);
@@ -27,10 +27,10 @@ namespace ls
         constexpr static Triangle2<T> right(const Vec2<T>& rightAngledVertex, const T& width, const T& height) noexcept(std::is_nothrow_constructible<Triangle2<T>, const Vec2<T>&, const Vec2<T>&, const Vec2<T>&>::value); //with 90 degree angle on the bottom left
 
         constexpr Triangle2(const Triangle2<T>&) = default;
-        constexpr Triangle2(Triangle2<T>&&) = default;
+        constexpr Triangle2(Triangle2<T>&&) noexcept = default;
 
         Triangle2<T>& operator =(const Triangle2<T>&) = default;
-        Triangle2<T>& operator =(Triangle2<T> &&) = default;
+        Triangle2<T>& operator =(Triangle2<T> &&) noexcept = default;
 
         constexpr Triangle2<T> translated(const Vec2<T>& displacement) const;
         Triangle2<T>& translate(const Vec2<T>& displacement) &;

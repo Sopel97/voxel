@@ -46,7 +46,6 @@ private:
     MapGenerator m_generator;
     uint32_t m_seed;
     ResourceHandle<BlockFactory> m_airFactory;
-    float m_timeSinceLastChunkUnloadPass;
     std::map<ls::Vec3I, MapChunk> m_chunks;
     std::future<std::vector<std::pair<ls::Vec3I, MapChunkBlockData>>> m_generatedChunks;
 
@@ -61,12 +60,12 @@ private:
 
     static constexpr int m_minChunkDistanceToUnload = 14;
 
-    static constexpr float m_timeBetweenChunkUnloadingPasses = 1.0f;
     static constexpr float m_timeBetweenMissingChunkPosCacheUpdates = 1.0f;
 
     static constexpr int m_chunkLoadingRange = 10;
 
     static constexpr int m_maxChunksSpawnedPerUpdate = 8;
+    static constexpr int m_maxChunksRemovedPerUpdate = 16;
 
     void trySpawnNewChunks(const ls::Vec3I& currentChunk);
     void spawnChunk(const ls::Vec3I& pos);

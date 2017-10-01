@@ -36,7 +36,6 @@ namespace ls
                 m_program(0),
                 m_location(0)
             {
-
             }
             ProgramUniformView(GLuint programId, const char* name) :
                 m_program(programId),
@@ -92,13 +91,13 @@ namespace ls
 
             }
             Shader(const Shader<ShaderType>&) = delete;
-            Shader(Shader<ShaderType>&& other) :
+            Shader(Shader<ShaderType>&& other) noexcept :
                 m_id(other.m_id)
             {
                 other.m_id = m_nullId;
             }
             Shader& operator=(const Shader<ShaderType>&) = delete;
-            Shader& operator=(Shader<ShaderType>&& other)
+            Shader& operator=(Shader<ShaderType>&& other) noexcept
             {
                 cleanup();
 
@@ -174,13 +173,13 @@ namespace ls
 
             }
             ShaderProgram(const ShaderProgram&) = delete;
-            ShaderProgram(ShaderProgram&& other) :
+            ShaderProgram(ShaderProgram&& other) noexcept :
                 m_id(other.m_id)
             {
                 other.m_id = m_nullId;
             }
             ShaderProgram& operator=(const ShaderProgram&) = delete;
-            ShaderProgram& operator=(ShaderProgram&& other)
+            ShaderProgram& operator=(ShaderProgram&& other) noexcept
             {
                 cleanup();
 
@@ -242,13 +241,13 @@ namespace ls
 
             ShaderProgramBuilder(const ShaderProgramBuilder&) = delete;
             ShaderProgramBuilder& operator=(const ShaderProgramBuilder&) = delete;
-            ShaderProgramBuilder(ShaderProgramBuilder&& other) :
+            ShaderProgramBuilder(ShaderProgramBuilder&& other) noexcept :
                 m_shaders(std::move(other.m_shaders))
             {
 
             }
 
-            ShaderProgramBuilder& operator=(ShaderProgramBuilder&& other)
+            ShaderProgramBuilder& operator=(ShaderProgramBuilder&& other) noexcept
             {
                 cleanup();
                 m_shaders = std::move(other.m_shaders);

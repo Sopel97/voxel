@@ -25,7 +25,7 @@ namespace ls
         *
         * Does not initialize the components
         */
-        constexpr Vec3() = default;
+        constexpr Vec3() noexcept = default;
 
         /**
         * Constructor
@@ -65,7 +65,7 @@ namespace ls
         /**
         * Default move constructor
         */
-        constexpr Vec3(Vec3<T>&&) = default;
+        constexpr Vec3(Vec3<T>&&) noexcept = default;
 
         /**
         * Default copy assign
@@ -75,7 +75,7 @@ namespace ls
         /**
         * Default move assign
         */
-        Vec3<T>& operator=(Vec3<T>&&) = default;
+        Vec3<T>& operator=(Vec3<T>&&) noexcept = default;
 
         /**
         * Adds a vector to this

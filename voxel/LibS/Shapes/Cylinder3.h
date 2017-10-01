@@ -19,13 +19,13 @@ namespace ls
         T height;
         T radius;
 
-        constexpr Cylinder3() = default;
+        constexpr Cylinder3() noexcept = default;
         constexpr Cylinder3(const Vec3<T>& baseOrigin, const T& height, const T& radius) noexcept(std::is_nothrow_copy_constructible<Vec3<T>>::value && std::is_nothrow_copy_constructible<T>::value);
 
         constexpr Cylinder3(const Cylinder3<T>&) = default;
-        constexpr Cylinder3(Cylinder3<T>&&) = default;
+        constexpr Cylinder3(Cylinder3<T>&&) noexcept = default;
 
-        Cylinder3<T>& operator =(Cylinder3<T> &&) = default;
+        Cylinder3<T>& operator =(Cylinder3<T> &&) noexcept = default;
         Cylinder3<T>& operator =(const Cylinder3<T>&) = default;
 
         constexpr Cylinder3<T> translated(const Vec3<T>& displacement) const;
