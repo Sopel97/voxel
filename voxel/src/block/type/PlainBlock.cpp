@@ -18,68 +18,16 @@ PlainBlock::SharedData::SharedData(SpecificBlockFactory<PlainBlock>& blockFactor
 {
     const Spritesheet& texture = ResourceManager<Spritesheet>::instance().get("Spritesheet").get();
 
-    texCoords[CubeSide::East] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        static_cast<int>(config["eastTexCoords"][0].getInt()),
-        static_cast<int>(config["eastTexCoords"][1].getInt())
-    ));
-
-    texCoords[CubeSide::West] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        static_cast<int>(config["westTexCoords"][0].getInt()),
-        static_cast<int>(config["westTexCoords"][1].getInt())
-    ));
-
-    texCoords[CubeSide::Top] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        static_cast<int>(config["topTexCoords"][0].getInt()),
-        static_cast<int>(config["topTexCoords"][1].getInt())
-    ));
-
-    texCoords[CubeSide::Bottom] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        static_cast<int>(config["bottomTexCoords"][0].getInt()),
-        static_cast<int>(config["bottomTexCoords"][1].getInt())
-    ));
-
-    texCoords[CubeSide::South] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        static_cast<int>(config["southTexCoords"][0].getInt()),
-        static_cast<int>(config["southTexCoords"][1].getInt())
-    ));
-
-    texCoords[CubeSide::North] = texture.gridCoordsToTexCoordsF(ls::Vec2I(
-        static_cast<int>(config["northTexCoords"][0].getInt()),
-        static_cast<int>(config["northTexCoords"][1].getInt())
-    ));
+    texCoords[CubeSide::East] = texture.gridCoordsToTexCoordsF(ls::json::fromJson<ls::Vec2I>(config["eastTexCoords"]));
+    texCoords[CubeSide::West] = texture.gridCoordsToTexCoordsF(ls::json::fromJson<ls::Vec2I>(config["westTexCoords"]));
+    texCoords[CubeSide::Top] = texture.gridCoordsToTexCoordsF(ls::json::fromJson<ls::Vec2I>(config["topTexCoords"]));
+    texCoords[CubeSide::Bottom] = texture.gridCoordsToTexCoordsF(ls::json::fromJson<ls::Vec2I>(config["bottomTexCoords"]));
+    texCoords[CubeSide::South] = texture.gridCoordsToTexCoordsF(ls::json::fromJson<ls::Vec2I>(config["southTexCoords"]));
+    texCoords[CubeSide::North] = texture.gridCoordsToTexCoordsF(ls::json::fromJson<ls::Vec2I>(config["northTexCoords"]));
 
     texSize = texture.gridSizeToTexSizeF({ 1, 1 });
 
-    opacity = BlockSideOpacity::none();
-    const auto& opacityConfig = config["opacity"];
-    const int size = opacityConfig.size();
-    for (int i = 0; i < size; ++i)
-    {
-        CubeSide side = CubeSide::fromString(opacityConfig[i].getString());
-        switch (side)
-        {
-        case CubeSide::East:
-            opacity.east = true;
-            break;
-        case CubeSide::West:
-            opacity.west = true;
-            break;
-        case CubeSide::Top:
-            opacity.top = true;
-            break;
-        case CubeSide::Bottom:
-            opacity.bottom = true;
-            break;
-        case CubeSide::South:
-            opacity.south = true;
-            break;
-        case CubeSide::North:
-            opacity.north = true;
-            break;
-        default:
-            break;
-        }
-    }
+    opacity = BlockSideOpacity::fromJson(config["opacity"]);
 }
 PlainBlock::PlainBlock(const SharedData& sharedData) :
     m_sharedData(&sharedData)

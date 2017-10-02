@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../LibS/Fwd.h"
+
 struct BlockSideOpacity
 {
     bool east : 1;
@@ -17,4 +19,6 @@ struct BlockSideOpacity
     {
         return { true, true, true, true, true, true };
     }
+
+    static BlockSideOpacity fromJson(const ls::json::Value& config);
 };

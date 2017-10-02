@@ -14,13 +14,13 @@ namespace ls
         struct Reader;
 
         template <class T>
-        T fromJson(const Value& val)
+        inline T fromJson(const Value& val)
         {
             return Reader<T>::fromJson(val);
         }
 
         template <class T, class U>
-        T fromJson(const Value& val, U&& defaultValue)
+        inline T fromJson(const Value& val, U&& defaultValue)
         {
             if (val.exists())
             {
