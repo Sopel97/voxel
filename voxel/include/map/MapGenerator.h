@@ -71,7 +71,7 @@ private:
 
         static uint32_t combine(uint32_t seed, uint32_t x)
         {
-            return seed ^ (std::hash<uint32_t>()(x) + 0x9e3779b9u + (seed << 6) + (seed >> 2));
+            return seed ^ (static_cast<uint32_t>(std::hash<uint32_t>()(x)) + 0x9e3779b9u + (seed << 6) + (seed >> 2));
         }
 
         uint32_t m_seed;

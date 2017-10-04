@@ -67,16 +67,16 @@ MapGenerator::CaveMapType MapGenerator::generateCaveMap(const ls::Vec3I& chunkPo
 
     auto applyTemplate = [](CaveMapType& map, const ls::Array3<bool>& t, const ls::Vec3I& center)
     {
-        const int w = t.width();
-        const int h = t.height();
-        const int d = t.depth();
+        const int w = static_cast<int>(t.width());
+        const int h = static_cast<int>(t.height());
+        const int d = static_cast<int>(t.depth());
         const ls::Vec3I pos{ center.x - w / 2, center.y - h / 2, center.z - d / 2 };
         const int minX = std::max(0, pos.x);
         const int minY = std::max(0, pos.y);
         const int minZ = std::max(0, pos.z);
-        const int maxX = std::min(MapChunk::width(), pos.x + w) - 1;
-        const int maxY = std::min(MapChunk::height(), pos.y + h) - 1;
-        const int maxZ = std::min(MapChunk::depth(), pos.z + d) - 1;
+        const int maxX = std::min(static_cast<int>(MapChunk::width()), pos.x + w) - 1;
+        const int maxY = std::min(static_cast<int>(MapChunk::height()), pos.y + h) - 1;
+        const int maxZ = std::min(static_cast<int>(MapChunk::depth()), pos.z + d) - 1;
         for (int x = minX; x <= maxX; ++x)
         {
             for (int y = minY; y <= maxY; ++y)
@@ -171,11 +171,11 @@ void MapGenerator::generateChunk(MapChunkBlockData& chunk) const
 
     const auto& caveMap = generateCaveMap(chunk.pos, chunk.seed);
 
-    for (int x = 0; x < MapChunk::width(); ++x)
+    for (size_t x = 0; x < MapChunk::width(); ++x)
     {
-        for (int z = 0; z < MapChunk::depth(); ++z)
+        for (size_t z = 0; z < MapChunk::depth(); ++z)
         {
-            const double r = sampler.sample({ static_cast<double>(x + firstBlockPos.x), static_cast<double>(z + firstBlockPos.z) }, simplexNoise);
+            const double r = sampler.sample({ static_cast<double>(static_cast<int>(x) + firstBlockPos.x), static_cast<double>(static_cast<int>(z) + firstBlockPos.z) }, simplexNoise);
 
             const int stoneLayerTop = 110 + static_cast<int>(r * 5.0) - firstBlockPos.y;
             const int dirtLayerTop = stoneLayerTop + static_cast<int>(r * 2.0) + 2;

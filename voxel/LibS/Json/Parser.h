@@ -51,9 +51,9 @@ namespace ls
                     return *m_ptr;
                 }
 
-                void advance(int n = 1)
+                void advance(size_t n = 1)
                 {
-                    m_ptr += std::min(n, m_str.end() - m_ptr);
+                    m_ptr += std::min(n, static_cast<size_t>(m_str.end() - m_ptr));
                 }
 
                 void eatWhitespaces()
@@ -74,7 +74,7 @@ namespace ls
                     const char* begin = &*m_ptr;
                     char* end;
                     const double result = strtod(begin, &end);
-                    const int length = end - begin;
+                    const size_t length = end - begin;
                     advance(length);
 
                     return result;
@@ -85,7 +85,7 @@ namespace ls
                     const char* begin = &*m_ptr;
                     char* end;
                     const int64_t result = static_cast<int64_t>(strtoll(begin, &end, 10));
-                    const int length = end - begin;
+                    const size_t length = end - begin;
                     advance(length);
 
                     return result;

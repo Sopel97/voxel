@@ -52,7 +52,7 @@ private:
     float m_timeSinceLastMissingChunkPosCacheUpdate;
     std::vector<ls::Vec3I> m_missingChunkPosCache;
     std::vector<ls::Vec3I> m_missingChunksInGeneration;
-    int m_missingChunkPosCacheCurrentPosition;
+    size_t m_missingChunkPosCacheCurrentPosition;
     ls::Vec3I m_missingChunkPosCacheLastOrigin;
 
     static constexpr int m_maxWorldHeight = 256;

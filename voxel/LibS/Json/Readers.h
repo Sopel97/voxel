@@ -94,7 +94,7 @@ namespace ls
                 std::vector<T> vec;
 
                 const auto& arr = val.getArray();
-                const int size = arr.size();
+                const size_t size = arr.size();
                 vec.reserve(size);
 
                 for (const auto& el : arr)

@@ -99,12 +99,12 @@ namespace ls
     template <class T>
     Vec2<T> ConvexPolygon2<T>::centerOfMass() const
     {
-        const int numVertices = vertices.size();
+        const size_t numVertices = vertices.size();
 
         T xsum{ 0 };
         T ysum{ 0 };
         T area{ 0 };
-        for (int i = 0; i < numVertices; ++i)
+        for (size_t i = 0; i < numVertices; ++i)
         {
             const Vec2<T>& p0 = vertices[i];
             const Vec2<T>& p1 = vertices[(i + 1) % numVertices];
@@ -126,10 +126,10 @@ namespace ls
     template <class T>
     T ConvexPolygon2<T>::signedArea() const
     {
-        const int numVertices = vertices.size();
+        const size_t numVertices = vertices.size();
 
         T area = 0;
-        for (int i = 0; i < numVertices; ++i)
+        for (size_t i = 0; i < numVertices; ++i)
         {
             const Vec2<T>& p0 = vertices[i];
             const Vec2<T>& p1 = vertices[(i + 1) % numVertices];

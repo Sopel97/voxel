@@ -39,7 +39,7 @@ public:
     virtual void onAdjacentBlockChanged(Map& map, const ls::Vec3I& thisPos, Block& changedBlock, const ls::Vec3I& changedBlockPos)
     {
     }
-    virtual void draw(std::vector<BlockVertex>& vertices, std::vector<unsigned>& indices, const ls::Vec3I& position, BlockSideOpacity outsideOpacity) const
+    virtual void draw(std::vector<BlockVertex>& vertices, std::vector<uint32_t>& indices, const ls::Vec3I& position, BlockSideOpacity outsideOpacity) const
     {
     }
     virtual BlockSideOpacity sideOpacity() const

@@ -75,7 +75,7 @@ public:
             South
         };
 
-        return CubeSide(dict[static_cast<int>(m_value)]);
+        return CubeSide(dict[static_cast<unsigned>(m_value)]);
     }
 
     constexpr const ls::Vec3I& direction() const
@@ -89,7 +89,7 @@ public:
             ls::Vec3I{ 0, 0, -1 }
         };
 
-        return dict[static_cast<int>(m_value)];
+        return dict[static_cast<unsigned>(m_value)];
     }
     constexpr const std::array<BlockVertex, 4>& faceVertices() const
     {
@@ -132,7 +132,7 @@ public:
             },
         };
 
-        return vertices[static_cast<int>(m_value)];
+        return vertices[static_cast<unsigned>(m_value)];
     }
     static constexpr const std::array<unsigned, 6>& faceIndices()
     {

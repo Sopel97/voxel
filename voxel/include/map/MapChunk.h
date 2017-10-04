@@ -16,9 +16,9 @@ class MapGenerator;
 
 namespace detail
 {
-    constexpr int m_chunkWidth = 32;
-    constexpr int m_chunkHeight = 32;
-    constexpr int m_chunkDepth = 32;
+    constexpr size_t m_chunkWidth = 32;
+    constexpr size_t m_chunkHeight = 32;
+    constexpr size_t m_chunkDepth = 32;
 
     using BlockArray = ls::Array3<BlockContainer, m_chunkWidth, m_chunkHeight, m_chunkDepth>;
     using BlockSideOpacityArray = ls::Array3<BlockSideOpacity, m_chunkWidth, m_chunkHeight, m_chunkDepth>;
@@ -57,9 +57,9 @@ class MapChunk
 {
     friend class MapChunkBlockData;
 
-    static constexpr int m_width = detail::m_chunkWidth;
-    static constexpr int m_height = detail::m_chunkHeight;
-    static constexpr int m_depth = detail::m_chunkDepth;
+    static constexpr size_t m_width = detail::m_chunkWidth;
+    static constexpr size_t m_height = detail::m_chunkHeight;
+    static constexpr size_t m_depth = detail::m_chunkDepth;
 
     using BlockArray = detail::BlockArray;
     using BlockSideOpacityArray = detail::BlockSideOpacityArray;
@@ -103,15 +103,15 @@ public:
 
     uint32_t seed() const;
 
-    static constexpr int width()
+    static constexpr size_t width()
     {
         return m_width;
     }
-    static constexpr int height()
+    static constexpr size_t height()
     {
         return m_height;
     }
-    static constexpr int depth()
+    static constexpr size_t depth()
     {
         return m_depth;
     }

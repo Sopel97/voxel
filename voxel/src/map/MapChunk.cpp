@@ -17,7 +17,7 @@ MapChunkBlockData::MapChunkBlockData(Map& map, MapGenerator& mapGenerator, const
 }
 ls::Vec3I MapChunkBlockData::firstBlockPosition() const
 {
-    return pos * ls::Vec3I(MapChunk::m_width, MapChunk::m_height, MapChunk::m_depth);
+    return pos * ls::Vec3I(static_cast<int>(MapChunk::m_width), static_cast<int>(MapChunk::m_height), static_cast<int>(MapChunk::m_depth));
 }
 MapChunk::MapChunk(Map& map, const ls::Vec3I& pos, const MapChunkNeighbours& neighbours) :
     m_map(&map),
@@ -71,7 +71,7 @@ const ls::Vec3I& MapChunk::pos() const
 
 ls::Vec3I MapChunk::firstBlockPosition() const
 {
-    return m_pos * ls::Vec3I(m_width, m_height, m_depth);
+    return m_pos * ls::Vec3I(static_cast<int>(m_width), static_cast<int>(m_height), static_cast<int>(m_depth));
 }
 
 void MapChunk::onAdjacentChunkPlaced(MapChunk& placedChunk, const ls::Vec3I& placedChunkPos)
@@ -128,15 +128,15 @@ void MapChunk::updateBlockOnAdjacentBlockChanged(const ls::Vec3I& blockToUpdateM
 
 void MapChunk::updateAllAsIfPlaced()
 {
-    for (int x = 0; x < MapChunk::width(); ++x)
+    for (size_t x = 0; x < MapChunk::width(); ++x)
     {
-        for (int y = 0; y < MapChunk::height(); ++y)
+        for (size_t y = 0; y < MapChunk::height(); ++y)
         {
-            for (int z = 0; z < MapChunk::depth(); ++z)
+            for (size_t z = 0; z < MapChunk::depth(); ++z)
             {
                 auto& block = m_blocks.at(x, y, z);
 
-                const ls::Vec3I pos = m_pos + ls::Vec3I(x, y, z);
+                const ls::Vec3I pos = m_pos + ls::Vec3I(static_cast<int>(x), static_cast<int>(y), static_cast<int>(z));
                 block.block().onBlockPlaced(*m_map, pos);
             }
         }
@@ -199,13 +199,13 @@ void MapChunk::updateOutsideOpacity(const MapChunkNeighbours& neighbours)
     // do the interior now, borders later
     ls::Array3<BlockSideOpacity> blockOpacityCache = createBlockOpacityCache();
 
-    for (int x = 0; x < MapChunk::width(); ++x)
+    for (size_t x = 0; x < MapChunk::width(); ++x)
     {
-        for (int y = 0; y < MapChunk::height(); ++y)
+        for (size_t y = 0; y < MapChunk::height(); ++y)
         {
-            for (int z = 0; z < MapChunk::depth(); ++z)
+            for (size_t z = 0; z < MapChunk::depth(); ++z)
             {
-                const ls::Vec3I pos{ x, y, z };
+                const ls::Vec3I pos{ static_cast<int>(x), static_cast<int>(y), static_cast<int>(z) };
 
                 m_outsideOpacityCache(x, y, z) = computeOutsideOpacity(pos, blockOpacityCache);
             }

@@ -221,12 +221,12 @@ namespace ls
             }
             void writeObject(const Value::Object& obj)
             {
-                const int size = obj.size();
+                const size_t size = obj.size();
                 if (size == 0) emptyObject();
                 else
                 {
                     startObject();
-                    int i = 0;
+                    size_t i = 0;
                     for (const auto& p : obj)
                     {
                         key(p.first);
@@ -243,12 +243,12 @@ namespace ls
             }
             void writeArray(const Value::Array& arr)
             {
-                const int size = arr.size();
+                const size_t size = arr.size();
                 if (size == 0) emptyArray();
                 else
                 {
                     startArray();
-                    int i = 0;
+                    size_t i = 0;
                     for (const auto& e : arr)
                     {
                         write(e);

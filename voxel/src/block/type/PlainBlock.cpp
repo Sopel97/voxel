@@ -35,7 +35,7 @@ PlainBlock::PlainBlock(const SharedData& sharedData) :
 
 }
 
-void PlainBlock::draw(std::vector<BlockVertex>& vertices, std::vector<unsigned>& indices, const ls::Vec3I& position, BlockSideOpacity outsideOpacity) const
+void PlainBlock::draw(std::vector<BlockVertex>& vertices, std::vector<uint32_t>& indices, const ls::Vec3I& position, BlockSideOpacity outsideOpacity) const
 {
     if (!outsideOpacity.east)
     {
@@ -62,13 +62,13 @@ void PlainBlock::draw(std::vector<BlockVertex>& vertices, std::vector<unsigned>&
         drawFace(vertices, indices, position, CubeSide::North);
     }
 }
-void PlainBlock::drawFace(std::vector<BlockVertex>& vertices, std::vector<unsigned>& indices, const ls::Vec3I& position, CubeSide side) const
+void PlainBlock::drawFace(std::vector<BlockVertex>& vertices, std::vector<uint32_t>& indices, const ls::Vec3I& position, CubeSide side) const
 {
     static const std::array<unsigned, 6> faceIndices = CubeSide::faceIndices();
 
     const ls::Vec3F positionF(position);
 
-    const int lastIndex = vertices.size();
+    const uint32_t lastIndex = static_cast<uint32_t>(vertices.size());
     const auto& face = side.faceVertices();
 
     for (const auto& v : face)
@@ -76,7 +76,7 @@ void PlainBlock::drawFace(std::vector<BlockVertex>& vertices, std::vector<unsign
         vertices.push_back(
             BlockVertex{
                 v.pos + positionF,
-                m_sharedData->texCoords[static_cast<int>(side)] + m_sharedData->texSize * v.uv
+                m_sharedData->texCoords[static_cast<unsigned>(side)] + m_sharedData->texSize * v.uv
             }
         );
     }

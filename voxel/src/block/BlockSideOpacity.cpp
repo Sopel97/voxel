@@ -7,8 +7,8 @@
 BlockSideOpacity BlockSideOpacity::fromJson(const ls::json::Value& config)
 {
     BlockSideOpacity opacity = none();
-    const int size = config.size();
-    for (int i = 0; i < size; ++i)
+    const size_t size = config.size();
+    for (size_t i = 0; i < size; ++i)
     {
         const CubeSide side = CubeSide::fromString(config[i].getString());
         switch (side)

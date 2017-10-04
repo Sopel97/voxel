@@ -15,7 +15,7 @@ namespace ls
     public:
         struct Index
         {
-            int x, y;
+            size_t x, y;
         };
 
     private:
@@ -35,7 +35,7 @@ namespace ls
 
             iterator() = default;
             ~iterator() = default;
-            iterator(int minX, int minY, int maxX, int maxY) noexcept : m_minY(minY), m_maxX(maxX), m_maxY(maxY), m_index{minX, minY} {}
+            iterator(size_t minX, size_t minY, size_t maxX, size_t maxY) noexcept : m_minY(minY), m_maxX(maxX), m_maxY(maxY), m_index{minX, minY} {}
             iterator(const iterator& other) = default;
 
             iterator& operator=(const iterator& other) = default;
@@ -50,9 +50,9 @@ namespace ls
             bool      operator!= (const iterator& rhs) { return std::tie(m_index.x, m_index.y) != std::tie(rhs.m_index.x, rhs.m_index.y); }
 
         private:
-            int m_minY;
-            int m_maxX;
-            int m_maxY;
+            size_t m_minY;
+            size_t m_maxX;
+            size_t m_maxY;
             Index m_index;
         };
 
@@ -68,7 +68,7 @@ namespace ls
 
             const_iterator() = default;
             ~const_iterator() = default;
-            const_iterator(int minX, int minY, int maxX, int maxY) noexcept : m_minY(minY), m_maxX(maxX), m_maxY(maxY), m_index{minX, minY} {}
+            const_iterator(size_t minX, size_t minY, size_t maxX, size_t maxY) noexcept : m_minY(minY), m_maxX(maxX), m_maxY(maxY), m_index{minX, minY} {}
             const_iterator(const iterator& other) noexcept : m_minY(other.m_minY), m_maxX(other.m_maxX), m_maxY(other.m_maxY), m_index(other.m_index) {}
             const_iterator(const const_iterator& other) = default;
 
@@ -84,15 +84,15 @@ namespace ls
             bool      operator!= (const iterator& rhs) { return std::tie(m_index.x, m_index.y) != std::tie(rhs.m_index.x, rhs.m_index.y); }
 
         private:
-            int m_minY;
-            int m_maxX;
-            int m_maxY;
+            size_t m_minY;
+            size_t m_maxX;
+            size_t m_maxY;
             Index m_index;
         };
 
     public:
 
-        IndexRegion2(int minX, int minY, int maxX, int maxY) noexcept :
+        IndexRegion2(size_t minX, size_t minY, size_t maxX, size_t maxY) noexcept :
             m_minX(minX),
             m_minY(minY),
             m_maxX(maxX),
@@ -126,10 +126,10 @@ namespace ls
             return const_iterator(m_maxX + 1, m_minY, m_maxX, m_maxY);
         }
     private:
-        int m_minX;
-        int m_minY;
-        int m_maxX;
-        int m_maxY;
+        size_t m_minX;
+        size_t m_minY;
+        size_t m_maxX;
+        size_t m_maxY;
     };
 
     template <class T>
@@ -152,7 +152,7 @@ namespace ls
 
             Col() = default;
 
-            Col(T* dataCol, int size) noexcept :
+            Col(T* dataCol, size_t size) noexcept :
                 m_dataCol(dataCol),
                 m_colSize(size)
             {
@@ -195,7 +195,7 @@ namespace ls
                 std::fill(begin(), end(), value);
             }
 
-            int size() const
+            size_t size() const
             {
                 return m_colSize;
             }
@@ -256,7 +256,7 @@ namespace ls
 
         private:
             T* m_dataCol;
-            int m_colSize;
+            size_t m_colSize;
         };
 
         class ConstCol
@@ -266,7 +266,7 @@ namespace ls
 
             ConstCol() = default;
 
-            ConstCol(const T* dataCol, int size) noexcept :
+            ConstCol(const T* dataCol, size_t size) noexcept :
                 m_dataCol(dataCol),
                 m_colSize(size)
             {
@@ -306,7 +306,7 @@ namespace ls
                 return m_dataCol;
             }
 
-            int size() const
+            size_t size() const
             {
                 return m_colSize;
             }
@@ -358,7 +358,7 @@ namespace ls
 
         private:
             const T* m_dataCol;
-            int m_colSize;
+            size_t m_colSize;
         };
 
         class ConstRow;
@@ -371,7 +371,7 @@ namespace ls
             class iterator
             {
             public:
-                using difference_type = int;
+                using difference_type = ptrdiff_t;
                 using value_type = T;
                 using reference = T&;
                 using pointer = T*;
@@ -417,7 +417,7 @@ namespace ls
             class const_iterator
             {
             public:
-                using difference_type = int;
+                using difference_type = ptrdiff_t;
                 using value_type = T;
                 using const_reference = const T&;
                 using const_pointer = const T*;
@@ -461,7 +461,7 @@ namespace ls
 
             Row() = default;
 
-            Row(T* dataRow, int size, int colSize) noexcept :
+            Row(T* dataRow, size_t size, size_t colSize) noexcept :
                 m_dataRow(dataRow),
                 m_rowSize(size),
                 m_colSize(colSize)
@@ -471,11 +471,11 @@ namespace ls
             Row(const Row& row) = default;
             Row(Row&& row) = default;
 
-            T& operator[] (int x)
+            T& operator[] (size_t x)
             {
                 return *(m_dataRow + x * m_colSize);
             }
-            const T& operator[] (int x) const
+            const T& operator[] (size_t x) const
             {
                 return *(m_dataRow + x * m_colSize);
             }
@@ -499,7 +499,7 @@ namespace ls
 
             Row& operator= (std::initializer_list<T> list)
             {
-                int i = 0;
+                size_t i = 0;
                 for(const T& v : list)
                 {
                     operator[](i) = v;
@@ -514,7 +514,7 @@ namespace ls
                 std::fill(begin(), end(), value);
             }
 
-            int size() const
+            size_t size() const
             {
                 return m_rowSize;
             }
@@ -573,8 +573,8 @@ namespace ls
             }
         private:
             T* m_dataRow;
-            int m_rowSize;
-            int m_colSize;
+            size_t m_rowSize;
+            size_t m_colSize;
         };
 
         class ConstRow
@@ -582,7 +582,7 @@ namespace ls
         public:
             ConstRow() = default;
 
-            ConstRow(const T* dataRow, int size, int colSize) noexcept :
+            ConstRow(const T* dataRow, size_t size, size_t colSize) noexcept :
                 m_dataRow(dataRow),
                 m_rowSize(size),
                 m_colSize(colSize)
@@ -590,7 +590,7 @@ namespace ls
             }
 
             ConstRow(const Row& row) noexcept :
-            m_dataRow(row.m_dataRow),
+                m_dataRow(row.m_dataRow),
                 m_rowSize(row.m_rowSize),
                 m_colSize(row.m_colSize)
             {
@@ -599,7 +599,7 @@ namespace ls
             ConstRow(const ConstRow& row) = default;
             ConstRow(ConstRow&& row) = default;
 
-            const T& operator[] (int x) const
+            const T& operator[] (size_t x) const
             {
                 return *(m_dataRow + x * m_colSize);
             }
@@ -620,7 +620,7 @@ namespace ls
                 return *this;
             }
 
-            int size() const
+            size_t size() const
             {
                 return m_rowSize;
             }
@@ -670,8 +670,8 @@ namespace ls
             }
         private:
             const T* m_dataRow;
-            int m_rowSize;
-            int m_colSize;
+            size_t m_rowSize;
+            size_t m_colSize;
         };
 
         using iterator = T*;
@@ -685,21 +685,21 @@ namespace ls
 
         }
 
-        Array2(int width, int height) :
+        Array2(size_t width, size_t height) :
             m_width(width),
             m_height(height)
         {
-            const int totalSize = width * height;
+            const size_t totalSize = width * height;
             m_data = std::make_unique<T[]>(totalSize);
         }
 
-        Array2(int width, int height, const T& initValue) :
+        Array2(size_t width, size_t height, const T& initValue) :
             m_width(width),
             m_height(height)
         {
-            const int totalSize = width * height;
+            const size_t totalSize = width * height;
             m_data = std::make_unique<T[]>(totalSize);
-            for(int i = 0; i < totalSize; ++i)
+            for(size_t i = 0; i < totalSize; ++i)
             {
                 m_data[i] = initValue;
             }
@@ -709,16 +709,16 @@ namespace ls
             m_width(other.m_width),
             m_height(other.m_height)
         {
-            const int totalSize = m_width * m_height;
+            const size_t totalSize = m_width * m_height;
             m_data = std::make_unique<T[]>(totalSize);
-            for(int i = 0; i < totalSize; ++i)
+            for(size_t i = 0; i < totalSize; ++i)
             {
                 m_data[i] = other.m_data[i];
             }
         }
 
         Array2(Array2<T>&& other) noexcept :
-        m_data(std::move(other.m_data)),
+            m_data(std::move(other.m_data)),
             m_width(std::move(other.m_width)),
             m_height(std::move(other.m_height))
         {
@@ -729,7 +729,7 @@ namespace ls
         {
             m_height = list.size();
             m_width = (*(list.begin())).size();
-            const int totalSize = m_width * m_height;
+            const size_t totalSize = m_width * m_height;
             m_data = std::make_unique<T[]>(totalSize);
             int y = 0;
             for(const auto& row : list)
@@ -744,29 +744,29 @@ namespace ls
             }
         }
 
-        ConstCol operator[] (int x) const
+        ConstCol operator[] (size_t x) const
         {
             return ConstCol(m_data.get() + x * m_height, m_height);
         }
 
-        Col operator[] (int x)
+        Col operator[] (size_t x)
         {
             return Col(m_data.get() + x * m_height, m_height);
         }
 
-        const T& operator() (int x, int y) const
+        const T& operator() (size_t x, size_t y) const
         {
             return m_data[x * m_height + y];
         }
-        T& operator() (int x, int y)
+        T& operator() (size_t x, size_t y)
         {
             return m_data[x * m_height + y];
         }
-        const T& at(int x, int y) const
+        const T& at(size_t x, size_t y) const
         {
             return m_data[x * m_height + y];
         }
-        T& at(int x, int y)
+        T& at(size_t x, size_t y)
         {
             return m_data[x * m_height + y];
         }
@@ -833,19 +833,19 @@ namespace ls
             return m_data.get();
         }
 
-        int width() const
+        size_t width() const
         {
             return m_width;
         }
 
-        int height() const
+        size_t height() const
         {
             return m_height;
         }
 
-        std::pair<int, int> size() const
+        std::pair<size_t, size_t> size() const
         {
-            return std::pair<int, int>(m_width, m_height);
+            return std::pair<size_t, size_t>(m_width, m_height);
         }
 
         bool empty() const
@@ -860,7 +860,7 @@ namespace ls
 
         iterator end()
         {
-            const int totalSize = m_width * m_height;
+            const size_t totalSize = m_width * m_height;
             return m_data.get() + totalSize;
         }
         const_iterator begin() const
@@ -870,7 +870,7 @@ namespace ls
 
         const_iterator end() const
         {
-            const int totalSize = m_width * m_height;
+            const size_t totalSize = m_width * m_height;
             return m_data.get() + totalSize;
         }
         const_iterator cbegin() const
@@ -880,7 +880,7 @@ namespace ls
 
         const_iterator cend() const
         {
-            const int totalSize = m_width * m_height;
+            const size_t totalSize = m_width * m_height;
             return m_data.get() + totalSize;
         }
 
@@ -921,8 +921,8 @@ namespace ls
 
     private:
         std::unique_ptr<T[]> m_data;
-        int m_width;
-        int m_height;
+        size_t m_width;
+        size_t m_height;
     };
 
     template <class T>

@@ -239,6 +239,16 @@ namespace ls
                 if (isArray()) return getArray().at(i);
                 else throw std::runtime_error("Value is not an array");
             }
+            Value& operator[](size_t i)
+            {
+                if (isArray()) return getArray().at(i);
+                else throw std::runtime_error("Value is not an array");
+            }
+            const Value& operator[](size_t i) const
+            {
+                if (isArray()) return getArray().at(i);
+                else throw std::runtime_error("Value is not an array");
+            }
 
             Value& operator[](const char* str)
             {
@@ -274,7 +284,7 @@ namespace ls
                 return operator[](str.c_str());
             }
 
-            int size() const
+            size_t size() const
             {
                 if (isArray()) return getArray().size();
                 else throw std::runtime_error("Value is not an array");

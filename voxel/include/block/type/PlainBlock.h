@@ -24,7 +24,7 @@ public:
 
     PlainBlock(const SharedData& sharedData);
 
-    void draw(std::vector<BlockVertex>& vertices, std::vector<unsigned>& indices, const ls::Vec3I& position, BlockSideOpacity outsideOpacity) const override;
+    void draw(std::vector<BlockVertex>& vertices, std::vector<uint32_t>& indices, const ls::Vec3I& position, BlockSideOpacity outsideOpacity) const override;
     BlockSideOpacity sideOpacity() const override;
 
     ~PlainBlock() override = default;
@@ -34,5 +34,5 @@ public:
 private:
     const SharedData* m_sharedData;
 
-    void drawFace(std::vector<BlockVertex>& vertices, std::vector<unsigned>& indices, const ls::Vec3I& position, CubeSide side) const;
+    void drawFace(std::vector<BlockVertex>& vertices, std::vector<uint32_t>& indices, const ls::Vec3I& position, CubeSide side) const;
 };

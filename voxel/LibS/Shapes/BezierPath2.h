@@ -64,7 +64,7 @@ namespace ls
     Vec2<T> BezierPath2<T>::evaluate(const T& t) const
     {
         Vec2<T> point(T(0), T(0));
-        const int numberOfControlPoints = controlPoints.size();
+        const int numberOfControlPoints = static_cast<int>(controlPoints.size());
         const int numberOfSubCurves = (numberOfControlPoints - 1) / 3;
 
         const T tt = t*static_cast<T>(numberOfSubCurves);

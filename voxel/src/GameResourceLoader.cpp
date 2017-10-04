@@ -30,8 +30,8 @@ void GameResourceLoader::loadTextures()
     ls::json::Document config = ls::json::Document::fromFile("assets/textures/textures.json");
     const auto& textureList = config["textures"];
 
-    const int numEntries = textureList.size();
-    for (int i = 0; i < numEntries; ++i)
+    const size_t numEntries = textureList.size();
+    for (size_t i = 0; i < numEntries; ++i)
     {
         const std::string path = textureList[i]["path"].getString();
         const std::string name = textureList[i]["name"].getString();
@@ -59,8 +59,8 @@ void GameResourceLoader::loadShaders()
     ls::json::Document config = ls::json::Document::fromFile("assets/shaders/shaders.json");
     const auto& shaderList = config["shaders"];
 
-    const int numEntries = shaderList.size();
-    for (int i = 0; i < numEntries; ++i)
+    const size_t numEntries = shaderList.size();
+    for (size_t i = 0; i < numEntries; ++i)
     {
         const std::string name = shaderList[i]["name"].getString();
         const std::string vertexPath = shaderList[i]["vertex"].getString();

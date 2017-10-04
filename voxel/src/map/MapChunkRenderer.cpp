@@ -29,7 +29,7 @@ void MapChunkRenderer::draw(MapChunk& chunk, float dt, int& numUpdatedChunksOnDr
 
     if (m_iboSize > 0)
     {
-        m_vao.drawElements(GL_TRIANGLES, m_iboSize, GL_UNSIGNED_INT);
+        m_vao.drawElements(GL_TRIANGLES, static_cast<GLsizei>(m_iboSize), GL_UNSIGNED_INT);
     }
 
     m_timeOutsideDrawingRange = 0.0f;
@@ -67,20 +67,20 @@ void MapChunkRenderer::culled(MapChunk& chunk, float dt, int& numUpdatedChunksOn
 void MapChunkRenderer::update(MapChunk& chunk)
 {
     std::vector<BlockVertex> vertices;
-    std::vector<unsigned> indices;
+    std::vector<uint32_t> indices;
     
     const ls::Vec3I firstBlockPos = chunk.firstBlockPosition();
     const auto& blocks = chunk.blocks();
     const auto& opacity = chunk.outsideOpacityCache();
-    for (int x = 0; x < MapChunk::width(); ++x)
+    for (size_t x = 0; x < MapChunk::width(); ++x)
     {
-        for (int y = 0; y < MapChunk::height(); ++y)
+        for (size_t y = 0; y < MapChunk::height(); ++y)
         {
-            for (int z = 0; z < MapChunk::depth(); ++z)
+            for (size_t z = 0; z < MapChunk::depth(); ++z)
             {
                 const auto& blockCont = blocks(x, y, z);
 
-                const ls::Vec3I pos = firstBlockPos + ls::Vec3I(x, y, z);
+                const ls::Vec3I pos = firstBlockPos + ls::Vec3I(static_cast<int>(x), static_cast<int>(y), static_cast<int>(z));
                 blockCont.block().draw(vertices, indices, pos, opacity(x, y, z));
             }
         }

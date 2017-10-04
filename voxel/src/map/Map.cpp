@@ -63,7 +63,7 @@ ls::Vec3I Map::worldToChunk(const ls::Vec3F& worldPos) const
 bool Map::isValidChunkPos(const ls::Vec3I& pos) const
 {
     if (pos.y < 0) return false;
-    if (pos.y >= m_maxWorldHeight / MapChunk::height()) return false;
+    if (pos.y >= m_maxWorldHeight / static_cast<int>(MapChunk::height())) return false;
 
     return true;
 }
@@ -101,8 +101,8 @@ void Map::trySpawnNewChunks(const ls::Vec3I& currentChunk)
 
     if(!m_generatedChunks.valid() || ready)
     {
-        const int numMissingChunks = m_missingChunkPosCache.size();
-        for (int i = 0; i < m_maxChunksSpawnedPerUpdate && m_missingChunkPosCacheCurrentPosition < numMissingChunks; ++i)
+        const size_t numMissingChunks = m_missingChunkPosCache.size();
+        for (size_t i = 0; i < m_maxChunksSpawnedPerUpdate && m_missingChunkPosCacheCurrentPosition < numMissingChunks; ++i)
         {
             m_missingChunksInGeneration.emplace_back(m_missingChunkPosCache[m_missingChunkPosCacheCurrentPosition]);
             ++m_missingChunkPosCacheCurrentPosition;

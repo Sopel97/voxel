@@ -65,8 +65,8 @@ namespace ls
     Vec2<T> BezierCurve2<T>::evaluate(const T& t) const
     {
         Vec2<T> point(T(0), T(0));
-        const int numberOfControlPoints = controlPoints.size();
-        for (int i = 0; i < numberOfControlPoints; ++i)
+        const size_t numberOfControlPoints = controlPoints.size();
+        for (size_t i = 0; i < numberOfControlPoints; ++i)
         {
             point += controlPoints[i] * static_cast<T>(BinomialCoefficients64::value(numberOfControlPoints - 1, i)) * static_cast<T>(std::pow(T(1) - t, numberOfControlPoints - 1 - i)) * static_cast<T>(std::pow(t, i));
         }

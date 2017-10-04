@@ -22,7 +22,7 @@ private:
     ls::gl::VertexBufferObject* m_vbo;
     ls::gl::IndexBufferObject* m_ibo;
     float m_timeOutsideDrawingRange;
-    int m_iboSize;
+    size_t m_iboSize;
     bool m_needsUpdate; 
     
     static constexpr float m_maxTimeOutsideDrawingRange = 30.0f;

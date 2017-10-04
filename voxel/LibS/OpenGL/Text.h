@@ -84,7 +84,7 @@ namespace ls
                     updateVao();
                 }
 
-                m_vao.drawElements(GL_TRIANGLES, m_numIndices, GL_UNSIGNED_SHORT);
+                m_vao.drawElements(GL_TRIANGLES, static_cast<GLsizei>(m_numIndices), GL_UNSIGNED_SHORT);
             }
 
             const ls::Vec2F& size()
@@ -104,7 +104,7 @@ namespace ls
             VertexArrayObject m_vao;
             VertexBufferObject* m_vbo;
             IndexBufferObject* m_ibo;
-            int m_numIndices;
+            size_t m_numIndices;
             int m_tabSizeInSpaces;
             float m_lineSpacing;
             float m_glyphHeight;
@@ -206,7 +206,7 @@ namespace ls
 
             int countLinesInText() const
             {
-                return std::count(m_text.begin(), m_text.end(), '\n') + 1;
+                return static_cast<int>(std::count(m_text.begin(), m_text.end(), '\n')) + 1;
             }
 
             void updateVao()

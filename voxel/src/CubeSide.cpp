@@ -32,5 +32,5 @@ const std::string& CubeSide::toString() const
         "North"
     };
 
-    return dict[static_cast<int>(m_value)];
+    return dict[static_cast<unsigned>(m_value)];
 }

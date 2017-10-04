@@ -33,23 +33,23 @@ namespace ls
 
         }
 
-        Array3(int width, int height, int depth) :
+        Array3(size_t width, size_t height, size_t depth) :
             m_width(width),
             m_height(height),
             m_depth(depth)
         {
-            const int totalSize = width * height * depth;
+            const size_t totalSize = width * height * depth;
             m_data = std::make_unique<T[]>(totalSize);
         }
 
-        Array3(int width, int height, int depth, const T& initValue) :
+        Array3(size_t width, size_t height, size_t depth, const T& initValue) :
             m_width(width),
             m_height(height),
             m_depth(depth)
         {
-            const int totalSize = width * height * depth;
+            const size_t totalSize = width * height * depth;
             m_data = std::make_unique<T[]>(totalSize);
-            for (int i = 0; i < totalSize; ++i)
+            for (size_t i = 0; i < totalSize; ++i)
             {
                 m_data[i] = initValue;
             }
@@ -60,9 +60,9 @@ namespace ls
             m_height(other.m_height),
             m_depth(other.m_depth)
         {
-            const int totalSize = m_width * m_height * m_depth;
+            const size_t totalSize = m_width * m_height * m_depth;
             m_data = std::make_unique<T[]>(totalSize);
-            for (int i = 0; i < totalSize; ++i)
+            for (size_t i = 0; i < totalSize; ++i)
             {
                 m_data[i] = other.m_data[i];
             }
@@ -77,19 +77,19 @@ namespace ls
             other.m_data = nullptr;
         }
 
-        const T& operator() (int x, int y, int z) const
+        const T& operator() (size_t x, size_t y, size_t z) const
         {
             return m_data[index(x, y, z)];
         }
-        T& operator() (int x, int y, int z)
+        T& operator() (size_t x, size_t y, size_t z)
         {
             return m_data[index(x, y, z)];
         }
-        const T& at(int x, int y, int z) const
+        const T& at(size_t x, size_t y, size_t z) const
         {
             return m_data[index(x, y, z)];
         }
-        T& at(int x, int y, int z)
+        T& at(size_t x, size_t y, size_t z)
         {
             return m_data[index(x, y, z)];
         }
@@ -128,17 +128,17 @@ namespace ls
             return m_data.get();
         }
 
-        int width() const
+        size_t width() const
         {
             return m_width;
         }
 
-        int height() const
+        size_t height() const
         {
             return m_height;
         }
 
-        int depth() const
+        size_t depth() const
         {
             return m_depth;
         }
@@ -155,7 +155,7 @@ namespace ls
 
         iterator end()
         {
-            const int totalSize = m_width * m_height * m_depth;
+            const size_t totalSize = m_width * m_height * m_depth;
             return m_data.get() + totalSize;
         }
         const_iterator begin() const
@@ -165,7 +165,7 @@ namespace ls
 
         const_iterator end() const
         {
-            const int totalSize = m_width * m_height * m_depth;
+            const size_t totalSize = m_width * m_height * m_depth;
             return m_data.get() + totalSize;
         }
         const_iterator cbegin() const
@@ -175,17 +175,17 @@ namespace ls
 
         const_iterator cend() const
         {
-            const int totalSize = m_width * m_height * m_depth;
+            const size_t totalSize = m_width * m_height * m_depth;
             return m_data.get() + totalSize;
         }
 
     private:
         std::unique_ptr<T[]> m_data;
-        int m_width;
-        int m_height;
-        int m_depth;
+        size_t m_width;
+        size_t m_height;
+        size_t m_depth;
 
-        int index(int x, int y, int z) const
+        size_t index(size_t x, size_t y, size_t z) const
         {
             return (x * m_height + y) * m_depth + z;
         }
@@ -199,7 +199,7 @@ namespace ls
 
 
 
-    template <class T, int Width, int Height, int Depth>
+    template <class T, size_t Width, size_t Height, size_t Depth>
     class Array3<T, Width, Height, Depth>
     {
     public:
@@ -224,7 +224,7 @@ namespace ls
         Array3(const SelfType& other) :
             Array3()
         {
-            for (int i = 0; i < bufferSize(); ++i)
+            for (size_t i = 0; i < bufferSize(); ++i)
             {
                 m_data[i] = other.m_data[i];
             }
@@ -235,19 +235,19 @@ namespace ls
         {
         }
 
-        const T& operator() (int x, int y, int z) const
+        const T& operator() (size_t x, size_t y, size_t z) const
         {
             return m_data[index(x, y, z)];
         }
-        T& operator() (int x, int y, int z)
+        T& operator() (size_t x, size_t y, size_t z)
         {
             return m_data[index(x, y, z)];
         }
-        const T& at(int x, int y, int z) const
+        const T& at(size_t x, size_t y, size_t z) const
         {
             return m_data[index(x, y, z)];
         }
-        T& at(int x, int y, int z)
+        T& at(size_t x, size_t y, size_t z)
         {
             return m_data[index(x, y, z)];
         }
@@ -281,17 +281,17 @@ namespace ls
             return m_data.get();
         }
 
-        static constexpr int width()
+        static constexpr size_t width()
         {
             return Width;
         }
 
-        static constexpr int height()
+        static constexpr size_t height()
         {
             return Height;
         }
 
-        static constexpr int depth()
+        static constexpr size_t depth()
         {
             return Depth;
         }
@@ -332,12 +332,12 @@ namespace ls
     private:
         std::unique_ptr<T[]> m_data;
 
-        int index(int x, int y, int z) const
+        size_t index(size_t x, size_t y, size_t z) const
         {
             return x * (Depth * Height) + y * Depth + z;
         }
 
-        static constexpr int bufferSize()
+        static constexpr size_t bufferSize()
         {
             return Width * Height * Depth;
         }

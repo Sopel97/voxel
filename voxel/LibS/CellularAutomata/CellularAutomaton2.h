@@ -24,25 +24,25 @@ namespace ls
         };
 
 
-        CellularAutomaton2(const Rule& rule, int width, int height, GridTopology topology = GridTopology::Finite);
-        CellularAutomaton2(const Rule& rule, int width, int height, State fillState, GridTopology topology = GridTopology::Finite);
+        CellularAutomaton2(const Rule& rule, size_t width, size_t height, GridTopology topology = GridTopology::Finite);
+        CellularAutomaton2(const Rule& rule, size_t width, size_t height, State fillState, GridTopology topology = GridTopology::Finite);
 
-        State at(int x, int y) const;
+        State at(size_t x, size_t y) const;
 
-        void setState(int x, int y, State state) &;
+        void setState(size_t x, size_t y, State state) &;
 
         void fill(State state) &;
         template <class FillFunction>
         void fill(FillFunction fillingFunction) &; //fill function must take x, y as coordinates and output valid State
 
-        void iterate(int numberOfIterations = 1) &;
+        void iterate(size_t numberOfIterations = 1) &;
 
-        int occurencesIn3x3(State state, int x, int y) const; //x,y determine center of the 3x3 region
-        int occurencesIn5x5(State state, int x, int y) const; //x,y determine center of the 5x5 region
-        int occurencesInRadius(State state, int x, int y, int radius) const; //x,y determine center of the region, radius is a maximal chessboard distance
-        int occurencesInRect(State state, const Box2<int>& rect) const;
-        int occurencesInMooreNeighbourhood(State state, int x, int y) const; //only sides
-        int occurencesInNeighbourhood(State state, int x, int y) const; //sides and diagonals
+        size_t occurencesIn3x3(State state, size_t x, size_t y) const; //x,y determine center of the 3x3 region
+        size_t occurencesIn5x5(State state, size_t x, size_t y) const; //x,y determine center of the 5x5 region
+        size_t occurencesInRadius(State state, size_t x, size_t y, size_t radius) const; //x,y determine center of the region, radius is a maximal chessboard distance
+        size_t occurencesInRect(State state, const Box2<int>& rect) const;
+        size_t occurencesInMooreNeighbourhood(State state, size_t x, size_t y) const; //only sides
+        size_t occurencesInNeighbourhood(State state, size_t x, size_t y) const; //sides and diagonals
 
     protected:
         Rule m_rule;
@@ -63,12 +63,12 @@ namespace ls
 
         }
 
-        State operator()(const CellularAutomaton2<QuantityRule3x3>& automaton, int x, int y)
+        State operator()(const CellularAutomaton2<QuantityRule3x3>& automaton, size_t x, size_t y)
         {
             return m_outputs[automaton.occurencesIn3x3(m_countedState, x, y)];
         }
 
-        void setOutputForQuantity(State outputState, int quantity)
+        void setOutputForQuantity(State outputState, size_t quantity)
         {
             m_outputs[quantity] = outputState;
         }
@@ -89,9 +89,9 @@ namespace ls
 
         ConwaysGameOfLifeRule() {}
 
-        State operator()(const CellularAutomaton2<ConwaysGameOfLifeRule>& automaton, int x, int y)
+        State operator()(const CellularAutomaton2<ConwaysGameOfLifeRule>& automaton, size_t x, size_t y)
         {
-            const int numberOfLivingNeighbours = automaton.occurencesInNeighbourhood(State::Live, x, y);
+            const size_t numberOfLivingNeighbours = automaton.occurencesInNeighbourhood(State::Live, x, y);
             const auto& currentState = automaton.at(x, y);
 
             if (currentState == State::Live)
@@ -120,7 +120,7 @@ namespace ls
 
         WireworldRule() {}
 
-        State operator()(const CellularAutomaton2<WireworldRule>& automaton, int x, int y)
+        State operator()(const CellularAutomaton2<WireworldRule>& automaton, size_t x, size_t y)
         {
             State currentState = automaton.at(x, y);
 
@@ -129,7 +129,7 @@ namespace ls
             else if (currentState == State::ElectronTail) return State::Conductor;
             else //(currentState == State::Conductor)
             {
-                const int numberOfElectronHeadsInNeighbourhood = automaton.occurencesInMooreNeighbourhood(State::ElectronHead, x, y);
+                const size_t numberOfElectronHeadsInNeighbourhood = automaton.occurencesInMooreNeighbourhood(State::ElectronHead, x, y);
                 if (numberOfElectronHeadsInNeighbourhood == 1 || numberOfElectronHeadsInNeighbourhood == 2)
                     return State::ElectronHead;
             }
@@ -141,7 +141,7 @@ namespace ls
 
 
     template <class Rule>
-    CellularAutomaton2<Rule>::CellularAutomaton2(const Rule& rule, int width, int height, GridTopology topology) :
+    CellularAutomaton2<Rule>::CellularAutomaton2(const Rule& rule, size_t width, size_t height, GridTopology topology) :
         m_rule(rule),
         m_topology(topology),
         m_grid(width, height)
@@ -150,7 +150,7 @@ namespace ls
     }
 
     template <class Rule>
-    CellularAutomaton2<Rule>::CellularAutomaton2(const Rule& rule, int width, int height, State fillState, GridTopology topology) :
+    CellularAutomaton2<Rule>::CellularAutomaton2(const Rule& rule, size_t width, size_t height, State fillState, GridTopology topology) :
         m_rule(rule),
         m_topology(topology),
         m_grid(width, height, fillState)
@@ -159,7 +159,7 @@ namespace ls
     }
 
     template <class Rule>
-    typename CellularAutomaton2<Rule>::State CellularAutomaton2<Rule>::at(int x, int y) const
+    typename CellularAutomaton2<Rule>::State CellularAutomaton2<Rule>::at(size_t x, size_t y) const
     {
         return m_grid(x, y);
     }
@@ -176,12 +176,12 @@ namespace ls
     template <class FillFunction>
     void CellularAutomaton2<Rule>::fill(FillFunction fillingFunction) &
     {
-        const int w = m_grid.sizeX();
-        const int h = m_grid.sizeY();
+        const size_t w = m_grid.sizeX();
+        const size_t h = m_grid.sizeY();
 
-        for (int x = 0; x < w; ++x)
+        for (size_t x = 0; x < w; ++x)
         {
-            for (int y = 0; y < h; ++y)
+            for (size_t y = 0; y < h; ++y)
             {
                 m_grid(x, y) = fillingFunction(x, y);
             }
@@ -189,23 +189,23 @@ namespace ls
     }
 
     template <class Rule>
-    void CellularAutomaton2<Rule>::setState(int x, int y, State state) &
+    void CellularAutomaton2<Rule>::setState(size_t x, size_t y, State state) &
     {
         m_grid(x, y) = state;
     }
 
     template <class Rule>
-    void CellularAutomaton2<Rule>::iterate(int iterations) &
+    void CellularAutomaton2<Rule>::iterate(size_t iterations) &
     {
-        const int w = m_grid.width();
-        const int h = m_grid.height();
+        const size_t w = m_grid.width();
+        const size_t h = m_grid.height();
 
         Array2<State> nextGrid(w, h);
         while (iterations--)
         {
-            for (int x = 0; x < w; ++x)
+            for (size_t x = 0; x < w; ++x)
             {
-                for (int y = 0; y < h; ++y)
+                for (size_t y = 0; y < h; ++y)
                 {
                     nextGrid(x, y) = m_rule(*this, x, y);
                 }
@@ -216,40 +216,40 @@ namespace ls
     }
 
     template <class Rule>
-    int CellularAutomaton2<Rule>::occurencesIn3x3(State state, int x, int y) const
+    size_t CellularAutomaton2<Rule>::occurencesIn3x3(State state, size_t x, size_t y) const
     {
         return occurencesInRadius(state, x, y, 1);
     }
     template <class Rule>
-    int CellularAutomaton2<Rule>::occurencesIn5x5(State state, int x, int y) const
+    size_t CellularAutomaton2<Rule>::occurencesIn5x5(State state, size_t x, size_t y) const
     {
         return occurencesInRadius(state, x, y, 2);
     }
     template <class Rule>
-    int CellularAutomaton2<Rule>::occurencesInRadius(State state, int x, int y, int radius) const
+    size_t CellularAutomaton2<Rule>::occurencesInRadius(State state, size_t x, size_t y, size_t radius) const
     {
-        const Vec2<int> diagonalVector(radius, radius);
-        const Vec2<int> centerVector(x, y);
+        const Vec2<int> diagonalVector(static_cast<int>(radius), static_cast<int>(radius));
+        const Vec2<int> centerVector(static_cast<int>(x), static_cast<int>(y));
         return occurencesInRect(state, Box2<int>(centerVector - diagonalVector, centerVector + diagonalVector));
     }
     template <class Rule>
-    int CellularAutomaton2<Rule>::occurencesInRect(State state, const Box2<int>& rect) const
+    size_t CellularAutomaton2<Rule>::occurencesInRect(State state, const Box2<int>& rect) const
     {
-        const int width = m_grid.width();
-        const int height = m_grid.height();
+        const size_t width = m_grid.width();
+        const size_t height = m_grid.height();
 
-        int quantity = 0;
+        size_t quantity = 0;
 
         if (m_topology == GridTopology::Finite)
         {
-            int xmin = std::max(rect.min.x, 0);
-            int ymin = std::max(rect.min.y, 0);
-            int xmax = std::min(rect.max.x, width - 1);
-            int ymax = std::min(rect.max.y, height - 1);
+            size_t xmin = static_cast<size_t>(std::max(rect.min.x, 0));
+            size_t ymin = static_cast<size_t>(std::max(rect.min.y, 0));
+            size_t xmax = static_cast<size_t>(std::min(rect.max.x, static_cast<int>(width - 1)));
+            size_t ymax = static_cast<size_t>(std::min(rect.max.y, static_cast<int>(height - 1)));
 
-            for (int xx = xmin; xx <= xmax; ++xx)
+            for (size_t xx = xmin; xx <= xmax; ++xx)
             {
-                for (int yy = ymin; yy <= ymax; ++yy)
+                for (size_t yy = ymin; yy <= ymax; ++yy)
                 {
                     if (m_grid(xx, yy) == state) ++quantity;
                 }
@@ -270,12 +270,12 @@ namespace ls
     }
 
     template <class Rule>
-    int CellularAutomaton2<Rule>::occurencesInMooreNeighbourhood(State state, int x, int y) const
+    size_t CellularAutomaton2<Rule>::occurencesInMooreNeighbourhood(State state, size_t x, size_t y) const
     {
-        const int width = m_grid.width();
-        const int height = m_grid.height();
+        const size_t width = m_grid.width();
+        const size_t height = m_grid.height();
 
-        int quantity = 0;
+        size_t quantity = 0;
 
         if (m_topology == GridTopology::Finite)
         {
@@ -286,9 +286,9 @@ namespace ls
         }
         else if (m_topology == GridTopology::Toroidal)
         {
-            if (m_grid((x - 1 + width) % width, y) == state) ++quantity;
+            if (m_grid((x + width - 1) % width, y) == state) ++quantity;
             if (m_grid((x + 1) % width, y) == state) ++quantity;
-            if (m_grid(x, (y - 1 + height) % height) == state) ++quantity;
+            if (m_grid(x, (y + height - 1) % height) == state) ++quantity;
             if (m_grid(x, (y + 1) % height) == state) ++quantity;
         }
 
@@ -296,7 +296,7 @@ namespace ls
     }
 
     template <class Rule>
-    int CellularAutomaton2<Rule>::occurencesInNeighbourhood(State state, int x, int y) const
+    size_t CellularAutomaton2<Rule>::occurencesInNeighbourhood(State state, size_t x, size_t y) const
     {
         return occurencesIn3x3(state, x, y) - (m_grid(x, y) == state);
     }
