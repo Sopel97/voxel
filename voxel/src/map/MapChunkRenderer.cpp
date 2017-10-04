@@ -66,9 +66,14 @@ void MapChunkRenderer::culled(MapChunk& chunk, float dt, int& numUpdatedChunksOn
 }
 void MapChunkRenderer::update(MapChunk& chunk)
 {
-    std::vector<BlockVertex> vertices;
-    std::vector<uint32_t> indices;
-    
+    static constexpr size_t vertexBufferCapacity = 1024;
+    static constexpr size_t indexBufferCapacity = 1024;
+
+    static thread_local std::vector<BlockVertex> vertices;
+    static thread_local std::vector<uint32_t> indices;
+    vertices.clear();
+    indices.clear();
+
     const ls::Vec3I firstBlockPos = chunk.firstBlockPosition();
     const auto& blocks = chunk.blocks();
     const auto& opacity = chunk.outsideOpacityCache();

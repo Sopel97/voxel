@@ -10,6 +10,10 @@
 
 #include "MapChunkRenderer.h"
 
+#include <queue>
+#include <vector>
+#include <mutex>
+
 class MapChunk;
 class Map;
 class MapGenerator;
@@ -22,6 +26,42 @@ namespace detail
 
     using BlockArray = ls::Array3<BlockContainer, m_chunkWidth, m_chunkHeight, m_chunkDepth>;
     using BlockSideOpacityArray = ls::Array3<BlockSideOpacity, m_chunkWidth, m_chunkHeight, m_chunkDepth>;
+
+    template<class Data>
+    class concurrent_queue
+    {
+    private:
+        std::queue<Data> the_queue;
+        mutable std::mutex the_mutex;
+    public:
+        template <class... Args>
+        void emplace(Args&&... args)
+        {
+            std::unique_lock<std::mutex> lock(the_mutex);
+            the_queue.emplace(std::forward<Args>(args)...);
+            lock.unlock();
+        }
+        void push(Data&& data)
+        {
+            std::unique_lock<std::mutex> lock(the_mutex);
+            the_queue.emplace(std::move(data));
+            lock.unlock();
+        }
+
+        bool empty() const
+        {
+            return the_queue.empty();
+        }
+
+        Data pop()
+        {
+            std::unique_lock<std::mutex> lock(the_mutex);
+            Data d = std::move(the_queue.front());
+            the_queue.pop();
+            lock.unlock();
+            return d;
+        }
+    };
 }
 
 struct MapChunkNeighbours
@@ -32,6 +72,51 @@ struct MapChunkNeighbours
     MapChunk* bottom;
     MapChunk* south;
     MapChunk* north;
+};
+
+class MapChunkStorageReserve
+{
+public:
+    static MapChunkStorageReserve& instance()
+    {
+        static MapChunkStorageReserve singleton;
+
+        return singleton;
+    }
+
+    void storeBlockArray(detail::BlockArray&& arr)
+    {
+        arr.fill(nullptr);
+        m_blockArrays.emplace(std::move(arr));
+    }
+    detail::BlockArray loadBlockArray()
+    {
+        if (m_blockArrays.empty()) createBlockArray();
+        return m_blockArrays.pop();
+    }
+    void storeOpacityArray(detail::BlockSideOpacityArray&& arr)
+    {
+        arr.fill(BlockSideOpacity::none());
+        m_opacityArrays.emplace(std::move(arr));
+    }
+    detail::BlockSideOpacityArray loadOpacityArray()
+    {
+        if (m_opacityArrays.empty()) createOpacityArray();
+        return m_opacityArrays.pop();
+    }
+
+    void createBlockArray()
+    {
+        m_blockArrays.emplace(nullptr);
+    }
+    void createOpacityArray()
+    {
+        m_opacityArrays.emplace(BlockSideOpacity::none());
+    }
+
+private:
+    detail::concurrent_queue<detail::BlockArray> m_blockArrays;
+    detail::concurrent_queue<detail::BlockSideOpacityArray> m_opacityArrays;
 };
 
 class MapChunkBlockData
@@ -49,6 +134,8 @@ public:
     MapChunkBlockData& operator=(const MapChunkBlockData&) = delete;
     MapChunkBlockData(MapChunkBlockData&&) noexcept = default;
     MapChunkBlockData& operator=(MapChunkBlockData&&) noexcept = default;
+
+    ~MapChunkBlockData();
 
     ls::Vec3I firstBlockPosition() const;
 };
@@ -72,6 +159,8 @@ public:
     MapChunk& operator=(const MapChunk&) = delete;
     MapChunk(MapChunk&& other) noexcept;
     MapChunk& operator=(MapChunk&& other) noexcept;
+
+    ~MapChunk();
 
     const ls::Vec3I& pos() const;
 

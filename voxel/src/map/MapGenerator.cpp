@@ -182,22 +182,22 @@ void MapGenerator::generateChunk(MapChunkBlockData& chunk) const
             const int grassLayerTop = dirtLayerTop + 1;
 
             int y = 0;
-            while (y < MapChunk::height() && y <= stoneLayerTop)
+            while (y < static_cast<int>(MapChunk::height()) && y <= stoneLayerTop)
             {
                 chunk.blocks(x, y, z) = caveMap(x, y, z) ? m_map->instantiateAirBlock() : stoneFactory.get().instantiate();
                  ++y;
             }
-            while (y < MapChunk::height() && y <= dirtLayerTop)
+            while (y < static_cast<int>(MapChunk::height()) && y <= dirtLayerTop)
             {
                 chunk.blocks(x, y, z) = caveMap(x, y, z) ? m_map->instantiateAirBlock() : dirtFactory.get().instantiate();;
                 ++y;
             }
-            while (y < MapChunk::height() && y <= grassLayerTop)
+            while (y < static_cast<int>(MapChunk::height()) && y <= grassLayerTop)
             {
                 chunk.blocks(x, y, z) = caveMap(x, y, z) ? m_map->instantiateAirBlock() : grassFactory.get().instantiate();
                 ++y;
             }
-            while (y < MapChunk::height())
+            while (y < static_cast<int>(MapChunk::height()))
             {
                 chunk.blocks(x, y, z) = m_map->instantiateAirBlock();
                 ++y;

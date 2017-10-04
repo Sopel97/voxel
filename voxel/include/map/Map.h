@@ -58,13 +58,16 @@ private:
     static constexpr int m_maxWorldHeight = 256;
     static_assert(m_maxWorldHeight % MapChunk::height() == 0);
 
-    static constexpr int m_minChunkDistanceToUnload = 14;
+    //static constexpr int m_minChunkDistanceToUnload = 14;
+    static constexpr int m_minChunkDistanceToUnload = 16;
 
     static constexpr float m_timeBetweenMissingChunkPosCacheUpdates = 1.0f;
 
-    static constexpr int m_chunkLoadingRange = 10;
+    //static constexpr int m_chunkLoadingRange = 10;
+    static constexpr int m_chunkLoadingRange = 14;
 
-    static constexpr int m_maxChunksSpawnedPerUpdate = 8;
+    //static constexpr int m_maxChunksSpawnedPerUpdate = 8;
+    static constexpr int m_maxChunksSpawnedPerUpdate = 16;
     static constexpr int m_maxChunksRemovedPerUpdate = 16;
 
     void trySpawnNewChunks(const ls::Vec3I& currentChunk);

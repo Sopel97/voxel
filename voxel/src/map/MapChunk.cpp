@@ -11,9 +11,17 @@ MapChunkBlockData::MapChunkBlockData(Map& map, MapGenerator& mapGenerator, const
     map(&map),
     pos(pos),
     seed(map.seed()),
-    blocks(nullptr)
+    blocks(MapChunkStorageReserve::instance().loadBlockArray())
 {
     mapGenerator.generateChunk(*this);
+}
+
+MapChunkBlockData::~MapChunkBlockData()
+{
+    if (!blocks.isEmpty())
+    {
+        MapChunkStorageReserve::instance().storeBlockArray(std::move(blocks));
+    }
 }
 ls::Vec3I MapChunkBlockData::firstBlockPosition() const
 {
@@ -23,8 +31,8 @@ MapChunk::MapChunk(Map& map, const ls::Vec3I& pos, const MapChunkNeighbours& nei
     m_map(&map),
     m_seed(map.seed()),
     m_pos(pos),
-    m_blocks(nullptr),
-    m_outsideOpacityCache(BlockSideOpacity::none())
+    m_blocks(MapChunkStorageReserve::instance().loadBlockArray()),
+    m_outsideOpacityCache(MapChunkStorageReserve::instance().loadOpacityArray())
 {
     m_boundingSphere = computeBoundingSphere();
     updateOutsideOpacityOnChunkBorders(neighbours);
@@ -34,7 +42,7 @@ MapChunk::MapChunk(MapChunkBlockData&& chunkBlockData, const MapChunkNeighbours&
     m_seed(chunkBlockData.seed),
     m_pos(chunkBlockData.pos),
     m_blocks(std::move(chunkBlockData.blocks)),
-    m_outsideOpacityCache(BlockSideOpacity::none())
+    m_outsideOpacityCache(MapChunkStorageReserve::instance().loadOpacityArray())
 {
     m_boundingSphere = computeBoundingSphere();
     updateOutsideOpacity(neighbours);
@@ -50,6 +58,18 @@ MapChunk::MapChunk(MapChunk&& other) noexcept :
     m_outsideOpacityCache(std::move(other.m_outsideOpacityCache))
 {
 
+}
+
+MapChunk::~MapChunk()
+{
+    if (!m_blocks.isEmpty())
+    {
+        MapChunkStorageReserve::instance().storeBlockArray(std::move(m_blocks));
+    }
+    if (!m_outsideOpacityCache.isEmpty())
+    {
+        MapChunkStorageReserve::instance().storeOpacityArray(std::move(m_outsideOpacityCache));
+    }
 }
 MapChunk& MapChunk::operator=(MapChunk&& other) noexcept
 {

@@ -35,6 +35,10 @@ namespace ls
 
                 other.m_id = m_nullId;
             }
+            ~BufferObject()
+            {
+                cleanup();
+            }
 
             template <class T>
             void reserve(GLsizeiptr size, GLenum usage)

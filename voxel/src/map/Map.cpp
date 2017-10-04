@@ -87,7 +87,8 @@ std::pair<ls::Vec3I, MapChunkBlockData> Map::generateChunkIsolated(const ls::Vec
 void Map::trySpawnNewChunks(const ls::Vec3I& currentChunk)
 {
     bool ready = false;
-    if (m_generatedChunks.valid() && m_generatedChunks.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+    bool valid = m_generatedChunks.valid();
+    if (valid && m_generatedChunks.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
     {
         ready = true;
 
@@ -99,7 +100,7 @@ void Map::trySpawnNewChunks(const ls::Vec3I& currentChunk)
         m_missingChunksInGeneration.clear();
     }
 
-    if(!m_generatedChunks.valid() || ready)
+    if(!valid || ready)
     {
         const size_t numMissingChunks = m_missingChunkPosCache.size();
         for (size_t i = 0; i < m_maxChunksSpawnedPerUpdate && m_missingChunkPosCacheCurrentPosition < numMissingChunks; ++i)
@@ -109,6 +110,7 @@ void Map::trySpawnNewChunks(const ls::Vec3I& currentChunk)
         }
 
         m_generatedChunks = std::async(std::launch::async, [this](const std::vector<ls::Vec3I>& p) {return generateChunksIsolated(p); }, m_missingChunksInGeneration);
+        //m_generatedChunks.wait();
     }
 }
 

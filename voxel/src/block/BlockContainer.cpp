@@ -36,6 +36,10 @@ BlockContainer& BlockContainer::operator=(const BlockContainer& other)
     if (m_block && m_block->isStateful())
     {
         delete m_block;
+    }
+
+    if (other.m_block && other.m_block->isStateful())
+    {
         m_block = other.m_block->clone().release();
     }
     else
