@@ -2,6 +2,7 @@
 
 #include "map/MapChunk.h"
 #include "map/Map.h"
+#include "map/MapChunkRenderQueue.h"
 
 #include "../LibS/OpenGL/Camera.h"
 #include "../LibS/Shapes/Vec3.h"
@@ -37,24 +38,26 @@ void MapRenderer::draw(Map& map, const ls::gl::Camera& camera, float dt)
 
     const ls::Vec3I cameraChunk = map.worldToChunk(camera.position());
 
-    int numUpdatedChunksOnDraw = 0;
-    int numUpdatedChunksOnCull = 0;
+    MapChunkRenderQueue queue(m_maxDistanceToRenderedChunk);
     for (auto& p : map.chunks())
     {
         auto& chunk = p.second;
-        if (shouldForgetChunk(cameraChunk, chunk))
+        const int dist = Map::distanceBetweenChunks(cameraChunk, chunk.pos());
+        if (shouldForgetChunk(chunk, dist))
         {
             chunk.tooFarToDraw(dt);
         }
         else if(shouldDrawChunk(camera, frustum, chunk))
         {
-            chunk.draw(dt, numUpdatedChunksOnDraw);
+            queue.enqueueDraw(chunk, dist);
         }
         else
         {
-            chunk.culled(dt, numUpdatedChunksOnCull);
+            queue.enqueueCull(chunk);
         }
     }
+
+    queue.draw(dt);
 
     //std::cout << "Rendered chunks: " << numRenderedChunks << '/' << map.chunks().size() << '\n';
 }
@@ -63,9 +66,9 @@ bool MapRenderer::shouldDrawChunk(const ls::gl::Camera& camera, const ls::Frustu
 {
     return intersect(frustum, chunk.boundingSphere());
 }
-bool MapRenderer::shouldForgetChunk(const ls::Vec3I& cameraChunk, const MapChunk& chunk)
+bool MapRenderer::shouldForgetChunk(const MapChunk& chunk, int dist)
 {
-    return Map::distanceBetweenChunks(cameraChunk, chunk.pos()) > m_maxDistanceToRenderedChunk;
+    return dist > m_maxDistanceToRenderedChunk;
 }
 float MapRenderer::distance(const ls::Plane3F& plane, const ls::Vec3F& point)
 {
