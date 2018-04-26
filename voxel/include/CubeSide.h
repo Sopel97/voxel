@@ -48,6 +48,20 @@ public:
 
     static CubeSide fromString(const std::string& s);
 
+    static const std::array<CubeSide, 6>& values()
+    {
+        static const std::array<CubeSide, 6> sides{
+            CubeSide(East),
+            CubeSide(West),
+            CubeSide(Top),
+            CubeSide(Bottom),
+            CubeSide(South),
+            CubeSide(North)
+        };
+
+        return sides;
+    }
+
     static constexpr CubeSide fromDirection(const ls::Vec3I& dir)
     {
         if (dir.x > 0) return CubeSide(East);
@@ -139,6 +153,11 @@ public:
         static const std::array<unsigned, 6> indices{ 0, 1, 2, 0, 2, 3 };
 
         return indices;
+    }
+
+    int ordinal() const
+    {
+        return static_cast<int>(m_value);
     }
 
     constexpr CubeSide() noexcept :

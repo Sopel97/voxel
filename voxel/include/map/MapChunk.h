@@ -64,15 +64,7 @@ namespace detail
     };
 }
 
-struct MapChunkNeighbours
-{
-    MapChunk* east;
-    MapChunk* west;
-    MapChunk* top;
-    MapChunk* bottom;
-    MapChunk* south;
-    MapChunk* north;
-};
+using MapChunkNeighbours = PerCubeSideData<MapChunk*>;
 
 class MapChunkStorageReserve
 {

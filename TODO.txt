@@ -1,6 +1,19 @@
 - Proper block updating when adjacent chunk is placed
 - Map should handle placing/removing events to adjacent blocks (when placing single blocks. When a chunk is placed, other chunks get notified and resolve updates by themselves)
 
+- blocks should decide if they want to draw the given face
+-- for example water/stone, water/water (transparency info is not enough)
+--- make 'seamless groups' that when transparent but compare equal dont render the face
+
+- base texture -> texture-level animation (animated spritesheet, updates certain texture regions based on guidelines from a config (list of frames with times))) -> framebuffered texture -> terrain rendering
+
+- add water (stationary only for now)
+
+- blocks can register on place (or when updated) for constant update, then they can prolongate or cancel.
+-- possibly unify updates (on place, on remove, constant, ...)
+
+- spilling water
+
 - Light (after updating is resolved completely)
 -- 4 bits for 'sun', 4 bits for local
 -- stored and updated in chunk like opacity cache is stored now (so 6 bytes per block)

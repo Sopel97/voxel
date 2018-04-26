@@ -153,12 +153,10 @@ void Map::spawnChunk(const ls::Vec3I& pos, MapChunkBlockData&& chunk)
     auto p = m_chunks.emplace(std::make_pair(pos, MapChunk(std::move(chunk), neighbours)));
     auto& placedChunk = p.first->second;
 
-    if (neighbours.east) neighbours.east->onAdjacentChunkPlaced(placedChunk, pos);
-    if (neighbours.west) neighbours.west->onAdjacentChunkPlaced(placedChunk, pos);
-    if (neighbours.top) neighbours.top->onAdjacentChunkPlaced(placedChunk, pos);
-    if (neighbours.bottom) neighbours.bottom->onAdjacentChunkPlaced(placedChunk, pos);
-    if (neighbours.south) neighbours.south->onAdjacentChunkPlaced(placedChunk, pos);
-    if (neighbours.north) neighbours.north->onAdjacentChunkPlaced(placedChunk, pos);
+    for (const auto& side : CubeSide::values())
+    {
+        if (neighbours[side]) neighbours[side]->onAdjacentChunkPlaced(placedChunk, pos);
+    }
 }
 void Map::unloadFarChunks(const ls::Vec3I& currentChunk)
 {

@@ -37,29 +37,12 @@ PlainBlock::PlainBlock(const SharedData& sharedData) :
 
 void PlainBlock::draw(std::vector<BlockVertex>& vertices, std::vector<uint32_t>& indices, const ls::Vec3I& position, BlockSideOpacity outsideOpacity) const
 {
-    if (!outsideOpacity.east)
+    for (const auto& side : CubeSide::values())
     {
-        drawFace(vertices, indices, position, CubeSide::East);
-    }
-    if (!outsideOpacity.west)
-    {
-        drawFace(vertices, indices, position, CubeSide::West);
-    }
-    if (!outsideOpacity.top)
-    {
-        drawFace(vertices, indices, position, CubeSide::Top);
-    }
-    if (!outsideOpacity.bottom)
-    {
-        drawFace(vertices, indices, position, CubeSide::Bottom);
-    }
-    if (!outsideOpacity.south)
-    {
-        drawFace(vertices, indices, position, CubeSide::South);
-    }
-    if (!outsideOpacity.north)
-    {
-        drawFace(vertices, indices, position, CubeSide::North);
+        if (!outsideOpacity[side])
+        {
+            drawFace(vertices, indices, position, side);
+        }
     }
 }
 void PlainBlock::drawFace(std::vector<BlockVertex>& vertices, std::vector<uint32_t>& indices, const ls::Vec3I& position, CubeSide side) const

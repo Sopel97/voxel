@@ -236,29 +236,12 @@ void MapChunk::updateOutsideOpacity(const MapChunkNeighbours& neighbours)
 }
 void MapChunk::updateOutsideOpacityOnChunkBorders(const MapChunkNeighbours& neighbours)
 {
-    if (neighbours.east)
+    for (const auto& side : CubeSide::values())
     {
-        updateOutsideOpacityOnChunkBorder(*neighbours.east, m_pos + CubeSide::makeEast().direction());
-    }
-    if (neighbours.west)
-    {
-        updateOutsideOpacityOnChunkBorder(*neighbours.west, m_pos + CubeSide::makeWest().direction());
-    }
-    if (neighbours.top)
-    {
-        updateOutsideOpacityOnChunkBorder(*neighbours.top, m_pos + CubeSide::makeTop().direction());
-    }
-    if (neighbours.bottom)
-    {
-        updateOutsideOpacityOnChunkBorder(*neighbours.bottom, m_pos + CubeSide::makeBottom().direction());
-    }
-    if (neighbours.south)
-    {
-        updateOutsideOpacityOnChunkBorder(*neighbours.south, m_pos + CubeSide::makeSouth().direction());
-    }
-    if (neighbours.north)
-    {
-        updateOutsideOpacityOnChunkBorder(*neighbours.north, m_pos + CubeSide::makeNorth().direction());
+        if (neighbours[side])
+        {
+            updateOutsideOpacityOnChunkBorder(*neighbours[side], m_pos + side.direction());
+        }
     }
 }
 void MapChunk::updateOutsideOpacityOnChunkBorder(const MapChunk& other, const ls::Vec3I& otherPos)
@@ -290,7 +273,7 @@ void MapChunk::updateOutsideOpacityOnChunkBorder(const MapChunk& other, const ls
                 auto& selfOpacity = m_outsideOpacityCache(x, y, z);
                 const auto& otherBlock = other.m_blocks(otherPos.x, otherPos.y, otherPos.z);
                 const auto otherOpacity = otherBlock.block().sideOpacity();
-                selfOpacity.set(dir, otherOpacity.get(dir.opposite()));
+                selfOpacity[dir] = otherOpacity[dir.opposite()];
             }
         }
     }
@@ -302,7 +285,7 @@ void MapChunk::updateOutsideOpacityOnAdjacentBlockChanged(const ls::Vec3I& block
     const auto otherOpacity = changedBlock.sideOpacity();
     const ls::Vec3I diff = changedBlockMapPos - blockToUpdateMapPos;
     const auto dir = CubeSide::fromDirection(diff);
-    selfOpacity.set(dir, otherOpacity.get(dir.opposite()));
+    selfOpacity[dir] = otherOpacity[dir.opposite()];
 }
 BlockSideOpacity MapChunk::computeOutsideOpacity(ls::Vec3I blockPos, const ls::Array3<BlockSideOpacity>& cache)
 {
@@ -324,12 +307,12 @@ BlockSideOpacity MapChunk::computeOutsideOpacity(ls::Vec3I blockPos, const ls::A
     // we are interested from outside view on opacities
     // so the sides are switched
     return BlockSideOpacity{
-        eastBlockOpacity.west,
-        westBlockOpacity.east,
-        topBlockOpacity.bottom,
-        bottomBlockOpacity.top,
-        southBlockOpacity.north,
-        northBlockOpacity.south
+        eastBlockOpacity[CubeSide::West],
+        westBlockOpacity[CubeSide::East],
+        topBlockOpacity[CubeSide::Bottom],
+        bottomBlockOpacity[CubeSide::Top],
+        southBlockOpacity[CubeSide::North],
+        northBlockOpacity[CubeSide::South]
     };
 }
 ls::Array3<BlockSideOpacity> MapChunk::createBlockOpacityCache()
